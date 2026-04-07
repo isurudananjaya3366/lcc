@@ -1,0 +1,31 @@
+<!-- Invoice PDF Footer Section -->
+<div
+  class="footer"
+  style="margin-top: 30px; border-top: 1px solid #ddd; padding-top: 15px; font-size: 11px; color: #666"
+>
+  {% if invoice.payment_instructions %}
+  <div class="payment-info" style="margin-bottom: 10px">
+    <h4 style="margin: 0 0 5px; font-size: 12px">Payment Instructions</h4>
+    <p style="margin: 0">{{ invoice.payment_instructions }}</p>
+  </div>
+  {% endif %} {% if template and template.bank_name %}
+  <div class="bank-details" style="margin-bottom: 10px">
+    <h4 style="margin: 0 0 5px; font-size: 12px">Bank Details</h4>
+    <p style="margin: 2px 0">{{ template.bank_name }}</p>
+    {% if template.bank_account_number %}
+    <p style="margin: 2px 0">Account: {{ template.bank_account_number }}</p>
+    {% endif %} {% if template.bank_branch %}
+    <p style="margin: 2px 0">Branch: {{ template.bank_branch }}</p>
+    {% endif %} {% if template.bank_swift_code %}
+    <p style="margin: 2px 0">SWIFT: {{ template.bank_swift_code }}</p>
+    {% endif %}
+  </div>
+  {% endif %} {% if invoice.terms_and_conditions %}
+  <div class="terms" style="margin-bottom: 10px">
+    <h4 style="margin: 0 0 5px; font-size: 12px">Terms &amp; Conditions</h4>
+    <p style="margin: 0">{{ invoice.terms_and_conditions }}</p>
+  </div>
+  {% endif %} {% if invoice.footer_text or template.footer_text %}
+  <p style="text-align: center; margin-top: 15px">{{ invoice.footer_text|default:template.footer_text }}</p>
+  {% endif %}
+</div>

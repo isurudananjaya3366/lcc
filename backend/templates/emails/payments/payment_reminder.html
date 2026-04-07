@@ -1,0 +1,54 @@
+{% extends "emails/payments/base_email.html" %} {% block title %}Payment Reminder{% endblock %} {% block header_title
+%}{{ urgency }}: Payment Due{% endblock %} {% block header_subtitle %}Invoice {{ invoice.invoice_number }}{% endblock %}
+{% block content %}
+<p>Dear {{ customer }},</p>
+
+<p>This is a {{ urgency|lower }} regarding an outstanding payment on your account.</p>
+
+<div class="warning-box">
+  <strong>Amount Due</strong>
+  <p style="margin: 8px 0 0; font-size: 20px; font-weight: bold; color: #ca8a04">
+    {{ invoice.balance_due }} {{ invoice.currency|default:"LKR" }}
+  </p>
+  {% if days_overdue > 0 %}
+  <p style="margin: 4px 0 0; color: #92400e">{{ days_overdue }} days overdue</p>
+  {% endif %}
+</div>
+
+<table class="info-table">
+  <tr>
+    <td>Invoice Number</td>
+    <td>{{ invoice.invoice_number }}</td>
+  </tr>
+  <tr>
+    <td>Invoice Total</td>
+    <td>{{ invoice.total }} {{ invoice.currency|default:"LKR" }}</td>
+  </tr>
+  <tr>
+    <td>Amount Paid</td>
+    <td>{{ invoice.amount_paid }} {{ invoice.currency|default:"LKR" }}</td>
+  </tr>
+  <tr>
+    <td>Balance Due</td>
+    <td>{{ invoice.balance_due }} {{ invoice.currency|default:"LKR" }}</td>
+  </tr>
+  <tr>
+    <td>Due Date</td>
+    <td>{{ invoice.due_date|date:"d F Y" }}</td>
+  </tr>
+</table>
+
+<p><strong>Payment Options:</strong></p>
+<ul>
+  <li><strong>Online:</strong> Pay through your customer portal</li>
+  <li><strong>Bank Transfer:</strong> Transfer to our bank account (details below)</li>
+  <li><strong>Cash:</strong> Visit our office during business hours</li>
+</ul>
+
+<p>
+  Please ensure payment is made at your earliest convenience. If payment has already been made, please disregard this
+  reminder.
+</p>
+
+<p>If you have any questions, please do not hesitate to contact us.</p>
+{% endblock %}

@@ -1,0 +1,5 @@
+packages:
+  # Main application
+  - '.'
+  # Shared packages (future)
+  - 'packages/*'

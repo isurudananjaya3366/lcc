@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Your Receipt from {{ header.business_name }}</title>
+    <!--[if mso
+      ]><style type="text/css">
+        table,
+        td {
+          font-family: Arial, Helvetica, sans-serif;
+        }
+      </style><!
+    [endif]-->
+  </head>
+  <body
+    style="
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      font-family: Arial, Helvetica, sans-serif;
+      -webkit-text-size-adjust: 100%;
+    "
+  >
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f4f4">
+      <tr>
+        <td align="center" style="padding: 20px 10px">
+          <!-- Main container -->
+          <table
+            role="presentation"
+            width="600"
+            cellpadding="0"
+            cellspacing="0"
+            style="
+              background-color: #ffffff;
+              border-radius: 8px;
+              overflow: hidden;
+              box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            "
+          >
+            <!-- Header -->
+            <tr>
+              <td style="background-color:{{ primary_color|default:'#2c3e50' }};padding:20px 30px;text-align:center;">
+                {% if logo_url %}<img
+                  src="{{ logo_url }}"
+                  alt="{{ header.business_name }}"
+                  style="max-height: 50px; margin-bottom: 8px"
+                /><br />{% endif %}
+                <div style="font-size: 22px; font-weight: bold; color: #ffffff">{{ header.business_name }}</div>
+                {% for line in header.custom_lines %}
+                <div style="font-size: 12px; color: rgba(255, 255, 255, 0.8)">{{ line }}</div>
+                {% endfor %}
+              </td>
+            </tr>
+
+            {% if is_duplicate %}
+            <tr>
+              <td style="background-color: #fee; padding: 8px; text-align: center; border-bottom: 2px solid #c00">
+                <span style="color: #c00; font-weight: bold; font-size: 14px">DUPLICATE COPY</span>
+              </td>
+            </tr>
+            {% endif %}
+
+            <!-- Greeting -->
+            <tr>
+              <td style="padding: 20px 30px 10px">
+                <div style="font-size: 16px; color: #333">
+                  {% if custom_message %}{{ custom_message }}{% else %}Thank you for your purchase!{% endif %}
+                </div>
+                <div style="font-size: 13px; color: #666; margin-top: 6px">Here's your receipt for your records.</div>
+              </td>
+            </tr>
+
+            <!-- Transaction card -->
+            <tr>
+              <td style="padding: 10px 30px">
+                <table
+                  role="presentation"
+                  width="100%"
+                  cellpadding="0"
+                  cellspacing="0"
+                  style="background-color:#f8f9fa;border-radius:6px;border-left:4px solid {{ accent_color|default:'#3498db' }};"
+                >
+                  <tr>
+                    <td style="padding: 15px">
+                      <div style="font-size: 13px; color: #666">Receipt #{{ transaction.receipt_number }}</div>
+                      <div
+                        style="font-size:24px;font-weight:bold;color:{{ primary_color|default:'#2c3e50' }};margin:4px 0;"
+                      >
+                        {{ totals.grand_total_display }}
+                      </div>
+                      <div style="font-size: 12px; color: #888">
+                        {{ transaction.date_display }} at {{ transaction.time_display }}
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- Items -->
+            <tr>
+              <td style="padding: 10px 30px">
+                <div style="font-size: 14px; font-weight: bold; color: #333; margin-bottom: 8px">Items</div>
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-size: 13px">
+                  <tr style="background-color: #f0f0f0">
+                    <td style="padding: 6px 8px; font-weight: bold">Item</td>
+                    <td style="padding: 6px 8px; text-align: center; font-weight: bold">Qty</td>
+                    <td style="padding: 6px 8px; text-align: right; font-weight: bold">Total</td>
+                  </tr>
+                  {% for item in items %}
+                  <tr style="border-bottom: 1px solid #eee">
+                    <td
+                      style="padding:6px 8px;{% if forloop.counter|divisibleby:2 %}background-color:#fafafa;{% endif %}"
+                    >
+                      {{ item.name }}{% if item.variant_display %}<br /><span style="font-size: 11px; color: #888"
+                        >{{ item.variant_display }}</span
+                      >{% endif %}
+                    </td>
+                    <td
+                      style="padding:6px 8px;text-align:center;{% if forloop.counter|divisibleby:2 %}background-color:#fafafa;{% endif %}"
+                    >
+                      {{ item.quantity_display }}
+                    </td>
+                    <td
+                      style="padding:6px 8px;text-align:right;{% if forloop.counter|divisibleby:2 %}background-color:#fafafa;{% endif %}"
+                    >
+                      {{ item.line_total_display }}
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </table>
+              </td>
+            </tr>
+
+            <!-- Totals -->
+            <tr>
+              <td style="padding: 10px 30px">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-size: 13px">
+                  <tr>
+                    <td style="padding: 3px 0; color: #666">Subtotal</td>
+                    <td style="padding: 3px 0; text-align: right">{{ totals.subtotal_display }}</td>
+                  </tr>
+                  {% if totals.discount_total > 0 %}
+                  <tr>
+                    <td style="padding: 3px 0; color: #c00">Discount</td>
+                    <td style="padding: 3px 0; text-align: right; color: #c00">-{{ totals.discount_display }}</td>
+                  </tr>
+                  {% endif %} {% for tax in totals.tax_breakdown %}
+                  <tr>
+                    <td style="padding: 3px 0; color: #666">{{ tax.tax_name }} ({{ tax.tax_rate_display }})</td>
+                    <td style="padding: 3px 0; text-align: right">{{ tax.tax_amount_display }}</td>
+                  </tr>
+                  {% endfor %}
+                  <tr>
+                    <td colspan="2" style="border-top: 2px solid #333; padding-top: 6px"></td>
+                  </tr>
+                  <tr>
+                    <td
+                      style="padding:4px 0;font-size:18px;font-weight:bold;color:{{ primary_color|default:'#2c3e50' }};"
+                    >
+                      TOTAL
+                    </td>
+                    <td
+                      style="padding:4px 0;text-align:right;font-size:18px;font-weight:bold;color:{{ primary_color|default:'#2c3e50' }};"
+                    >
+                      {{ totals.grand_total_display }}
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- Payment -->
+            <tr>
+              <td style="padding: 10px 30px">
+                <div style="font-size: 14px; font-weight: bold; color: #333; margin-bottom: 6px">Payment</div>
+                {% for pay in payments.payments %}
+                <div style="font-size: 13px; padding: 2px 0">
+                  {{ pay.method_display }}: {{ pay.amount_display }}{% if pay.reference %}
+                  <span style="color: #888">(Ref: {{ pay.reference }})</span>{% endif %}
+                </div>
+                {% endfor %} {% if payments.change_due_display %}
+                <div style="font-size: 13px; font-weight: bold; padding: 2px 0">
+                  Change: {{ payments.change_due_display }}
+                </div>
+                {% endif %}
+              </td>
+            </tr>
+
+            <!-- Footer -->
+            <tr>
+              <td style="padding: 20px 30px; text-align: center; background-color: #f8f9fa; border-top: 1px solid #eee">
+                {% for line in footer.custom_lines %}
+                <div style="font-size: 12px; color: #666">{{ line }}</div>
+                {% endfor %} {% if footer.return_policy %}
+                <div style="font-size: 11px; color: #888; margin-top: 6px">{{ footer.return_policy }}</div>
+                {% endif %}
+                <div style="font-size: 10px; color: #aaa; margin-top: 10px">{{ footer.footer_note }}</div>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

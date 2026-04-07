@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: auto">
+    <div style="background: #ffc107; color: #333; padding: 20px; text-align: center">
+      <h1 style="margin: 0">Payment Reminder</h1>
+    </div>
+    <div style="padding: 20px">
+      <p>Dear {{ invoice.customer_name }},</p>
+      <p>
+        This is a friendly reminder that invoice <strong>{{ invoice.invoice_number }}</strong> is approaching its due
+        date.
+      </p>
+      <table style="width: 100%; border-collapse: collapse; margin: 20px 0">
+        <tr>
+          <td style="padding: 8px; border-bottom: 1px solid #ddd"><strong>Invoice Number</strong></td>
+          <td style="padding: 8px; border-bottom: 1px solid #ddd">{{ invoice.invoice_number }}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border-bottom: 1px solid #ddd"><strong>Due Date</strong></td>
+          <td style="padding: 8px; border-bottom: 1px solid #ddd">{{ invoice.due_date|default:"—" }}</td>
+        </tr>
+        <tr style="font-weight: bold">
+          <td style="padding: 8px"><strong>Balance Due</strong></td>
+          <td style="padding: 8px">{{ invoice.currency_symbol }} {{ invoice.balance_due }}</td>
+        </tr>
+      </table>
+      <p>If you have already made the payment, please disregard this notice.</p>
+      <p>Thank you,<br />{{ invoice.business_name }}</p>
+    </div>
+  </body>
+</html>

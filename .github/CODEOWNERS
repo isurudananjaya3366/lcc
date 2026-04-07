@@ -1,0 +1,111 @@
+# LankaCommerce Cloud - Code Owners
+
+# This file defines who is automatically requested for review
+
+# when changes are made to specific paths.
+
+#
+
+# Order matters - last matching pattern takes precedence
+
+# Use GitHub usernames or team handles (@org/team)
+
+# ============================================
+
+# Default Owners (fallback)
+
+# ============================================
+
+-                               @lankacommerce/core-team
+
+# ============================================
+
+# Backend (Django)
+
+# ============================================
+
+/backend/ @lankacommerce/backend-team
+/backend/apps/auth/ @lankacommerce/backend-team @lankacommerce/security-team
+/backend/apps/payments/ @lankacommerce/backend-team @lankacommerce/payments-team
+/backend/apps/tenants/ @lankacommerce/backend-team @lankacommerce/architecture-team
+
+# ============================================
+
+# Frontend (Next.js)
+
+# ============================================
+
+/frontend/ @lankacommerce/frontend-team
+/frontend/apps/pos/ @lankacommerce/pos-team
+/frontend/apps/erp/ @lankacommerce/erp-team
+/frontend/apps/webstore/ @lankacommerce/webstore-team
+
+# ============================================
+
+# Infrastructure
+
+# ============================================
+
+/docker/ @lankacommerce/devops-team
+/docker-compose*.yml @lankacommerce/devops-team
+Dockerfile* @lankacommerce/devops-team
+
+# ============================================
+
+# CI/CD & GitHub
+
+# ============================================
+
+/.github/ @lankacommerce/devops-team
+/.github/workflows/ @lankacommerce/devops-team
+
+# ============================================
+
+# Configuration Files
+
+# ============================================
+
+_.env_ @lankacommerce/devops-team
+/backend/config/ @lankacommerce/backend-team @lankacommerce/devops-team
+/frontend/config/ @lankacommerce/frontend-team @lankacommerce/devops-team
+
+# ============================================
+
+# Database & Migrations
+
+# ============================================
+
+/backend/_/migrations/ @lankacommerce/backend-team @lankacommerce/dba-team
+_.sql @lankacommerce/dba-team
+
+# ============================================
+
+# Security-Sensitive Files
+
+# ============================================
+
+/backend/apps/auth/ @lankacommerce/security-team
+**/security\* @lankacommerce/security-team
+**/permissions\* @lankacommerce/security-team
+
+# ============================================
+
+# Documentation
+
+# ============================================
+
+/docs/ @lankacommerce/docs-team
+_.md @lankacommerce/docs-team
+README_ @lankacommerce/docs-team
+
+# ============================================
+
+# Package Management
+
+# ============================================
+
+package.json @lankacommerce/frontend-team
+package-lock.json @lankacommerce/frontend-team
+requirements\*.txt @lankacommerce/backend-team
+pyproject.toml @lankacommerce/backend-team
+poetry.lock @lankacommerce/backend-team

@@ -1,0 +1,27 @@
+{% extends "alerts/emails/base_alert_email.html" %} {% block title %}Low Stock Alert{% endblock %} {% block border_color
+%}#FFC107{% endblock %} {% block bg_color %}#FFF9E6{% endblock %} {% block header %}⚠️ Low Stock Alert{% endblock %} {%
+block content %}
+<div class="alert-box">
+  <h2 style="margin-top: 0">Low Stock Warning</h2>
+  <p>The following product is running low on stock:</p>
+  <table>
+    <tr>
+      <td>Product:</td>
+      <td>{{ product.name }}</td>
+    </tr>
+    <tr>
+      <td>Current Stock:</td>
+      <td>{{ stock_level }} units</td>
+    </tr>
+    <tr>
+      <td>Low Stock Threshold:</td>
+      <td>{{ threshold }} units</td>
+    </tr>
+    <tr>
+      <td>Warehouse:</td>
+      <td>{{ warehouse.name|default:"All Warehouses" }}</td>
+    </tr>
+  </table>
+  <p><strong>Action Required:</strong> Please review and consider reordering this product.</p>
+</div>
+{% endblock %}

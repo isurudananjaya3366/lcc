@@ -1,0 +1,14 @@
+STOCK ALERT: Low Stock Warning
+================================
+
+The following product is running low on stock:
+
+Product: {{ product.name }}
+Current Stock: {{ stock_level }} units
+Low Stock Threshold: {{ threshold }} units
+Warehouse: {{ warehouse.name|default:"All Warehouses" }}
+
+Action Required: Please review and consider reordering this product.
+
+---
+This is an automated notification.

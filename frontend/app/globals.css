@@ -1,0 +1,126 @@
+/* ================================================================
+ * Global Styles — LankaCommerce Cloud
+ * ================================================================
+ * Import order:
+ *   1. CSS variables (design tokens)
+ *   2. Animation keyframes & classes
+ *   3. Tailwind directives (base → components → utilities)
+ *   4. Custom layer overrides
+ * ================================================================ */
+
+/* ── Dependencies ─────────────────────────────────────────────── */
+@import '../styles/variables.css';
+@import '../styles/animations.css';
+
+/* ── Tailwind Directives ──────────────────────────────────────── */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Base Layer ───────────────────────────────────────────────── */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-white text-gray-900;
+    @apply dark:bg-gray-950 dark:text-gray-50;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings:
+      'rlig' 1,
+      'calt' 1;
+  }
+
+  /* ── Typography defaults ─────────────────────────────────── */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display font-semibold tracking-tight;
+  }
+
+  a {
+    @apply text-primary-600 hover:text-primary-700;
+    @apply dark:text-primary-400 dark:hover:text-primary-300;
+    text-decoration: none;
+  }
+
+  /* ── Focus visible ───────────────────────────────────────── */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary-500;
+  }
+
+  /* ── Selection highlight ─────────────────────────────────── */
+  ::selection {
+    @apply bg-primary-100 text-primary-900;
+  }
+
+  .dark ::selection {
+    @apply bg-primary-800 text-primary-100;
+  }
+}
+
+/* ── Components Layer ─────────────────────────────────────────── */
+@layer components {
+  /* Button base — will be expanded with component library */
+  .btn {
+    @apply inline-flex items-center justify-center;
+    @apply rounded-md px-4 py-2 text-sm font-medium;
+    @apply transition-colors duration-200;
+    @apply focus-visible:outline-2 focus-visible:outline-offset-2;
+    @apply disabled:pointer-events-none disabled:opacity-50;
+  }
+
+  /* Card container */
+  .card {
+    @apply rounded-lg border border-gray-200 bg-white p-6 shadow-sm;
+    @apply dark:border-gray-800 dark:bg-gray-900;
+  }
+
+  /* Form input base */
+  .input {
+    @apply w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm;
+    @apply placeholder:text-gray-400;
+    @apply focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20;
+    @apply dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100;
+    @apply dark:placeholder:text-gray-500;
+    @apply disabled:cursor-not-allowed disabled:opacity-50;
+  }
+}
+
+/* ── Utilities Layer ──────────────────────────────────────────── */
+@layer utilities {
+  /* Hide scrollbars while preserving scroll functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Balanced text wrapping */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Truncate text with ellipsis (multi-line) */
+  .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+  }
+}

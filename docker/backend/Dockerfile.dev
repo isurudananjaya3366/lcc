@@ -1,0 +1,53 @@
+# ==================================================
+# LankaCommerce Cloud - Backend Development Dockerfile
+# ==================================================
+# Purpose: Development environment with hot reload
+# Base: Python 3.12 slim
+# ==================================================
+
+# Base image - Python 3.12 slim for balance of size and compatibility
+FROM python:3.12-slim AS development
+
+# Environment variables for Python behavior
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    libpq-dev \
+    postgresql-client \
+    gettext \
+    curl \
+    netcat-openbsd \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /app
+
+# Copy requirements files for dependency installation
+COPY requirements/ requirements/
+
+# Install Python dependencies
+RUN pip install --upgrade pip \
+    && pip install -r requirements/local.txt
+
+# Copy application code
+COPY . .
+
+# Copy and configure entrypoint
+# entrypoint.sh lives in the backend build context
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# Set entrypoint
+ENTRYPOINT ["/entrypoint.sh"]
+
+# Expose Django development server port
+EXPOSE 8000
+
+# Default command - Django development server
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

@@ -1,0 +1,13 @@
+STOCK ALERT: Back in Stock
+===========================
+
+The following product has been restocked:
+
+Product: {{ product.name }}
+Current Stock: {{ stock_level }} units
+Warehouse: {{ warehouse.name|default:"All Warehouses" }}
+
+No further action is needed.
+
+---
+This is an automated notification.

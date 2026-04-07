@@ -1,0 +1,55 @@
+{
+  "compilerOptions": {
+    /* ── Type Checking ──────────────────────────────────────── */
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitReturns": true,
+    /* ── Target & Library ───────────────────────────────────── */
+    "target": "ES2022",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    /* ── Module ─────────────────────────────────────────────── */
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "isolatedModules": true,
+    /* ── JSX ────────────────────────────────────────────────── */
+    "jsx": "react-jsx",
+    /* ── Interop ────────────────────────────────────────────── */
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    /* ── Output ─────────────────────────────────────────────── */
+    "noEmit": true,
+    /* ── Performance ────────────────────────────────────────── */
+    "skipLibCheck": true,
+    "incremental": true,
+    /* ── Path Aliases ───────────────────────────────────────── */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+      "@/components/*": ["./components/*"],
+      "@/lib/*": ["./lib/*"],
+      "@/hooks/*": ["./hooks/*"],
+      "@/types/*": ["./types/*"],
+      "@/styles/*": ["./styles/*"],
+      "@/stores/*": ["./stores/*"],
+      "@/services/*": ["./services/*"],
+      "@/constants/*": ["./constants/*"]
+    },
+    /* ── Next.js Plugin ─────────────────────────────────────── */
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": ["node_modules", ".next", "out", "dist", "coverage"]
+}

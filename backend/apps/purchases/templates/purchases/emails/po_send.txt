@@ -1,0 +1,17 @@
+Purchase Order {{ po.po_number }}
+
+Dear {{ vendor.company_name }},
+
+Please find attached Purchase Order {{ po.po_number }} dated {{ po.order_date }}.
+
+PO Number: {{ po.po_number }}
+Date: {{ po.order_date }}
+{% if po.expected_delivery_date %}Expected Delivery: {{ po.expected_delivery_date }}
+{% endif %}Total: {{ po.currency }} {{ po.total }}
+
+Please acknowledge receipt of this order at your earliest convenience.
+
+Regards
+
+---
+This is an automated message. Please do not reply directly to this email.

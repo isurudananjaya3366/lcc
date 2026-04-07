@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+# LankaCommerce Cloud - Pre-commit Hook
+# Runs lint-staged on staged files
+
+cd frontend
+npx lint-staged

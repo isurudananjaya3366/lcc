@@ -1,0 +1,21 @@
+# Extend base requirements
+-r base.in
+
+# Testing Framework
+pytest>=7.4
+pytest-django>=4.5
+
+# Test Factories
+factory-boy>=3.3
+faker>=19.0
+
+# Coverage
+pytest-cov>=4.1
+coverage>=7.3
+
+# Async Testing
+pytest-asyncio>=0.21
+
+# Test Utilities
+freezegun>=1.2
+responses>=0.23

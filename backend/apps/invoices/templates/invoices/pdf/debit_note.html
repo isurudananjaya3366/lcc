@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Debit Note {{ invoice.invoice_number }}</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        color: #333;
+        margin: 0;
+        padding: 20px;
+      }
+      .header {
+        border-bottom: 3px solid #dc3545;
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+      }
+      .title {
+        font-size: 24px;
+        font-weight: bold;
+        color: #dc3545;
+      }
+      .info-grid {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
+      .info-block {
+        width: 48%;
+      }
+      .info-block h3 {
+        margin: 0 0 8px;
+        font-size: 13px;
+        color: #666;
+        text-transform: uppercase;
+      }
+      .reference-box {
+        background: #fdf0f0;
+        border: 1px solid #dc3545;
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+      }
+      th {
+        background: #dc3545;
+        color: #fff;
+        padding: 8px;
+        text-align: left;
+      }
+      td {
+        padding: 8px;
+        border-bottom: 1px solid #ddd;
+      }
+      .totals {
+        text-align: right;
+      }
+      .totals td {
+        border: none;
+      }
+      .grand-total {
+        font-size: 16px;
+        font-weight: bold;
+        color: #dc3545;
+      }
+      .footer {
+        border-top: 1px solid #ddd;
+        padding-top: 10px;
+        font-size: 11px;
+        color: #666;
+        margin-top: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div class="title">DEBIT NOTE</div>
+      <div><strong>{{ invoice.invoice_number }}</strong></div>
+      <div>Date: {{ invoice.issue_date|default:"—" }}</div>
+    </div>
+
+    <div class="reference-box">
+      <strong>Original Invoice:</strong> {{ invoice.related_invoice.invoice_number|default:"N/A" }}<br />
+      <strong>Reason:</strong> {{ invoice.notes }}
+    </div>
+
+    <div class="info-grid">
+      <div class="info-block">
+        <h3>From</h3>
+        <div>{{ invoice.business_name }}</div>
+        <div>{{ invoice.business_address }}</div>
+        <div>{{ invoice.business_phone }}</div>
+        <div>{{ invoice.business_email }}</div>
+      </div>
+      <div class="info-block">
+        <h3>To</h3>
+        <div>{{ invoice.customer_name }}</div>
+        <div>{{ invoice.customer_address }}</div>
+        <div>{{ invoice.customer_phone }}</div>
+        <div>{{ invoice.customer_email }}</div>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Description</th>
+          <th>Qty</th>
+          <th>Unit Price</th>
+          <th>Tax</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in line_items %}
+        <tr>
+          <td>{{ item.position }}</td>
+          <td>{{ item.description }}</td>
+          <td>{{ item.quantity }}</td>
+          <td>{{ item.unit_price }}</td>
+          <td>{{ item.tax_amount }}</td>
+          <td>{{ item.line_total }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <table class="totals">
+      <tr>
+        <td>Subtotal:</td>
+        <td>{{ invoice.currency_symbol }} {{ invoice.subtotal }}</td>
+      </tr>
+      {% if invoice.discount_amount %}
+      <tr>
+        <td>Discount:</td>
+        <td>-{{ invoice.currency_symbol }} {{ invoice.discount_amount }}</td>
+      </tr>
+      {% endif %}
+      <tr>
+        <td>Tax:</td>
+        <td>{{ invoice.currency_symbol }} {{ invoice.tax_amount }}</td>
+      </tr>
+      <tr class="grand-total">
+        <td>Additional Charge:</td>
+        <td>{{ invoice.currency_symbol }} {{ invoice.total }}</td>
+      </tr>
+    </table>
+
+    <div class="footer">
+      <p>
+        This debit note increases your outstanding balance on invoice {{
+        invoice.related_invoice.invoice_number|default:"" }}.
+      </p>
+      {% if invoice.business_registration_number %}
+      <p>BRN: {{ invoice.business_registration_number }}</p>
+      {% endif %} {% if invoice.vat_registration_number %}
+      <p>VAT Reg: {{ invoice.vat_registration_number }}</p>
+      {% endif %}
+    </div>
+  </body>
+</html>

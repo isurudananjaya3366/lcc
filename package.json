@@ -1,0 +1,26 @@
+{
+  "name": "lankacommerce-cloud",
+  "version": "0.1.0",
+  "private": true,
+  "description": "LankaCommerce Cloud - Multi-tenant POS + ERP + Webstore platform",
+  "scripts": {
+    "commit": "cz",
+    "commitlint": "commitlint --edit",
+    "prepare": "husky"
+  },
+  "keywords": [],
+  "author": "LankaCommerce Team",
+  "license": "UNLICENSED",
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^20.4.1",
+    "@commitlint/config-conventional": "^20.4.1",
+    "commitizen": "^4.3.1",
+    "cz-conventional-changelog": "^3.3.0",
+    "husky": "^9.1.7"
+  }
+}

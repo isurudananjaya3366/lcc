@@ -1,0 +1,28 @@
+<!-- Invoice PDF Billing Section -->
+<div
+  class="billing"
+  style="display: flex; justify-content: space-between; margin-bottom: 20px; padding: 15px; background: #f9f9f9"
+>
+  <div class="bill-to">
+    <h3 style="margin: 0 0 8px 0; font-size: 14px; text-transform: uppercase">Bill To</h3>
+    <p style="margin: 2px 0; font-weight: bold">{{ invoice.customer_name }}</p>
+    {% if invoice.customer_email %}
+    <p style="margin: 2px 0; font-size: 12px">{{ invoice.customer_email }}</p>
+    {% endif %} {% if invoice.customer_phone %}
+    <p style="margin: 2px 0; font-size: 12px">{{ invoice.customer_phone }}</p>
+    {% endif %} {% if invoice.customer_address %}
+    <p style="margin: 2px 0; font-size: 12px">{{ invoice.customer_address }}</p>
+    {% endif %} {% if invoice.customer_tax_id %}
+    <p style="margin: 2px 0; font-size: 12px"><strong>Tax ID:</strong> {{ invoice.customer_tax_id }}</p>
+    {% endif %}
+  </div>
+  {% if invoice.related_invoice %}
+  <div class="reference">
+    <h3 style="margin: 0 0 8px 0; font-size: 14px; text-transform: uppercase">Reference</h3>
+    <p style="margin: 2px 0">Original Invoice: {{ invoice.related_invoice.invoice_number }}</p>
+    {% if invoice.external_reference %}
+    <p style="margin: 2px 0">Ref: {{ invoice.external_reference }}</p>
+    {% endif %}
+  </div>
+  {% endif %}
+</div>

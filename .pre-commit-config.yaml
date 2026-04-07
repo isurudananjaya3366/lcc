@@ -1,0 +1,90 @@
+# ==================================================
+# LankaCommerce Cloud - Pre-commit Configuration
+# ==================================================
+# Purpose: Automated code quality checks before commits
+# ==================================================
+
+# Default stages to run hooks
+default_stages: [commit]
+
+# Fail fast - stop on first failure
+fail_fast: false
+
+# Hook repositories
+repos:
+  # General pre-commit hooks (utility)
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+        name: Trim trailing whitespace
+        args: ["--markdown-linebreak-ext=md"]
+
+      - id: end-of-file-fixer
+        name: Fix end of files
+
+      - id: check-yaml
+        name: Check YAML syntax
+        args: ["--allow-multiple-documents"]
+
+      - id: check-added-large-files
+        name: Check for large files
+        args: ["--maxkb=500"]
+
+      - id: check-merge-conflict
+        name: Check for merge conflicts
+
+      - id: check-json
+        name: Check JSON syntax
+
+      - id: debug-statements
+        name: Check for debug statements
+
+  # isort - Import sorting (runs before Black)
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        name: isort
+        description: Sort Python imports
+        files: ^backend/
+        args: ["--settings-path", "backend/pyproject.toml"]
+
+  # Black - Python formatter
+  - repo: https://github.com/psf/black
+    rev: 24.4.2
+    hooks:
+      - id: black
+        name: black
+        description: Format Python code with Black
+        language_version: python3.12
+        files: ^backend/
+        args: ["--config", "backend/pyproject.toml"]
+
+  # flake8 - Python linting
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.0.0
+    hooks:
+      - id: flake8
+        name: flake8
+        description: Check Python code with flake8
+        files: ^backend/
+        args: ["--config", "backend/.flake8"]
+        additional_dependencies:
+          - flake8-bugbear>=24.0.0
+          - flake8-comprehensions>=3.14.0
+
+  # mypy - Python type checking
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.10.0
+    hooks:
+      - id: mypy
+        name: mypy
+        description: Check Python types with mypy
+        files: ^backend/
+        args: ["--config-file", "backend/mypy.ini"]
+        additional_dependencies:
+          - django-stubs>=5.0.0
+          - djangorestframework-stubs>=3.14.0
+          - types-redis>=4.6.0
+          - types-celery>=5.3.0

@@ -1,0 +1,186 @@
+# ────────────────────────────────────────────────────────────
+# API Schema CI — SP11 Task 78
+# Validates the OpenAPI 3.0 schema on every push / PR.
+# ────────────────────────────────────────────────────────────
+name: API Schema Validation
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - "backend/**"
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - "backend/**"
+
+env:
+  DJANGO_SETTINGS_MODULE: config.settings.test_pg
+  POSTGRES_DB: lcc_test
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+  DATABASE_URL: postgres://postgres:postgres@localhost:5432/lcc_test
+
+jobs:
+  # ── 1. Schema Validation ──────────────────────────────────
+  schema-validation:
+    name: Validate OpenAPI Schema
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_DB: lcc_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: backend/requirements/base.in
+
+      - name: Install dependencies
+        working-directory: backend
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements/base.in
+          pip install pytest pytest-django django-redis drf-spectacular drf-spectacular-sidecar
+
+      - name: Run schema validation (strict)
+        working-directory: backend
+        run: |
+          python manage.py validate_schema --strict --output schema.json
+
+      - name: Upload schema artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: openapi-schema
+          path: backend/schema.json
+          retention-days: 30
+
+  # ── 2. API Docs Tests ─────────────────────────────────────
+  api-docs-tests:
+    name: API Documentation Tests
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_DB: lcc_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: backend/requirements/base.in
+
+      - name: Install dependencies
+        working-directory: backend
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements/base.in
+          pip install pytest pytest-django django-redis drf-spectacular drf-spectacular-sidecar
+
+      - name: Run API docs tests
+        working-directory: backend
+        run: |
+          python -m pytest tests/core/test_api_docs.py --tb=short -q --junitxml=test-results.xml
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-docs-test-results
+          path: backend/test-results.xml
+          retention-days: 14
+
+  # ── 3. Schema Diff (PRs only) ─────────────────────────────
+  schema-diff:
+    name: Schema Diff Report
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    needs: [schema-validation]
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+
+      - name: Checkout base branch schema
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.base_ref }}
+          path: base
+
+      - name: Download PR schema artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: openapi-schema
+
+      - name: Generate diff summary
+        id: diff
+        run: |
+          if [ -f base/backend/schema.json ]; then
+            DIFF=$(diff --unified base/backend/schema.json schema.json || true)
+            if [ -z "$DIFF" ]; then
+              echo "No schema changes detected."
+              echo "has_changes=false" >> "$GITHUB_OUTPUT"
+            else
+              echo "Schema changes detected."
+              echo "has_changes=true" >> "$GITHUB_OUTPUT"
+              echo "$DIFF" > schema-diff.txt
+            fi
+          else
+            echo "No base schema found — first run."
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Comment PR with diff
+        if: steps.diff.outputs.has_changes == 'true'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: api-schema-diff
+          path: schema-diff.txt

@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Receipt {{ receipt_number }}</title>
+    <style>
+      @page {
+        size: 58mm auto;
+        margin: 3mm;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Courier New", monospace;
+        font-size: 10px;
+        color: #000;
+        max-width: 220px;
+        margin: 0 auto;
+      }
+      .center {
+        text-align: center;
+      }
+      .bold {
+        font-weight: bold;
+      }
+      .sep {
+        border-top: 1px dashed #000;
+        margin: 4px 0;
+      }
+      .dsep {
+        border-top: 2px solid #000;
+        margin: 4px 0;
+      }
+      .row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 10px;
+      }
+      .grand {
+        font-size: 14px;
+        font-weight: bold;
+      }
+      .small {
+        font-size: 8px;
+        color: #444;
+      }
+      table {
+        width: 100%;
+        font-size: 10px;
+        border-collapse: collapse;
+      }
+      td {
+        padding: 1px 0;
+      }
+      .r {
+        text-align: right;
+      }
+    </style>
+  </head>
+  <body>
+    {% if watermark %}
+    <div class="center bold" style="font-size: 14px; color: #aaa; letter-spacing: 3px">{{ watermark }}</div>
+    {% endif %}
+    <div class="center bold" style="font-size: 14px">{{ header.business_name }}</div>
+    {% for line in header.custom_lines %}
+    <div class="center small">{{ line }}</div>
+    {% endfor %}
+    <div class="sep"></div>
+    {% if transaction.receipt_number %}
+    <div class="row"><span>Rcpt#</span><span>{{ transaction.receipt_number }}</span></div>
+    {% endif %} {% if transaction.date_display %}
+    <div class="row"><span>Date</span><span>{{ transaction.date_display }}</span></div>
+    {% endif %} {% if transaction.time_display %}
+    <div class="row"><span>Time</span><span>{{ transaction.time_display }}</span></div>
+    {% endif %}
+    <div class="sep"></div>
+    <table>
+      {% for item in items %}
+      <tr>
+        <td>{{ item.name|truncatechars:18 }}</td>
+        <td class="r">{{ item.quantity_display }}x{{ item.line_total_display }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    <div class="sep"></div>
+    <div class="row"><span>Subtotal</span><span>{{ totals.subtotal_display }}</span></div>
+    {% if totals.discount_total > 0 %}
+    <div class="row"><span>Discount</span><span>-{{ totals.discount_display }}</span></div>
+    {% endif %} {% for tax in totals.tax_breakdown %}
+    <div class="row"><span>{{ tax.tax_name }}</span><span>{{ tax.tax_amount_display }}</span></div>
+    {% endfor %}
+    <div class="dsep"></div>
+    <div class="row grand"><span>TOTAL</span><span>{{ totals.grand_total_display }}</span></div>
+    <div class="dsep"></div>
+    {% for pay in payments.payments %}
+    <div class="row"><span>{{ pay.method_display }}</span><span>{{ pay.amount_display }}</span></div>
+    {% endfor %} {% if payments.change_due_display %}
+    <div class="row bold"><span>Change</span><span>{{ payments.change_due_display }}</span></div>
+    {% endif %}
+    <div class="sep"></div>
+    <div class="center small">
+      {% for line in footer.custom_lines %}{{ line }}<br />{% endfor %} {% if footer.footer_note %}{{ footer.footer_note
+      }}{% endif %}
+    </div>
+  </body>
+</html>

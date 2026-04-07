@@ -1,0 +1,35 @@
+<!-- Invoice PDF Line Items Table -->
+<table class="line-items" style="width: 100%; border-collapse: collapse; margin-bottom: 20px">
+  <thead>
+    <tr style="background: #333; color: #fff">
+      <th style="padding: 8px; text-align: left">#</th>
+      <th style="padding: 8px; text-align: left">Description</th>
+      <th style="padding: 8px; text-align: left">SKU</th>
+      <th style="padding: 8px; text-align: right">Qty</th>
+      <th style="padding: 8px; text-align: right">Unit Price</th>
+      <th style="padding: 8px; text-align: right">Discount</th>
+      <th style="padding: 8px; text-align: right">Tax</th>
+      <th style="padding: 8px; text-align: right">Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in line_items %}
+    <tr style="border-bottom: 1px solid #ddd">
+      <td style="padding: 6px">{{ item.position }}</td>
+      <td style="padding: 6px">
+        {{ item.description }}{% if item.hsn_code %}<br /><small>HSN: {{ item.hsn_code }}</small>{% endif %}
+      </td>
+      <td style="padding: 6px">{{ item.sku }}</td>
+      <td style="padding: 6px; text-align: right">{{ item.quantity }}</td>
+      <td style="padding: 6px; text-align: right">{{ item.unit_price }}</td>
+      <td style="padding: 6px; text-align: right">{{ item.discount_amount }}</td>
+      <td style="padding: 6px; text-align: right">{{ item.tax_amount }}</td>
+      <td style="padding: 6px; text-align: right">{{ item.line_total }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="8" style="padding: 10px; text-align: center">No items</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>

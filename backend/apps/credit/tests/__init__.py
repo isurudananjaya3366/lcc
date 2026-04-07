@@ -1,0 +1,1 @@
+"""Credit & Loyalty tests package."""

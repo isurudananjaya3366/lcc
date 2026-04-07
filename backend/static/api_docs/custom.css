@@ -1,0 +1,180 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   LankaCommerce Cloud – Swagger UI Brand Styling (SP11 Task 40)
+   ═══════════════════════════════════════════════════════════════════════
+   Custom CSS loaded via SPECTACULAR_SETTINGS["SWAGGER_UI_CSS"].
+   Applies LankaCommerce brand colours and minor layout tweaks to the
+   default Swagger UI theme.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── Brand Tokens ──────────────────────────────────────────────────── */
+:root {
+  --lc-primary: #1976d2;
+  --lc-primary-dark: #115293;
+  --lc-secondary: #424242;
+  --lc-accent: #ff6f00;
+  --lc-accent-light: #ffa040;
+  --lc-bg-light: #fafafa;
+  --lc-text: #212121;
+  --lc-border: #e0e0e0;
+}
+
+/* ── Top Bar ───────────────────────────────────────────────────────── */
+.swagger-ui .topbar {
+  background-color: var(--lc-primary);
+  border-bottom: 3px solid var(--lc-accent);
+  padding: 8px 0;
+}
+
+.swagger-ui .topbar .download-url-wrapper .select-label {
+  color: #fff;
+}
+
+.swagger-ui .topbar a {
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ── Info Section ──────────────────────────────────────────────────── */
+.swagger-ui .info .title {
+  color: var(--lc-primary);
+  font-weight: 700;
+}
+
+.swagger-ui .info .description p {
+  color: var(--lc-secondary);
+}
+
+/* ── Tag Headers ───────────────────────────────────────────────────── */
+.swagger-ui .opblock-tag {
+  border-bottom: 2px solid var(--lc-primary);
+  font-weight: 600;
+}
+
+.swagger-ui .opblock-tag:hover {
+  background-color: var(--lc-bg-light);
+}
+
+/* ── Operation Blocks ──────────────────────────────────────────────── */
+.swagger-ui .opblock.opblock-get .opblock-summary-method {
+  background-color: #1976d2;
+}
+
+.swagger-ui .opblock.opblock-post .opblock-summary-method {
+  background-color: #388e3c;
+}
+
+.swagger-ui .opblock.opblock-put .opblock-summary-method {
+  background-color: #f57c00;
+}
+
+.swagger-ui .opblock.opblock-patch .opblock-summary-method {
+  background-color: #7b1fa2;
+}
+
+.swagger-ui .opblock.opblock-delete .opblock-summary-method {
+  background-color: #d32f2f;
+}
+
+/* ── Authorize Button ──────────────────────────────────────────────── */
+.swagger-ui .btn.authorize {
+  background-color: var(--lc-primary);
+  border-color: var(--lc-primary);
+  color: #fff;
+}
+
+.swagger-ui .btn.authorize:hover {
+  background-color: var(--lc-primary-dark);
+  border-color: var(--lc-primary-dark);
+}
+
+.swagger-ui .btn.authorize svg {
+  fill: #fff;
+}
+
+/* ── Execute Button ────────────────────────────────────────────────── */
+.swagger-ui .btn.execute {
+  background-color: var(--lc-accent);
+  border-color: var(--lc-accent);
+  color: #fff;
+}
+
+.swagger-ui .btn.execute:hover {
+  background-color: var(--lc-accent-light);
+}
+
+/* ── Models Section ────────────────────────────────────────────────── */
+.swagger-ui section.models h4 {
+  color: var(--lc-primary);
+  border-bottom: 1px solid var(--lc-border);
+  padding-bottom: 6px;
+}
+
+/* ── Filter / Search Box ───────────────────────────────────────────── */
+.swagger-ui .filter-container input[type="text"] {
+  border: 2px solid var(--lc-border);
+  border-radius: 4px;
+  padding: 6px 12px;
+}
+
+.swagger-ui .filter-container input[type="text"]:focus {
+  border-color: var(--lc-primary);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+}
+
+/* ── Scrollbar (Webkit) ────────────────────────────────────────────── */
+.swagger-ui ::-webkit-scrollbar {
+  width: 8px;
+}
+
+.swagger-ui ::-webkit-scrollbar-thumb {
+  background-color: var(--lc-border);
+  border-radius: 4px;
+}
+
+.swagger-ui ::-webkit-scrollbar-thumb:hover {
+  background-color: var(--lc-secondary);
+}
+
+/* ── Dark-mode media query (Task 33) ──────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --lc-bg-light: #1e1e1e;
+    --lc-text: #e0e0e0;
+    --lc-border: #424242;
+  }
+
+  .swagger-ui .topbar {
+    background-color: var(--lc-primary-dark);
+  }
+
+  .swagger-ui,
+  .swagger-ui .scheme-container,
+  .swagger-ui .opblock .opblock-section-header {
+    background-color: #121212;
+    color: var(--lc-text);
+  }
+
+  .swagger-ui .opblock-tag:hover {
+    background-color: #2a2a2a;
+  }
+
+  .swagger-ui .info .title,
+  .swagger-ui .info .description p {
+    color: var(--lc-text);
+  }
+
+  .swagger-ui input[type="text"],
+  .swagger-ui textarea,
+  .swagger-ui select {
+    background-color: #2a2a2a;
+    color: var(--lc-text);
+    border-color: var(--lc-border);
+  }
+
+  .swagger-ui .model-container,
+  .swagger-ui section.models {
+    background-color: #1e1e1e;
+    color: var(--lc-text);
+  }
+}

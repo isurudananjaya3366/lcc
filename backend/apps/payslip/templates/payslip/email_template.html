@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Your Payslip for {{ period_name }}</title>
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+        color: #333;
+        line-height: 1.6;
+      }
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .header {
+        text-align: center;
+        padding: 15px 0;
+        border-bottom: 2px solid #2c3e50;
+        margin-bottom: 20px;
+      }
+      .header h2 {
+        color: #2c3e50;
+        margin: 0;
+      }
+      .content p {
+        margin: 10px 0;
+      }
+      .highlight {
+        background-color: #f8f9fa;
+        padding: 12px;
+        border-left: 3px solid #2c3e50;
+        margin: 15px 0;
+      }
+      .footer {
+        margin-top: 30px;
+        padding-top: 15px;
+        border-top: 1px solid #dee2e6;
+        font-size: 12px;
+        color: #7f8c8d;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h2>{{ company_name }}</h2>
+      </div>
+
+      <div class="content">
+        <p>Dear {{ employee_name }},</p>
+
+        <p>Please find attached your payslip for <strong>{{ period_name }}</strong>.</p>
+
+        <div class="highlight">
+          <strong>Payslip Number:</strong> {{ slip_number }}<br />
+          <strong>Pay Period:</strong> {{ period_name }}<br />
+          <strong>Net Salary:</strong> LKR {{ net_salary }}
+        </div>
+
+        <p>If you have any questions regarding your payslip, please contact the HR Department.</p>
+
+        <p>Thank you.</p>
+      </div>
+
+      <div class="footer">
+        <p>This is an automated email. Please do not reply directly to this message.</p>
+        {% if disclaimer %}
+        <p>{{ disclaimer }}</p>
+        {% endif %}
+      </div>
+    </div>
+  </body>
+</html>

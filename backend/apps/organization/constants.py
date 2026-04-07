@@ -1,0 +1,80 @@
+"""
+Organization module constants.
+
+Department and designation status choices, membership roles,
+and designation level constants for the organization module.
+"""
+
+# ── Department Status ───────────────────────────────────────────────
+DEPARTMENT_STATUS_ACTIVE = "active"
+DEPARTMENT_STATUS_INACTIVE = "inactive"
+DEPARTMENT_STATUS_ARCHIVED = "archived"
+
+DEPARTMENT_STATUS_CHOICES = [
+    (DEPARTMENT_STATUS_ACTIVE, "Active"),
+    (DEPARTMENT_STATUS_INACTIVE, "Inactive"),
+    (DEPARTMENT_STATUS_ARCHIVED, "Archived"),
+]
+
+DEFAULT_DEPARTMENT_STATUS = DEPARTMENT_STATUS_ACTIVE
+
+# ── Designation Status ──────────────────────────────────────────────
+DESIGNATION_STATUS_ACTIVE = "active"
+DESIGNATION_STATUS_INACTIVE = "inactive"
+DESIGNATION_STATUS_ARCHIVED = "archived"
+
+DESIGNATION_STATUS_CHOICES = [
+    (DESIGNATION_STATUS_ACTIVE, "Active"),
+    (DESIGNATION_STATUS_INACTIVE, "Inactive"),
+    (DESIGNATION_STATUS_ARCHIVED, "Archived"),
+]
+
+DEFAULT_DESIGNATION_STATUS = DESIGNATION_STATUS_ACTIVE
+
+# ── Designation Level ───────────────────────────────────────────────
+DESIGNATION_LEVEL_ENTRY = "entry"
+DESIGNATION_LEVEL_JUNIOR = "junior"
+DESIGNATION_LEVEL_MID = "mid"
+DESIGNATION_LEVEL_SENIOR = "senior"
+DESIGNATION_LEVEL_LEAD = "lead"
+DESIGNATION_LEVEL_MANAGER = "manager"
+DESIGNATION_LEVEL_DIRECTOR = "director"
+DESIGNATION_LEVEL_EXECUTIVE = "executive"
+
+DESIGNATION_LEVEL_CHOICES = [
+    (DESIGNATION_LEVEL_ENTRY, "Entry Level"),
+    (DESIGNATION_LEVEL_JUNIOR, "Junior"),
+    (DESIGNATION_LEVEL_MID, "Mid Level"),
+    (DESIGNATION_LEVEL_SENIOR, "Senior"),
+    (DESIGNATION_LEVEL_LEAD, "Lead"),
+    (DESIGNATION_LEVEL_MANAGER, "Manager"),
+    (DESIGNATION_LEVEL_DIRECTOR, "Director"),
+    (DESIGNATION_LEVEL_EXECUTIVE, "Executive"),
+]
+
+DEFAULT_DESIGNATION_LEVEL = DESIGNATION_LEVEL_ENTRY
+
+# ── Designation Level Ordering (numeric rank) ───────────────────────
+DESIGNATION_LEVEL_ORDER = {
+    DESIGNATION_LEVEL_ENTRY: 1,
+    DESIGNATION_LEVEL_JUNIOR: 2,
+    DESIGNATION_LEVEL_MID: 3,
+    DESIGNATION_LEVEL_SENIOR: 4,
+    DESIGNATION_LEVEL_LEAD: 5,
+    DESIGNATION_LEVEL_MANAGER: 6,
+    DESIGNATION_LEVEL_DIRECTOR: 7,
+    DESIGNATION_LEVEL_EXECUTIVE: 8,
+}
+
+# ── Department Membership Roles ─────────────────────────────────────
+MEMBERSHIP_ROLE_MEMBER = "member"
+MEMBERSHIP_ROLE_LEAD = "lead"
+MEMBERSHIP_ROLE_DEPUTY_MANAGER = "deputy_manager"
+
+MEMBERSHIP_ROLE_CHOICES = [
+    (MEMBERSHIP_ROLE_MEMBER, "Member"),
+    (MEMBERSHIP_ROLE_LEAD, "Lead"),
+    (MEMBERSHIP_ROLE_DEPUTY_MANAGER, "Deputy Manager"),
+]
+
+DEFAULT_MEMBERSHIP_ROLE = MEMBERSHIP_ROLE_MEMBER

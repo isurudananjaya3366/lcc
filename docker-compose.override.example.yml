@@ -1,0 +1,36 @@
+# ==================================================
+# LankaCommerce Cloud - Development Overrides Example
+# ==================================================
+# Purpose: Template for local development customizations
+# Usage: Copy to docker-compose.override.yml and customize
+#   cp docker-compose.override.example.yml docker-compose.override.yml
+# Auto-merged with docker-compose.yml by Docker Compose
+#
+# Note: Base docker-compose.yml uses .env.docker for env_file.
+#   Ensure .env.docker exists (cp .env.docker.example .env.docker)
+# ==================================================
+
+services:
+  backend:
+    # Enable debugger port
+    ports:
+      - "8000:8000"
+      - "5678:5678" # debugpy
+    environment:
+      - DEBUG=${DEBUG:-True}
+      - DJANGO_DEBUG_TOOLBAR=${DJANGO_DEBUG_TOOLBAR:-true}
+
+  frontend:
+    environment:
+      - NODE_ENV=${NODE_ENV:-development}
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:8000/api/v1}
+
+  db:
+    # Expose for external tools (pgAdmin, DBeaver, etc.)
+    ports:
+      - "5432:5432"
+
+  redis:
+    # Expose for external tools (RedisInsight, etc.)
+    ports:
+      - "6379:6379"

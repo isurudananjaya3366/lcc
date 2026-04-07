@@ -1,0 +1,31 @@
+<!-- Invoice PDF Header Section -->
+<div class="header" style="display: flex; justify-content: space-between; margin-bottom: 20px">
+  <div class="company-info">
+    {% if template and template.logo %}
+    <img src="{{ template.logo.url }}" alt="Logo" style="max-height: 60px; margin-bottom: 10px" />
+    {% endif %}
+    <h1 style="margin: 0; font-size: 24px">
+      {% if invoice.type == 'CREDIT_NOTE' %}Credit Note{% elif invoice.type == 'DEBIT_NOTE' %}Debit Note{% else
+      %}Invoice{% endif %}
+    </h1>
+    <p style="margin: 5px 0">{{ invoice.business_name }}</p>
+    {% if invoice.business_address %}
+    <p style="margin: 2px 0; font-size: 12px">{{ invoice.business_address }}</p>
+    {% endif %} {% if invoice.business_phone %}
+    <p style="margin: 2px 0; font-size: 12px">{{ invoice.business_phone }}</p>
+    {% endif %} {% if invoice.business_email %}
+    <p style="margin: 2px 0; font-size: 12px">{{ invoice.business_email }}</p>
+    {% endif %}
+  </div>
+  <div class="invoice-info" style="text-align: right">
+    <p><strong>Number:</strong> {{ invoice.invoice_number }}</p>
+    <p><strong>Date:</strong> {{ invoice.issue_date|date:"Y-m-d" }}</p>
+    {% if invoice.due_date %}
+    <p><strong>Due:</strong> {{ invoice.due_date|date:"Y-m-d" }}</p>
+    {% endif %}
+    <p><strong>Status:</strong> {{ invoice.get_status_display }}</p>
+    {% if invoice.vat_registration_number %}
+    <p><strong>VAT No:</strong> {{ invoice.vat_registration_number }}</p>
+    {% endif %}
+  </div>
+</div>

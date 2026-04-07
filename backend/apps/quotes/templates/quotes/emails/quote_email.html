@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quotation {{ quote.quote_number }}</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        color: #1e293b;
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+        background: #f1f5f9;
+      }
+      .container {
+        max-width: 600px;
+        margin: 20px auto;
+        background: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .header {
+        background: #2563eb;
+        color: #fff;
+        padding: 24px 32px;
+      }
+      .header h1 {
+        margin: 0;
+        font-size: 22px;
+      }
+      .header p {
+        margin: 4px 0 0;
+        opacity: 0.9;
+        font-size: 14px;
+      }
+      .body {
+        padding: 32px;
+      }
+      .info-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 16px 0;
+      }
+      .info-table td {
+        padding: 6px 0;
+        font-size: 14px;
+      }
+      .info-table td:first-child {
+        font-weight: 600;
+        width: 140px;
+        color: #475569;
+      }
+      .total-box {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        padding: 16px 24px;
+        text-align: right;
+        margin: 20px 0;
+      }
+      .total-box .label {
+        font-size: 14px;
+        color: #64748b;
+      }
+      .total-box .amount {
+        font-size: 24px;
+        font-weight: bold;
+        color: #2563eb;
+      }
+      .message {
+        background: #eff6ff;
+        border-left: 4px solid #2563eb;
+        padding: 12px 16px;
+        margin: 16px 0;
+        border-radius: 0 4px 4px 0;
+        font-size: 14px;
+      }
+      .btn {
+        display: inline-block;
+        background: #2563eb;
+        color: #fff;
+        padding: 12px 28px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+        margin-top: 16px;
+      }
+      .footer {
+        background: #f8fafc;
+        padding: 20px 32px;
+        text-align: center;
+        font-size: 12px;
+        color: #94a3b8;
+        border-top: 1px solid #e2e8f0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Quotation {{ quote.quote_number }}</h1>
+        {% if quote.title %}
+        <p>{{ quote.title }}</p>
+        {% endif %}
+      </div>
+      <div class="body">
+        <p>Dear {{ quote.customer_display_name }},</p>
+
+        {% if personal_message %}
+        <div class="message">{{ personal_message }}</div>
+        {% endif %}
+
+        <p>Please find your quotation details below.</p>
+
+        <table class="info-table">
+          <tr>
+            <td>Quote #</td>
+            <td>{{ quote.quote_number }}</td>
+          </tr>
+          <tr>
+            <td>Date</td>
+            <td>{{ quote.issue_date|date:"d M Y" }}</td>
+          </tr>
+          {% if quote.valid_until %}
+          <tr>
+            <td>Valid Until</td>
+            <td>{{ quote.valid_until|date:"d M Y" }}</td>
+          </tr>
+          {% endif %}
+          <tr>
+            <td>Currency</td>
+            <td>{{ quote.get_currency_display }}</td>
+          </tr>
+        </table>
+
+        <div class="total-box">
+          <div class="label">Total Amount</div>
+          <div class="amount">{{ quote.currency_symbol }} {{ quote.total }}</div>
+        </div>
+
+        {% if public_url %}
+        <p style="text-align: center">
+          <a href="{{ public_url }}" class="btn">View Quotation Online</a>
+        </p>
+        {% endif %} {% if quote.notes %}
+        <h3 style="margin-top: 24px">Notes</h3>
+        <p style="font-size: 14px">{{ quote.notes|linebreaksbr }}</p>
+        {% endif %} {% if quote.terms %}
+        <h3>Terms &amp; Conditions</h3>
+        <p style="font-size: 13px; color: #475569">{{ quote.terms|linebreaksbr }}</p>
+        {% endif %}
+      </div>
+      <div class="footer">
+        <p>Thank you for your business.</p>
+        <p>This email was sent automatically. Please do not reply directly.</p>
+      </div>
+    </div>
+  </body>
+</html>

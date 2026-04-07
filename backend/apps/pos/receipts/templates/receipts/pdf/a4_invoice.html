@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Invoice {{ receipt_number }}</title>
+    <style>
+      @page { size: A4; margin: 20mm; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font-family: {{ font_family|default:"Arial, Helvetica, sans-serif" }}; font-size: 11pt; color: #333; }
+      .invoice-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; border-bottom: 3px solid {{ primary_color|default:"#333" }}; padding-bottom: 15px; }
+      .business-info { flex: 1; }
+      .business-name { font-size: 22pt; font-weight: bold; color: {{ primary_color|default:"#333" }}; }
+      .business-detail { font-size: 9pt; color: #666; margin-top: 2px; }
+      .invoice-meta { text-align: right; }
+      .invoice-title { font-size: 18pt; color: {{ primary_color|default:"#333" }}; font-weight: bold; }
+      .meta-row { font-size: 9pt; color: #666; margin-top: 3px; }
+      .section { margin: 15px 0; }
+      .section-title { font-size: 10pt; font-weight: bold; color: {{ primary_color|default:"#333" }}; border-bottom: 1px solid #ddd; padding-bottom: 4px; margin-bottom: 8px; }
+      table.items { width: 100%; border-collapse: collapse; margin-top: 8px; }
+      table.items th { background: {{ primary_color|default:"#f5f5f5" }}; color: {% if primary_color %}#fff{% else %}#333{% endif %}; padding: 8px; text-align: left; font-size: 9pt; text-transform: uppercase; }
+      table.items td { padding: 8px; border-bottom: 1px solid #eee; font-size: 10pt; }
+      table.items .amount { text-align: right; }
+      table.items .qty { text-align: center; }
+      .variant-cell { font-size: 8pt; color: #888; }
+      .totals-box { float: right; width: 250px; margin-top: 15px; }
+      .totals-row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 10pt; }
+      .totals-row.grand { font-size: 14pt; font-weight: bold; border-top: 2px solid #333; padding-top: 8px; margin-top: 4px; color: {{ primary_color|default:"#333" }}; }
+      .payment-section { clear: both; margin-top: 15px; padding-top: 10px; border-top: 1px solid #ddd; }
+      .footer { margin-top: 30px; text-align: center; font-size: 9pt; color: #888; border-top: 1px solid #eee; padding-top: 10px; }
+      .watermark { position: fixed; top: 40%; left: 20%; font-size: 72pt; color: rgba(200,200,200,0.3); transform: rotate(-30deg); z-index: -1; font-weight: bold; }
+    </style>
+  </head>
+  <body>
+    {% if watermark %}
+    <div class="watermark">{{ watermark }}</div>
+    {% endif %}
+
+    <div class="invoice-header">
+      <div class="business-info">
+        {% if logo_url %}<img src="{{ logo_url }}" alt="Logo" style="max-height: 50px; margin-bottom: 6px" /><br />{%
+        endif %}
+        <div class="business-name">{{ header.business_name }}</div>
+        {% for line in header.custom_lines %}
+        <div class="business-detail">{{ line }}</div>
+        {% endfor %}
+      </div>
+      <div class="invoice-meta">
+        <div class="invoice-title">RECEIPT</div>
+        <div class="meta-row"><strong>No:</strong> {{ transaction.receipt_number }}</div>
+        <div class="meta-row"><strong>Date:</strong> {{ transaction.date_display }}</div>
+        <div class="meta-row"><strong>Time:</strong> {{ transaction.time_display }}</div>
+        {% if transaction.order_number %}
+        <div class="meta-row"><strong>Order:</strong> {{ transaction.order_number }}</div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Transaction Details</div>
+      <div style="display: flex; gap: 40px; font-size: 10pt">
+        {% if transaction.cashier_name %}
+        <div><strong>Cashier:</strong> {{ transaction.cashier_name }}</div>
+        {% endif %} {% if transaction.terminal_name %}
+        <div><strong>Terminal:</strong> {{ transaction.terminal_name }}</div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Items</div>
+      <table class="items">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Item</th>
+            <th class="qty">Qty</th>
+            <th class="amount">Unit Price</th>
+            <th class="amount">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in items %}
+          <tr>
+            <td>{{ item.line_number }}</td>
+            <td>
+              {{ item.name }}{% if item.variant_display %}<br /><span class="variant-cell"
+                >{{ item.variant_display }}</span
+              >{% endif %}
+            </td>
+            <td class="qty">{{ item.quantity_display }}</td>
+            <td class="amount">{{ item.unit_price_display }}</td>
+            <td class="amount">{{ item.line_total_display }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="totals-box">
+      <div class="totals-row"><span>Subtotal</span><span>{{ totals.subtotal_display }}</span></div>
+      {% if totals.discount_total > 0 %}
+      <div class="totals-row"><span>Discount</span><span>-{{ totals.discount_display }}</span></div>
+      {% endif %} {% for tax in totals.tax_breakdown %}
+      <div class="totals-row">
+        <span>{{ tax.tax_name }} ({{ tax.tax_rate_display }})</span><span>{{ tax.tax_amount_display }}</span>
+      </div>
+      {% endfor %}
+      <div class="totals-row grand"><span>TOTAL</span><span>{{ totals.grand_total_display }}</span></div>
+    </div>
+
+    <div class="payment-section">
+      <div class="section-title">Payment</div>
+      {% for pay in payments.payments %}
+      <div style="font-size: 10pt">
+        <strong>{{ pay.method_display }}:</strong> {{ pay.amount_display }}{% if pay.reference %}
+        <span style="color: #888">(Ref: {{ pay.reference }})</span>{% endif %}
+      </div>
+      {% endfor %} {% if payments.change_due_display %}
+      <div style="font-size: 10pt; font-weight: bold">Change: {{ payments.change_due_display }}</div>
+      {% endif %}
+    </div>
+
+    <div class="footer">
+      {% for line in footer.custom_lines %}
+      <div>{{ line }}</div>
+      {% endfor %} {% if footer.return_policy %}
+      <div style="margin-top: 4px">{{ footer.return_policy }}</div>
+      {% endif %} {% if footer.footer_note %}
+      <div style="margin-top: 4px">{{ footer.footer_note }}</div>
+      {% endif %}
+    </div>
+  </body>
+</html>

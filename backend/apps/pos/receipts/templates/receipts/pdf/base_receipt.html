@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Receipt {{ receipt_number }}</title>
+    <style>
+      @page { size: 80mm auto; margin: 5mm; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        font-family: {{ font_family|default:"Arial, Helvetica, sans-serif" }};
+        font-size: 12px;
+        color: #333;
+        max-width: 300px;
+        margin: 0 auto;
+      }
+      .header { text-align: center; margin-bottom: 8px; }
+      .business-name {
+        font-size: 18px;
+        font-weight: bold;
+        color: {{ primary_color|default:"#333" }};
+      }
+      .header-line { font-size: 11px; color: #666; }
+      .section { margin: 6px 0; }
+      .separator { border-top: 1px dashed #999; margin: 6px 0; }
+      .double-sep { border-top: 2px solid #333; margin: 6px 0; }
+      .row { display: flex; justify-content: space-between; font-size: 11px; }
+      .row-label { color: #666; }
+      .items-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+      .items-table th { text-align: left; border-bottom: 1px solid #ccc; padding: 2px 0; font-size: 10px; }
+      .items-table td { padding: 2px 0; vertical-align: top; }
+      .items-table .amount { text-align: right; }
+      .items-table .qty { text-align: center; width: 40px; }
+      .variant { font-size: 10px; color: #888; padding-left: 8px; }
+      .discount-line { font-size: 10px; color: #c00; padding-left: 8px; }
+      .totals .row { font-size: 12px; }
+      .grand-total { font-size: 16px; font-weight: bold; color: {{ primary_color|default:"#333" }}; }
+      .footer { text-align: center; font-size: 10px; color: #888; margin-top: 10px; }
+      .qr-section { text-align: center; margin-top: 8px; }
+      .watermark { text-align: center; font-size: 20px; font-weight: bold; color: #ddd; letter-spacing: 4px; }
+      .duplicate-badge { background: #fee; border: 1px solid #c00; color: #c00; padding: 2px 8px; font-size: 10px; display: inline-block; margin: 4px 0; }
+    </style>
+  </head>
+  <body>
+    {% if watermark %}
+    <div class="watermark">{{ watermark }}</div>
+    {% endif %} {% if is_duplicate %}
+    <div style="text-align: center"><span class="duplicate-badge">DUPLICATE COPY</span></div>
+    {% endif %}
+
+    <div class="header">
+      {% if logo_url %}<img
+        src="{{ logo_url }}"
+        alt="Logo"
+        style="max-width: 120px; max-height: 60px; margin-bottom: 4px"
+      />{% endif %}
+      <div class="business-name">{{ header.business_name }}</div>
+      {% for line in header.custom_lines %}
+      <div class="header-line">{{ line }}</div>
+      {% endfor %}
+    </div>
+
+    <div class="separator"></div>
+
+    <div class="section">
+      {% if transaction.receipt_number %}
+      <div class="row"><span class="row-label">Receipt #:</span><span>{{ transaction.receipt_number }}</span></div>
+      {% endif %} {% if transaction.date_display %}
+      <div class="row"><span class="row-label">Date:</span><span>{{ transaction.date_display }}</span></div>
+      {% endif %} {% if transaction.time_display %}
+      <div class="row"><span class="row-label">Time:</span><span>{{ transaction.time_display }}</span></div>
+      {% endif %} {% if transaction.cashier_name %}
+      <div class="row"><span class="row-label">Cashier:</span><span>{{ transaction.cashier_name }}</span></div>
+      {% endif %} {% if transaction.terminal_name %}
+      <div class="row"><span class="row-label">Terminal:</span><span>{{ transaction.terminal_name }}</span></div>
+      {% endif %}
+    </div>
+
+    <div class="separator"></div>
+
+    <div class="section">
+      <table class="items-table">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th class="qty">Qty</th>
+            <th class="amount">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in items %}
+          <tr>
+            <td>{{ item.name }}</td>
+            <td class="qty">{{ item.quantity_display }}</td>
+            <td class="amount">{{ item.line_total_display }}</td>
+          </tr>
+          {% if item.variant_display %}
+          <tr>
+            <td colspan="3" class="variant">{{ item.variant_display }}</td>
+          </tr>
+          {% endif %} {% if item.discount_display %}
+          <tr>
+            <td colspan="3" class="discount-line">Discount: -{{ item.discount_display }}</td>
+          </tr>
+          {% endif %} {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="separator"></div>
+
+    <div class="section totals">
+      <div class="row"><span>Subtotal:</span><span>{{ totals.subtotal_display }}</span></div>
+      {% if totals.discount_total > 0 %}
+      <div class="row"><span>Discount:</span><span>-{{ totals.discount_display }}</span></div>
+      {% endif %} {% for tax in totals.tax_breakdown %}
+      <div class="row">
+        <span>{{ tax.tax_name }} ({{ tax.tax_rate_display }}):</span><span>{{ tax.tax_amount_display }}</span>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="double-sep"></div>
+    <div class="section">
+      <div class="row grand-total"><span>TOTAL:</span><span>{{ totals.grand_total_display }}</span></div>
+    </div>
+    <div class="double-sep"></div>
+
+    <div class="section">
+      {% for pay in payments.payments %}
+      <div class="row"><span>{{ pay.method_display }}:</span><span>{{ pay.amount_display }}</span></div>
+      {% if pay.reference %}
+      <div class="row">
+        <span class="row-label" style="padding-left: 8px">Ref: {{ pay.reference }}</span><span></span>
+      </div>
+      {% endif %} {% endfor %} {% if payments.change_due_display %}
+      <div class="row" style="font-weight: bold">
+        <span>Change:</span><span>{{ payments.change_due_display }}</span>
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="separator"></div>
+
+    <div class="footer">
+      {% for line in footer.custom_lines %}
+      <div>{{ line }}</div>
+      {% endfor %} {% if footer.return_policy %}
+      <div style="margin-top: 4px">{{ footer.return_policy }}</div>
+      {% endif %} {% if footer.footer_note %}
+      <div style="margin-top: 4px">{{ footer.footer_note }}</div>
+      {% endif %}
+    </div>
+
+    {% if qr_code.data %}
+    <div class="qr-section">
+      {% if qr_code.display_text %}
+      <div style="font-size: 10px; color: #888">{{ qr_code.display_text }}</div>
+      {% endif %}
+    </div>
+    {% endif %}
+  </body>
+</html>

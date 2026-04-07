@@ -1,0 +1,2 @@
+# Run frontend lint-staged for code quality checks
+cd frontend && npx lint-staged

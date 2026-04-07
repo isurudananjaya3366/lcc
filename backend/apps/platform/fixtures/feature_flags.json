@@ -1,0 +1,114 @@
+[
+  {
+    "model": "platform.featureflag",
+    "fields": {
+      "key": "webstore.live_chat",
+      "name": "Webstore Live Chat",
+      "description": "Enable live chat support widget on the webstore for real-time customer assistance.",
+      "rollout_percentage": 0,
+      "is_active": true,
+      "deactivated_on": null,
+      "is_public": true,
+      "created_on": "2025-01-01T00:00:00Z",
+      "updated_on": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "platform.featureflag",
+    "fields": {
+      "key": "webstore.product_reviews",
+      "name": "Webstore Product Reviews",
+      "description": "Allow customers to leave reviews and ratings on webstore products.",
+      "rollout_percentage": 0,
+      "is_active": true,
+      "deactivated_on": null,
+      "is_public": true,
+      "created_on": "2025-01-01T00:00:00Z",
+      "updated_on": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "platform.featureflag",
+    "fields": {
+      "key": "inventory.barcode_scanner",
+      "name": "Barcode Scanner",
+      "description": "Enable barcode scanning for inventory management and POS transactions.",
+      "rollout_percentage": 0,
+      "is_active": true,
+      "deactivated_on": null,
+      "is_public": true,
+      "created_on": "2025-01-01T00:00:00Z",
+      "updated_on": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "platform.featureflag",
+    "fields": {
+      "key": "inventory.multi_warehouse",
+      "name": "Multi-Warehouse Support",
+      "description": "Support multiple warehouse locations for inventory tracking and transfers.",
+      "rollout_percentage": 0,
+      "is_active": true,
+      "deactivated_on": null,
+      "is_public": false,
+      "created_on": "2025-01-01T00:00:00Z",
+      "updated_on": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "platform.featureflag",
+    "fields": {
+      "key": "billing.multi_currency",
+      "name": "Multi-Currency Billing",
+      "description": "Support billing and invoicing in multiple currencies beyond LKR.",
+      "rollout_percentage": 0,
+      "is_active": true,
+      "deactivated_on": null,
+      "is_public": false,
+      "created_on": "2025-01-01T00:00:00Z",
+      "updated_on": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "platform.featureflag",
+    "fields": {
+      "key": "billing.auto_invoicing",
+      "name": "Automatic Invoicing",
+      "description": "Automatically generate and send invoices on recurring billing cycles.",
+      "rollout_percentage": 0,
+      "is_active": true,
+      "deactivated_on": null,
+      "is_public": true,
+      "created_on": "2025-01-01T00:00:00Z",
+      "updated_on": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "platform.featureflag",
+    "fields": {
+      "key": "reports.advanced_analytics",
+      "name": "Advanced Analytics",
+      "description": "Enable advanced analytics dashboards with custom report generation.",
+      "rollout_percentage": 0,
+      "is_active": true,
+      "deactivated_on": null,
+      "is_public": false,
+      "created_on": "2025-01-01T00:00:00Z",
+      "updated_on": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "platform.featureflag",
+    "fields": {
+      "key": "reports.custom_dashboards",
+      "name": "Custom Dashboards",
+      "description": "Allow tenants to create and customize their own dashboard layouts.",
+      "rollout_percentage": 0,
+      "is_active": true,
+      "deactivated_on": null,
+      "is_public": true,
+      "created_on": "2025-01-01T00:00:00Z",
+      "updated_on": "2025-01-01T00:00:00Z"
+    }
+  }
+]

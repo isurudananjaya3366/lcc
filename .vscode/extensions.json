@@ -1,0 +1,46 @@
+{
+  // Recommended extensions for LankaCommerce Cloud development
+  "recommendations": [
+    // Python extensions
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "ms-python.black-formatter",
+    "ms-python.flake8",
+    "ms-python.mypy-type-checker",
+    "ms-python.isort",
+    "charliermarsh.ruff",
+
+    // JavaScript/TypeScript extensions
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "bradlc.vscode-tailwindcss",
+
+    // General development
+    "editorconfig.editorconfig",
+    "eamodio.gitlens",
+    "usernamehw.errorlens",
+    "gruntfuggly.todo-tree",
+
+    // Docker
+    "ms-azuretools.vscode-docker",
+
+    // Database
+    "mtxr.sqltools",
+    "mtxr.sqltools-driver-pg",
+
+    // API development
+    "humao.rest-client",
+    "42crunch.vscode-openapi",
+
+    // DotEnv
+    "mikestead.dotenv",
+
+    // YAML
+    "redhat.vscode-yaml"
+  ],
+  "unwantedRecommendations": [
+    // Avoid conflicts with project linters
+    "hookyqr.beautify",
+    "HookyQR.minify"
+  ]
+}

@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Invoice {{ invoice.invoice_number }}</title>
+    <style>
+      body { font-family: {{ template.font_family|default:"Arial" }}, sans-serif; font-size: {{ template.font_size|default:"12" }}px; color: {{ template.text_color|default:"#333" }}; margin: 0; padding: 20px; }
+      .header { border-bottom: 3px solid {{ template.primary_color|default:"#007bff" }}; padding-bottom: 15px; margin-bottom: 20px; }
+      .title { font-size: 24px; font-weight: bold; color: {{ template.primary_color|default:"#007bff" }}; }
+      .invoice-meta { margin-top: 10px; }
+      .invoice-meta span { display: inline-block; margin-right: 20px; }
+      .info-grid { display: flex; justify-content: space-between; margin-bottom: 20px; }
+      .info-block { width: 48%; }
+      .info-block h3 { margin: 0 0 8px; font-size: 13px; color: #666; text-transform: uppercase; }
+      table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+      th { background: {{ template.primary_color|default:"#007bff" }}; color: #fff; padding: 8px; text-align: left; }
+      td { padding: 8px; border-bottom: 1px solid #ddd; }
+      .totals { text-align: right; }
+      .totals td { border: none; }
+      .grand-total { font-size: 16px; font-weight: bold; color: {{ template.primary_color|default:"#007bff" }}; }
+      .balance-due { font-size: 18px; font-weight: bold; color: #dc3545; margin-top: 10px; }
+      .tax-summary { margin-bottom: 20px; }
+      .bank-details { background: #f8f9fa; padding: 15px; border-radius: 4px; margin-bottom: 20px; }
+      .bank-details h3 { margin-top: 0; font-size: 13px; color: #666; text-transform: uppercase; }
+      .terms { font-size: 11px; color: #666; margin-bottom: 15px; white-space: pre-line; }
+      .footer { border-top: 1px solid #ddd; padding-top: 10px; font-size: 11px; color: #666; margin-top: 30px; }
+      .signature-block { margin-top: 30px; text-align: right; }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div class="title">{% if invoice.type == "SVAT" %}SVAT INVOICE{% else %}INVOICE{% endif %}</div>
+      <div class="invoice-meta">
+        <span><strong>Invoice #:</strong> {{ invoice.invoice_number }}</span>
+        <span><strong>Date:</strong> {{ invoice.issue_date|default:"—" }}</span>
+        <span><strong>Due:</strong> {{ invoice.due_date|default:"—" }}</span>
+        {% if invoice.payment_terms %}<span><strong>Terms:</strong> {{ invoice.payment_terms }}</span>{% endif %}
+      </div>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-block">
+        <h3>From</h3>
+        <div><strong>{{ invoice.business_name }}</strong></div>
+        <div>{{ invoice.business_address }}</div>
+        <div>{{ invoice.business_phone }}</div>
+        <div>{{ invoice.business_email }}</div>
+        {% if invoice.business_website %}
+        <div>{{ invoice.business_website }}</div>
+        {% endif %} {% if invoice.business_registration_number %}
+        <div>BRN: {{ invoice.business_registration_number }}</div>
+        {% endif %} {% if invoice.vat_registration_number %}
+        <div>VAT: {{ invoice.vat_registration_number }}</div>
+        {% endif %} {% if invoice.svat_number %}
+        <div>SVAT: {{ invoice.svat_number }}</div>
+        {% endif %}
+      </div>
+      <div class="info-block">
+        <h3>Bill To</h3>
+        <div><strong>{{ invoice.customer_name }}</strong></div>
+        <div>{{ invoice.customer_address }}</div>
+        <div>{{ invoice.customer_phone }}</div>
+        <div>{{ invoice.customer_email }}</div>
+        {% if invoice.external_reference %}
+        <div>Ref: {{ invoice.external_reference }}</div>
+        {% endif %}
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Description</th>
+          <th>SKU</th>
+          <th>Qty</th>
+          <th>Unit Price</th>
+          <th>Discount</th>
+          <th>Tax</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in line_items %}
+        <tr>
+          <td>{{ item.position }}</td>
+          <td>{{ item.description }}{% if item.hsn_code %}<br /><small>HSN: {{ item.hsn_code }}</small>{% endif %}</td>
+          <td>{{ item.sku }}</td>
+          <td>{{ item.quantity }}</td>
+          <td>{{ invoice.currency_symbol }} {{ item.unit_price }}</td>
+          <td>
+            {% if item.discount_amount %}{{ invoice.currency_symbol }} {{ item.discount_amount }}{% else %}—{% endif %}
+          </td>
+          <td>{{ invoice.currency_symbol }} {{ item.tax_amount }}</td>
+          <td>{{ invoice.currency_symbol }} {{ item.line_total }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <table class="totals">
+      <tr>
+        <td>Subtotal:</td>
+        <td>{{ invoice.currency_symbol }} {{ invoice.subtotal }}</td>
+      </tr>
+      {% if invoice.discount_amount %}
+      <tr>
+        <td>Discount:</td>
+        <td>-{{ invoice.currency_symbol }} {{ invoice.discount_amount }}</td>
+      </tr>
+      {% endif %}
+      <tr>
+        <td>Tax:</td>
+        <td>{{ invoice.currency_symbol }} {{ invoice.tax_amount }}</td>
+      </tr>
+      <tr class="grand-total">
+        <td>Total:</td>
+        <td>{{ invoice.currency_symbol }} {{ invoice.total }}</td>
+      </tr>
+      {% if invoice.amount_paid %}
+      <tr>
+        <td>Paid:</td>
+        <td>-{{ invoice.currency_symbol }} {{ invoice.amount_paid }}</td>
+      </tr>
+      {% endif %}
+      <tr class="balance-due">
+        <td>Balance Due:</td>
+        <td>{{ invoice.currency_symbol }} {{ invoice.balance_due }}</td>
+      </tr>
+    </table>
+
+    {% if template and template.show_bank_details and template.bank_name %}
+    <div class="bank-details">
+      <h3>Payment Details</h3>
+      <div><strong>Bank:</strong> {{ template.bank_name }}</div>
+      <div><strong>Account:</strong> {{ template.account_name }}</div>
+      <div><strong>A/C No:</strong> {{ template.account_number }}</div>
+      <div><strong>Branch:</strong> {{ template.branch }}</div>
+      {% if template.swift_code %}
+      <div><strong>SWIFT:</strong> {{ template.swift_code }}</div>
+      {% endif %}
+    </div>
+    {% endif %} {% if template and template.show_terms and template.terms_and_conditions %}
+    <div class="terms">
+      <strong>Terms &amp; Conditions:</strong><br />
+      {{ template.terms_and_conditions }}
+    </div>
+    {% endif %} {% if template and template.payment_instructions %}
+    <div class="terms">{{ template.payment_instructions }}</div>
+    {% endif %} {% if template and template.show_signature %}
+    <div class="signature-block">
+      {% if template.signature_image %}<img
+        src="{{ template.signature_image.url }}"
+        alt="Signature"
+        style="max-height: 60px"
+      />{% endif %}
+      <div>{{ template.authorized_signatory }}</div>
+      <div><small>{{ template.signatory_designation }}</small></div>
+    </div>
+    {% endif %}
+
+    <div class="footer">
+      {% if template and template.footer_text %}
+      <p>{{ template.footer_text }}</p>
+      {% endif %}
+      <p>Generated on {% now "Y-m-d H:i" %} | {{ invoice.invoice_number }}</p>
+    </div>
+  </body>
+</html>

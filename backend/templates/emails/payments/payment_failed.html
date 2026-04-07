@@ -1,0 +1,45 @@
+{% extends "emails/payments/base_email.html" %} {% block title %}Payment Failed{% endblock %} {% block header_title
+%}Payment Failed{% endblock %} {% block header_subtitle %}Action required{% endblock %} {% block content %}
+<p>Dear {{ customer }},</p>
+
+<p>Unfortunately, your recent payment was not successful.</p>
+
+<table class="info-table">
+  <tr>
+    <td>Payment Number</td>
+    <td>{{ payment.payment_number }}</td>
+  </tr>
+  <tr>
+    <td>Amount</td>
+    <td>{{ payment.amount }} {{ payment.currency }}</td>
+  </tr>
+  <tr>
+    <td>Payment Method</td>
+    <td>{{ payment.get_method_display }}</td>
+  </tr>
+  <tr>
+    <td>Date</td>
+    <td>{{ payment.payment_date|date:"d F Y" }}</td>
+  </tr>
+</table>
+
+{% if failure_reason %}
+<div class="warning-box">
+  <strong>Reason for Failure</strong>
+  <p style="margin: 4px 0 0">{{ failure_reason }}</p>
+</div>
+{% endif %}
+
+<p><strong>Common reasons for payment failure:</strong></p>
+<ul>
+  <li>Insufficient funds in your account</li>
+  <li>Card expired or blocked</li>
+  <li>Incorrect payment details</li>
+  <li>Bank declined the transaction</li>
+</ul>
+
+<p>
+  Please try again or use an alternative payment method. If the problem persists, contact your bank or reach out to our
+  support team.
+</p>
+{% endblock %}

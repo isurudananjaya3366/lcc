@@ -1,0 +1,22 @@
+# Issue Template Chooser Configuration
+# This file configures the GitHub issue template chooser page.
+# https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/configuring-issue-templates-for-your-repository
+
+blank_issues_enabled: false
+
+contact_links:
+  - name: 📚 Documentation
+    url: https://github.com/AkbarBeiwormo/pos/wiki
+    about: Check our documentation and wiki for answers to common questions.
+
+  - name: 💬 Community Discussions
+    url: https://github.com/AkbarBeiwormo/pos/discussions
+    about: Ask questions, share ideas, and connect with the community.
+
+  - name: 🔒 Security Vulnerability
+    url: https://github.com/AkbarBeiwormo/pos/security/advisories/new
+    about: Report security vulnerabilities privately. Do NOT create a public issue.
+
+  - name: 💡 Ideas & Roadmap
+    url: https://github.com/AkbarBeiwormo/pos/discussions/categories/ideas
+    about: Share ideas and vote on upcoming features in our roadmap.

@@ -1,0 +1,42 @@
+{% extends "emails/payments/base_email.html" %} {% block title %}Payment Confirmation{% endblock %} {% block
+header_title %}Payment Confirmed{% endblock %} {% block header_subtitle %}Thank you for your payment{% endblock %} {%
+block content %}
+<p>Dear {{ customer }},</p>
+
+<p>We have received your payment. Here are the details:</p>
+
+<div class="success-box">
+  <strong>Payment Successful</strong>
+  <p style="margin: 8px 0 0; font-size: 20px; font-weight: bold; color: #16a34a">
+    {{ payment.amount }} {{ payment.currency }}
+  </p>
+</div>
+
+<table class="info-table">
+  <tr>
+    <td>Payment Number</td>
+    <td>{{ payment.payment_number }}</td>
+  </tr>
+  <tr>
+    <td>Payment Method</td>
+    <td>{{ payment.get_method_display }}</td>
+  </tr>
+  <tr>
+    <td>Payment Date</td>
+    <td>{{ payment.payment_date|date:"d F Y" }}</td>
+  </tr>
+  {% if payment.reference_number %}
+  <tr>
+    <td>Reference</td>
+    <td>{{ payment.reference_number }}</td>
+  </tr>
+  {% endif %} {% if invoice %}
+  <tr>
+    <td>Invoice</td>
+    <td>{{ invoice.invoice_number }}</td>
+  </tr>
+  {% endif %}
+</table>
+
+<p>If you have any questions about this payment, please contact us.</p>
+{% endblock %}

@@ -1,0 +1,14 @@
+STOCK ALERT: CRITICAL Stock Warning
+=====================================
+
+Stock for the following product is critically low:
+
+Product: {{ product.name }}
+Current Stock: {{ stock_level }} units
+Threshold: {{ threshold }} units
+Warehouse: {{ warehouse.name|default:"All Warehouses" }}
+
+URGENT: Please reorder this product immediately to avoid stockout.
+
+---
+This is an automated notification.

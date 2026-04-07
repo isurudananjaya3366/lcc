@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: auto">
+    <div style="background: #007bff; color: #fff; padding: 20px; text-align: center">
+      <h1 style="margin: 0">Invoice from {{ invoice.business_name }}</h1>
+    </div>
+    <div style="padding: 20px">
+      <p>Dear {{ invoice.customer_name }},</p>
+      <p>Please find attached invoice <strong>{{ invoice.invoice_number }}</strong>.</p>
+      <table style="width: 100%; border-collapse: collapse; margin: 20px 0">
+        <tr>
+          <td style="padding: 8px; border-bottom: 1px solid #ddd"><strong>Invoice Number</strong></td>
+          <td style="padding: 8px; border-bottom: 1px solid #ddd">{{ invoice.invoice_number }}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border-bottom: 1px solid #ddd"><strong>Issue Date</strong></td>
+          <td style="padding: 8px; border-bottom: 1px solid #ddd">{{ invoice.issue_date|default:"—" }}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border-bottom: 1px solid #ddd"><strong>Due Date</strong></td>
+          <td style="padding: 8px; border-bottom: 1px solid #ddd">{{ invoice.due_date|default:"—" }}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border-bottom: 1px solid #ddd"><strong>Total</strong></td>
+          <td style="padding: 8px; border-bottom: 1px solid #ddd">{{ invoice.currency_symbol }} {{ invoice.total }}</td>
+        </tr>
+        <tr style="font-weight: bold; color: #dc3545">
+          <td style="padding: 8px"><strong>Balance Due</strong></td>
+          <td style="padding: 8px">{{ invoice.currency_symbol }} {{ invoice.balance_due }}</td>
+        </tr>
+      </table>
+      <p>Please remit payment by the due date.</p>
+      <p>Thank you for your business.</p>
+      <p style="color: #999; font-size: 12px">
+        {{ invoice.business_name }}<br />{{ invoice.business_email }}<br />{{ invoice.business_phone }}
+      </p>
+    </div>
+  </body>
+</html>

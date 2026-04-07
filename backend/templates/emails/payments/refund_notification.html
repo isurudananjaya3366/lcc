@@ -1,0 +1,45 @@
+{% extends "emails/payments/base_email.html" %} {% block title %}Refund Notification{% endblock %} {% block header_title
+%}Refund Processed{% endblock %} {% block header_subtitle %}Your refund has been processed{% endblock %} {% block
+content %}
+<p>Dear {{ customer }},</p>
+
+<p>We would like to inform you that a refund has been processed for your payment.</p>
+
+<div class="highlight-box">
+  <strong>Refund Amount</strong>
+  <p style="margin: 8px 0 0; font-size: 20px; font-weight: bold; color: #2563eb">
+    {{ refund.amount }} {{ payment.currency }}
+  </p>
+</div>
+
+<table class="info-table">
+  <tr>
+    <td>Refund Number</td>
+    <td>{{ refund.refund_number }}</td>
+  </tr>
+  <tr>
+    <td>Original Payment</td>
+    <td>{{ payment.payment_number }}</td>
+  </tr>
+  <tr>
+    <td>Refund Method</td>
+    <td>{{ refund.get_refund_method_display }}</td>
+  </tr>
+  <tr>
+    <td>Reason</td>
+    <td>{{ refund.get_reason_display }}</td>
+  </tr>
+</table>
+
+<div class="warning-box">
+  <strong>Processing Time</strong>
+  <p style="margin: 4px 0 0">
+    {% if refund.refund_method == 'ORIGINAL' or refund.refund_method == 'BANK_TRANSFER' %} Bank refunds may take 5-10
+    business days to appear in your account. {% elif refund.refund_method == 'STORE_CREDIT' %} Store credit has been
+    added to your account and is available immediately. {% else %} Your refund will be processed within 3-5 business
+    days. {% endif %}
+  </p>
+</div>
+
+<p>If you have any questions about this refund, please contact us.</p>
+{% endblock %}

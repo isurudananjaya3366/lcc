@@ -1,0 +1,34 @@
+<!-- Invoice PDF Tax Summary Section -->
+<div class="tax-summary" style="width: 300px; margin-left: auto; margin-bottom: 20px">
+  <table style="width: 100%; border-collapse: collapse">
+    <tr>
+      <td style="padding: 4px">Subtotal:</td>
+      <td style="padding: 4px; text-align: right">{{ invoice.currency_symbol }}{{ invoice.subtotal }}</td>
+    </tr>
+    {% if invoice.discount_amount %}
+    <tr>
+      <td style="padding: 4px">Discount:</td>
+      <td style="padding: 4px; text-align: right">-{{ invoice.currency_symbol }}{{ invoice.discount_amount }}</td>
+    </tr>
+    {% endif %} {% if invoice.tax_amount %}
+    <tr>
+      <td style="padding: 4px">Tax ({{ invoice.get_tax_scheme_display }}):</td>
+      <td style="padding: 4px; text-align: right">{{ invoice.currency_symbol }}{{ invoice.tax_amount }}</td>
+    </tr>
+    {% endif %}
+    <tr style="border-top: 2px solid #333; font-weight: bold; font-size: 16px">
+      <td style="padding: 8px 4px">Total:</td>
+      <td style="padding: 8px 4px; text-align: right">{{ invoice.currency_symbol }}{{ invoice.total }}</td>
+    </tr>
+    {% if invoice.amount_paid %}
+    <tr>
+      <td style="padding: 4px">Paid:</td>
+      <td style="padding: 4px; text-align: right">{{ invoice.currency_symbol }}{{ invoice.amount_paid }}</td>
+    </tr>
+    <tr style="font-weight: bold">
+      <td style="padding: 4px">Balance Due:</td>
+      <td style="padding: 4px; text-align: right">{{ invoice.currency_symbol }}{{ invoice.balance_due }}</td>
+    </tr>
+    {% endif %}
+  </table>
+</div>

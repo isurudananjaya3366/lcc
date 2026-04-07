@@ -1,0 +1,42 @@
+; ==================================================
+; PgBouncer User List
+; ==================================================
+; Format: "username" "password"
+;
+; Password format:
+;   - Plain text passwords are prefixed with nothing
+;   - MD5 hashed passwords are prefixed with "md5"
+;   - SCRAM-SHA-256 passwords are prefixed with "SCRAM-SHA-256$"
+;
+; For development, plain text passwords are used.
+; In production, use md5 or SCRAM hashes:
+;   SELECT 'md5' || md5('password' || 'username');
+;
+; Sync Rules:
+;   - Every user here MUST exist as a PostgreSQL role
+;   - Passwords MUST match the PostgreSQL role password
+;   - lcc_user is created in 01-init.sql
+;   - postgres password comes from POSTGRES_PASSWORD env
+;
+; Credential Rotation:
+;   1. Generate new password hash
+;   2. Update this userlist.txt file
+;   3. Update 01-init.sql or ALTER USER in PostgreSQL
+;   4. Reload PgBouncer: docker exec lcc-pgbouncer kill -HUP 1
+;   5. Update application DATABASE_URL env variable
+;   6. Restart application services
+;
+; Verification:
+;   After any change, verify with:
+;   psql -h localhost -p 6432 -U lcc_user lankacommerce
+; ==================================================
+
+; Application user — used by Django, Celery, and all
+; application database access. Created in 01-init.sql
+; with CREATEDB privilege for django-tenants.
+"lcc_user" "dev_password_change_me"
+
+; Superuser — used for PgBouncer admin console,
+; maintenance, and emergency access. Password must
+; match POSTGRES_PASSWORD in .env.docker.
+"postgres" "dev_password_change_me"

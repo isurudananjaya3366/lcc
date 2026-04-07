@@ -1,0 +1,51 @@
+# ==================================================
+# LankaCommerce Cloud - flake8 Configuration
+# ==================================================
+# Purpose: Python linting configuration
+# Compatibility: Black formatter
+# ==================================================
+
+[flake8]
+# Line length (must match Black's 88)
+max-line-length = 88
+
+# McCabe complexity threshold
+max-complexity = 10
+
+# Ignore codes that conflict with Black
+extend-ignore =
+    # Whitespace before ':' (Black handles this)
+    E203,
+    # Too many leading '#' for block comment
+    E266,
+    # Line too long (Black handles this)
+    E501,
+    # Line break before binary operator (Black prefers this)
+    W503,
+
+# Per-file ignores
+per-file-ignores =
+    # Allow unused imports in __init__.py (re-exports)
+    __init__.py:F401
+
+# Exclude directories from linting
+exclude =
+    # Version control
+    .git,
+    # Virtual environments
+    .venv,
+    venv,
+    env,
+    # Cache directories
+    __pycache__,
+    .pytest_cache,
+    .mypy_cache,
+    # Build outputs
+    build,
+    dist,
+    *.egg-info,
+    # Django generated
+    migrations,
+    # IDE directories
+    .idea,
+    .vscode,

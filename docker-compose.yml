@@ -1,0 +1,283 @@
+# ==================================================
+# LankaCommerce Cloud - Docker Compose Configuration
+# ==================================================
+# Purpose: Development environment orchestration
+# Usage: docker compose up -d
+# ==================================================
+
+services:
+  # -------------------------------------------------
+  # Backend - Django REST API
+  # -------------------------------------------------
+  backend:
+    build:
+      context: ./backend
+      dockerfile: ../docker/backend/Dockerfile.dev
+    container_name: lcc-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - backend-static:/app/staticfiles
+      - backend-media:/app/mediafiles
+    environment:
+      - DEBUG=${DEBUG:-True}
+      - DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE:-config.settings.local}
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY:-docker-dev-secret-change-me-in-production}
+      - DJANGO_ALLOWED_HOSTS=${DJANGO_ALLOWED_HOSTS:-localhost,127.0.0.1,backend,0.0.0.0}
+      - DATABASE_URL=${DATABASE_URL:-postgres://lcc_user:dev_password_change_me@pgbouncer:6432/lankacommerce}
+      - REDIS_URL=${REDIS_URL:-redis://redis:6379/0}
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL:-redis://redis:6379/0}
+      # Storage (default: local filesystem; set to "s3" for AWS S3)
+      - STORAGE_BACKEND=${STORAGE_BACKEND:-local}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:-}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:-}
+      - AWS_STORAGE_BUCKET_NAME=${AWS_STORAGE_BUCKET_NAME:-}
+      - AWS_S3_REGION_NAME=${AWS_S3_REGION_NAME:-ap-south-1}
+      - AWS_S3_CUSTOM_DOMAIN=${AWS_S3_CUSTOM_DOMAIN:-}
+      - AWS_PRIVATE_BUCKET_NAME=${AWS_PRIVATE_BUCKET_NAME:-}
+      - AWS_PUBLIC_BUCKET_NAME=${AWS_PUBLIC_BUCKET_NAME:-}
+    env_file:
+      - .env.docker
+    networks:
+      - lcc-network
+    depends_on:
+      pgbouncer:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+
+  # -------------------------------------------------
+  # Frontend - Next.js Application
+  # -------------------------------------------------
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ../docker/frontend/Dockerfile.dev
+    container_name: lcc-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      - NODE_ENV=${NODE_ENV:-development}
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:8000/api/v1}
+      - NEXT_PUBLIC_SITE_URL=${NEXT_PUBLIC_SITE_URL:-http://localhost:3000}
+      - API_BASE_URL=${API_BASE_URL:-http://backend:8000/api/v1}
+      - WATCHPACK_POLLING=${WATCHPACK_POLLING:-true}
+    env_file:
+      - .env.docker
+    networks:
+      - lcc-network
+    depends_on:
+      backend:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+
+  # -------------------------------------------------
+  # Database - PostgreSQL
+  # -------------------------------------------------
+  db:
+    image: postgres:15-alpine
+    container_name: lcc-postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - postgres-wal-archive:/var/lib/postgresql/wal_archive
+      - ./docker/postgres/init:/docker-entrypoint-initdb.d:ro
+      - ./docker/postgres/postgresql.conf:/etc/postgresql/postgresql.conf:ro
+      - ./docker/postgres/pg_hba.conf:/etc/postgresql/pg_hba.conf:ro
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-lankacommerce}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-dev_password_change_me}
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf -c hba_file=/etc/postgresql/pg_hba.conf
+    networks:
+      - lcc-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-lankacommerce}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
+  # -------------------------------------------------
+  # PgBouncer - Connection Pooler
+  # -------------------------------------------------
+  pgbouncer:
+    image: edoburu/pgbouncer:latest
+    container_name: lcc-pgbouncer
+    ports:
+      - "${PGBOUNCER_HOST_PORT:-6432}:6432"
+    volumes:
+      - ./docker/pgbouncer/pgbouncer.ini:/etc/pgbouncer/pgbouncer.ini:ro
+      - ./docker/pgbouncer/userlist.txt:/etc/pgbouncer/userlist.txt:ro
+    networks:
+      - lcc-network
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -p 6432 -U lcc_user -d lankacommerce || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
+  # -------------------------------------------------
+  # Redis - Cache & Message Broker
+  # -------------------------------------------------
+  redis:
+    image: redis:7-alpine
+    container_name: lcc-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+      - ./docker/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
+    command: redis-server /usr/local/etc/redis/redis.conf
+    networks:
+      - lcc-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    restart: unless-stopped
+
+  # -------------------------------------------------
+  # Celery Worker - Background Task Processing
+  # -------------------------------------------------
+  celery-worker:
+    build:
+      context: ./backend
+      dockerfile: ../docker/backend/Dockerfile.dev
+    container_name: lcc-celery-worker
+    volumes:
+      - ./backend:/app
+      - ./docker/scripts:/scripts:ro
+    command: /scripts/celery-worker.sh
+    environment:
+      - CELERY_APP=${CELERY_APP:-config.celery:app}
+      - CELERY_CONCURRENCY=${CELERY_CONCURRENCY:-2}
+      - CELERY_QUEUES=${CELERY_QUEUES:-default,high_priority,low_priority}
+      - CELERY_LOG_LEVEL=${CELERY_LOG_LEVEL:-info}
+    env_file:
+      - .env.docker
+    networks:
+      - lcc-network
+    depends_on:
+      pgbouncer:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      backend:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "celery", "-A", "config.celery", "inspect", "ping", "--timeout", "5"]
+      interval: 60s
+      timeout: 30s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+
+  # -------------------------------------------------
+  # Celery Beat - Task Scheduler
+  # -------------------------------------------------
+  celery-beat:
+    build:
+      context: ./backend
+      dockerfile: ../docker/backend/Dockerfile.dev
+    container_name: lcc-celery-beat
+    volumes:
+      - ./backend:/app
+      - ./docker/scripts:/scripts:ro
+    command: /scripts/celery-beat.sh
+    environment:
+      - CELERY_APP=${CELERY_APP:-config.celery:app}
+      - CELERY_BEAT_SCHEDULER=${CELERY_BEAT_SCHEDULER:-django_celery_beat.schedulers:DatabaseScheduler}
+      - CELERY_LOG_LEVEL=${CELERY_LOG_LEVEL:-info}
+    env_file:
+      - .env.docker
+    networks:
+      - lcc-network
+    depends_on:
+      pgbouncer:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # -------------------------------------------------
+  # Flower - Celery Monitoring
+  # -------------------------------------------------
+  flower:
+    build:
+      context: ./backend
+      dockerfile: ../docker/backend/Dockerfile.dev
+    container_name: lcc-flower
+    ports:
+      - "5555:5555"
+    volumes:
+      - ./backend:/app
+      - ./docker/scripts:/scripts:ro
+    command: /scripts/flower.sh
+    environment:
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL:-redis://redis:6379/0}
+      - FLOWER_PORT=${FLOWER_PORT:-5555}
+      - FLOWER_BASIC_AUTH=${FLOWER_BASIC_AUTH:-admin:admin}
+    env_file:
+      - .env.docker
+    networks:
+      - lcc-network
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+# -------------------------------------------------
+# Networks
+# -------------------------------------------------
+networks:
+  lcc-network:
+    driver: bridge
+    name: lankacommerce-network
+
+# -------------------------------------------------
+# Volumes
+# -------------------------------------------------
+volumes:
+  postgres-data:
+    name: lcc-postgres-data
+    driver: local
+  postgres-wal-archive:
+    name: lcc-postgres-wal-archive
+    driver: local
+  redis-data:
+    name: lcc-redis-data
+    driver: local
+  backend-static:
+    name: lcc-backend-static
+    driver: local
+  backend-media:
+    name: lcc-backend-media
+    driver: local

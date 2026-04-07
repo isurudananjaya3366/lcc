@@ -1,0 +1,14 @@
+STOCK ALERT: OUT OF STOCK
+==========================
+
+The following product is completely out of stock:
+
+Product: {{ product.name }}
+Current Stock: {{ stock_level }} units
+Warehouse: {{ warehouse.name|default:"All Warehouses" }}
+
+IMMEDIATE ACTION REQUIRED: This product is unavailable for sale.
+Please restock as soon as possible.
+
+---
+This is an automated notification.

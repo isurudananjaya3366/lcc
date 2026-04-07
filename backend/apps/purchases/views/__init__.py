@@ -1,0 +1,1 @@
+"""Purchases views package."""

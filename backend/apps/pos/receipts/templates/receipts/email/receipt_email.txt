@@ -1,0 +1,36 @@
+{{ header.business_name }}
+{% for line in header.custom_lines %}{{ line }}
+{% endfor %}
+=======================================
+
+Receipt #{{ transaction.receipt_number }}
+Date: {{ transaction.date_display }}  Time: {{ transaction.time_display }}
+{% if transaction.cashier_name %}Cashier: {{ transaction.cashier_name }}{% endif %}
+{% if transaction.terminal_name %}Terminal: {{ transaction.terminal_name }}{% endif %}
+
+---------------------------------------
+ITEMS
+---------------------------------------
+{% for item in items %}{{ item.name }}{% if item.variant_display %} ({{ item.variant_display }}){% endif %}
+  {{ item.quantity_display }} x {{ item.unit_price_display }} = {{ item.line_total_display }}{% if item.discount_display %}
+  Discount: -{{ item.discount_display }}{% endif %}
+{% endfor %}
+---------------------------------------
+
+Subtotal:       {{ totals.subtotal_display }}{% if totals.discount_total > 0 %}
+Discount:      -{{ totals.discount_display }}{% endif %}
+{% for tax in totals.tax_breakdown %}{{ tax.tax_name }} ({{ tax.tax_rate_display }}): {{ tax.tax_amount_display }}
+{% endfor %}
+=======================================
+TOTAL:          {{ totals.grand_total_display }}
+=======================================
+
+PAYMENT
+{% for pay in payments.payments %}{{ pay.method_display }}: {{ pay.amount_display }}{% if pay.reference %} (Ref: {{ pay.reference }}){% endif %}
+{% endfor %}{% if payments.change_due_display %}Change: {{ payments.change_due_display }}{% endif %}
+
+---------------------------------------
+{% for line in footer.custom_lines %}{{ line }}
+{% endfor %}{% if footer.return_policy %}
+{{ footer.return_policy }}{% endif %}
+{% if footer.footer_note %}{{ footer.footer_note }}{% endif %}

@@ -1,0 +1,39 @@
+{% extends "emails/payments/base_email.html" %} {% block title %}Payment Receipt{% endblock %} {% block header_title
+%}Payment Receipt{% endblock %} {% block header_subtitle %}Receipt {{ receipt.receipt_number }}{% endblock %} {% block
+content %}
+<p>Dear {{ customer }},</p>
+
+<p>Please find your payment receipt attached to this email.</p>
+
+<table class="info-table">
+  <tr>
+    <td>Receipt Number</td>
+    <td>{{ receipt.receipt_number }}</td>
+  </tr>
+  <tr>
+    <td>Receipt Date</td>
+    <td>{{ receipt.receipt_date|date:"d F Y" }}</td>
+  </tr>
+  <tr>
+    <td>Amount</td>
+    <td>{{ receipt.receipt_amount }} {{ receipt.currency }}</td>
+  </tr>
+  <tr>
+    <td>Payment Method</td>
+    <td>{{ receipt.get_display_method }}</td>
+  </tr>
+  {% if receipt.reference_number %}
+  <tr>
+    <td>Reference</td>
+    <td>{{ receipt.reference_number }}</td>
+  </tr>
+  {% endif %}
+</table>
+
+<div class="highlight-box">
+  <strong>PDF Attached</strong>
+  <p style="margin: 4px 0 0">Your receipt PDF is attached to this email for your records.</p>
+</div>
+
+<p>If you have any questions, please do not hesitate to contact us.</p>
+{% endblock %}

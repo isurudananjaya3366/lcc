@@ -1,0 +1,24 @@
+Quotation {{ quote.quote_number }}
+{% if quote.title %}— {{ quote.title }}{% endif %}
+
+Dear {{ quote.customer_display_name }},
+
+{% if personal_message %}{{ personal_message }}
+
+{% endif %}Please find your quotation details below.
+
+Quote Number: {{ quote.quote_number }}
+Date: {{ quote.issue_date|date:"d M Y" }}
+{% if quote.valid_until %}Valid Until: {{ quote.valid_until|date:"d M Y" }}{% endif %}
+
+Total: {{ quote.currency_symbol }} {{ quote.total }}
+
+{% if public_url %}View online: {{ public_url }}{% endif %}
+
+{% if quote.notes %}Notes:
+{{ quote.notes }}{% endif %}
+
+{% if quote.terms %}Terms & Conditions:
+{{ quote.terms }}{% endif %}
+
+Thank you for your business.
