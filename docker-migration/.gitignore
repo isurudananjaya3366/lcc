@@ -1,0 +1,9 @@
+# Exclude all exported data files — they contain sensitive database dumps and credentials
+exports/*.dump
+exports/*.rdb
+exports/*.tar.gz
+exports/*.sha256
+exports/.env.docker
+
+# Keep the exports directory placeholder
+!exports/.gitkeep
