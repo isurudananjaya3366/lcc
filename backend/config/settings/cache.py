@@ -40,7 +40,6 @@ CACHES = {
             "SOCKET_TIMEOUT": REDIS_SOCKET_TIMEOUT,
             "RETRY_ON_TIMEOUT": REDIS_RETRY_ON_TIMEOUT,
             "MAX_CONNECTIONS": REDIS_MAX_CONNECTIONS,
-            "PARSER_CLASS": "redis.connection.HiredisParser",
             "CONNECTION_POOL_KWARGS": {
                 "health_check_interval": REDIS_HEALTH_CHECK_INTERVAL,
             },
@@ -56,7 +55,6 @@ CACHES = {
             "SOCKET_CONNECT_TIMEOUT": REDIS_SOCKET_CONNECT_TIMEOUT,
             "SOCKET_TIMEOUT": REDIS_SOCKET_TIMEOUT,
             "MAX_CONNECTIONS": 10,
-            "PARSER_CLASS": "redis.connection.HiredisParser",
         },
     },
     "ratelimit": {

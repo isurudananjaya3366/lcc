@@ -32,7 +32,7 @@ echo "Redis is ready!"
 
 # Wait for PostgreSQL
 echo "Waiting for PostgreSQL..."
-while ! nc -z postgres 5432; do
+while ! nc -z db 5432; do
     echo "PostgreSQL not ready, retrying..."
     sleep 1
 done

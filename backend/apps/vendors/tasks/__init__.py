@@ -1,1 +1,1 @@
-from apps.vendors.tasks.document_tasks import check_document_expiry_alerts  # noqa: F401
+from apps.vendors.tasks.document_tasks import check_expiring_documents  # noqa: F401

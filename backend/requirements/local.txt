@@ -105,6 +105,11 @@ djangorestframework==3.16.1
 djangorestframework-simplejwt==5.5.1
     # via -r requirements/base.in
 drf-spectacular==0.29.0
+drf-spectacular-sidecar==2026.4.1
+    # via -r requirements/base.in
+flower==2.0.1
+    # via -r requirements/base.in
+    # via -r requirements/base.in
     # via -r requirements/base.in
 executing==2.2.1
     # via stack-data
@@ -112,8 +117,22 @@ filelock==3.20.3
     # via virtualenv
 h11==0.16.0
     # via uvicorn
+botocore==1.42.84
+    # via boto3
+boto3==1.42.84
+    # via -r requirements/base.in
+django-js-asset==3.1.2
+    # via django-mptt
+django-mptt==0.18.0
+    # via -r requirements/base.in
+django-redis==6.0.0
+    # via -r requirements/base.in
+django-storages==1.14.6
+    # via -r requirements/base.in
 hiredis==3.3.0
     # via -r requirements/base.in
+jmespath==1.1.0
+    # via boto3
 httptools==0.7.1
     # via uvicorn
 identify==2.6.16
@@ -191,12 +210,16 @@ referencing==0.37.0
     # via
     #   jsonschema
     #   jsonschema-specifications
+reportlab==4.4.10
+    # via -r requirements/base.in
 rpds-py==0.30.0
     # via
     #   jsonschema
     #   referencing
 ruff==0.15.0
     # via -r requirements/local.in
+s3transfer==0.16.0
+    # via boto3
 six==1.17.0
     # via python-dateutil
 sqlparse==0.5.5
@@ -233,6 +256,8 @@ virtualenv==20.36.1
     # via pre-commit
 watchfiles==1.1.1
     # via uvicorn
+urllib3==2.6.3
+    # via botocore
 wcwidth==0.6.0
     # via prompt-toolkit
 websockets==16.0
