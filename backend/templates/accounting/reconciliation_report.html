@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>Reconciliation Report</title></head>
+<body>
+<h1>Bank Reconciliation Report</h1>
+
+<table>
+  <tr><td><strong>Account</strong></td><td>{{ report.header.account_name }} ({{ report.header.account_number }})</td></tr>
+  <tr><td><strong>Bank</strong></td><td>{{ report.header.bank_name }}</td></tr>
+  <tr><td><strong>Period</strong></td><td>{{ report.header.period_description }}</td></tr>
+  <tr><td><strong>Status</strong></td><td>{{ report.header.status }}</td></tr>
+  {% if report.header.reconciled_by %}
+  <tr><td><strong>Reconciled By</strong></td><td>{{ report.header.reconciled_by }}</td></tr>
+  {% endif %}
+  <tr><td><strong>Report Generated</strong></td><td>{{ report.header.report_generated }}</td></tr>
+</table>
+
+<h2>Summary</h2>
+<table>
+  <tr><td>Statement Balance</td><td class="amount">{{ report.summary.balances.statement_balance }}</td></tr>
+  <tr><td>Book Balance</td><td class="amount">{{ report.summary.balances.book_balance }}</td></tr>
+  <tr><td><strong>Difference</strong></td><td class="amount"><strong>{{ report.summary.balances.difference }}</strong></td></tr>
+</table>
+
+<table>
+  <tr><td>Matched Items</td><td>{{ report.summary.reconciliation.matched_items_count }}</td><td class="amount">{{ report.summary.reconciliation.matched_items_amount }}</td></tr>
+  <tr><td>Unmatched Book Items</td><td>{{ report.summary.reconciliation.unmatched_book_count }}</td><td class="amount">{{ report.summary.reconciliation.unmatched_book_amount }}</td></tr>
+  <tr><td>Unmatched Statement Items</td><td>{{ report.summary.reconciliation.unmatched_statement_count }}</td><td class="amount">{{ report.summary.reconciliation.unmatched_statement_amount }}</td></tr>
+  <tr><td>Adjustments</td><td>{{ report.summary.reconciliation.adjustments_count }}</td><td class="amount">{{ report.summary.reconciliation.adjustments_net }}</td></tr>
+</table>
+
+{% if report.matched_items.items %}
+<h2>Matched Items ({{ report.matched_items.total_count }})</h2>
+<table>
+  <thead>
+    <tr><th>Date</th><th>Statement Desc.</th><th>Journal Ref.</th><th>Type</th><th class="amount">Amount</th></tr>
+  </thead>
+  <tbody>
+    {% for item in report.matched_items.items %}
+    <tr>
+      <td>{{ item.date }}</td>
+      <td>{{ item.statement_description }}</td>
+      <td>{{ item.journal_reference }}</td>
+      <td>{{ item.match_type }}</td>
+      <td class="amount">{{ item.statement_amount }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+{% if report.unmatched_items.book_items.items %}
+<h2>Unmatched Book Items ({{ report.unmatched_items.book_items.count }})</h2>
+<table>
+  <thead>
+    <tr><th>Date</th><th>Reference</th><th>Description</th><th class="amount">Amount</th><th>Age</th></tr>
+  </thead>
+  <tbody>
+    {% for item in report.unmatched_items.book_items.items %}
+    <tr>
+      <td>{{ item.date }}</td>
+      <td>{{ item.reference }}</td>
+      <td>{{ item.description }}</td>
+      <td class="amount">{{ item.amount }}</td>
+      <td>{{ item.age_days }}d</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+{% if report.unmatched_items.statement_items.items %}
+<h2>Unmatched Statement Items ({{ report.unmatched_items.statement_items.count }})</h2>
+<table>
+  <thead>
+    <tr><th>Date</th><th>Reference</th><th>Description</th><th class="amount">Amount</th></tr>
+  </thead>
+  <tbody>
+    {% for item in report.unmatched_items.statement_items.items %}
+    <tr>
+      <td>{{ item.date }}</td>
+      <td>{{ item.reference }}</td>
+      <td>{{ item.description }}</td>
+      <td class="amount">{{ item.amount }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+{% if report.adjustments.items %}
+<h2>Adjustments ({{ report.adjustments.total_count }})</h2>
+<table>
+  <thead>
+    <tr><th>Date</th><th>Type</th><th>Reason</th><th>Journal Entry</th><th class="amount">Amount</th></tr>
+  </thead>
+  <tbody>
+    {% for item in report.adjustments.items %}
+    <tr>
+      <td>{{ item.date }}</td>
+      <td>{{ item.type }}</td>
+      <td>{{ item.reason }}</td>
+      <td>{{ item.journal_entry|default:"—" }}</td>
+      <td class="amount">{{ item.amount }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+</body>
+</html>

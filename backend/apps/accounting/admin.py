@@ -7,16 +7,24 @@ AccountingPeriod, JournalEntryTemplate, and RecurringEntry.
 """
 
 from django.contrib import admin
+from django.utils import timezone
+from django.utils.html import format_html
 from mptt.admin import MPTTModelAdmin
 
 from apps.accounting.models import (
     Account,
     AccountingPeriod,
     AccountTypeConfig,
+    BankAccount,
+    BankStatement,
     COATemplate,
     JournalEntry,
     JournalEntryLine,
     JournalEntryTemplate,
+    MatchingRule,
+    Reconciliation,
+    ReconciliationAdjustment,
+    ReconciliationItem,
     RecurringEntry,
 )
 from apps.accounting.services.approval_service import ApprovalService
@@ -194,3 +202,130 @@ class RecurringEntryAdmin(admin.ModelAdmin):
     list_display = ("template", "frequency", "is_active", "next_run_date", "last_run_date")
     list_filter = ("frequency", "is_active")
     ordering = ("next_run_date",)
+
+
+# ════════════════════════════════════════════════════════════════════════
+# Account Reconciliation Admin (SP10)
+# ════════════════════════════════════════════════════════════════════════
+
+
+@admin.register(BankAccount)
+class BankAccountAdmin(admin.ModelAdmin):
+    list_display = (
+        "account_name",
+        "account_number",
+        "bank_name",
+        "account_type",
+        "currency",
+        "is_active",
+        "last_reconciled_date",
+    )
+    list_filter = ("account_type", "currency", "is_active")
+    search_fields = ("account_name", "account_number", "bank_name", "branch_name")
+    readonly_fields = ("last_reconciled_date", "last_reconciled_balance")
+
+
+@admin.register(BankStatement)
+class BankStatementAdmin(admin.ModelAdmin):
+    list_display = (
+        "bank_account",
+        "statement_format",
+        "start_date",
+        "end_date",
+        "import_status",
+        "import_line_count",
+        "is_reconciled",
+    )
+    list_filter = ("statement_format", "import_status", "is_reconciled")
+    search_fields = ("bank_account__account_name",)
+    readonly_fields = ("imported_at", "imported_by")
+
+
+@admin.register(MatchingRule)
+class MatchingRuleAdmin(admin.ModelAdmin):
+    list_display = (
+        "name",
+        "bank_account",
+        "priority",
+        "amount_tolerance",
+        "date_range_days",
+        "match_reference",
+        "is_active",
+    )
+    list_filter = ("is_active", "match_reference", "bank_account")
+    search_fields = ("name",)
+    ordering = ("priority", "name")
+
+
+class ReconciliationItemInline(admin.TabularInline):
+    model = ReconciliationItem
+    extra = 0
+    readonly_fields = ("statement_line", "journal_entry", "match_type", "matched_at", "matched_by")
+    can_delete = False
+
+
+class ReconciliationAdjustmentInline(admin.TabularInline):
+    model = ReconciliationAdjustment
+    extra = 0
+    readonly_fields = ("journal_entry", "adjustment_type", "adjustment_amount", "created_by", "created_at")
+    can_delete = False
+
+
+@admin.register(Reconciliation)
+class ReconciliationAdmin(admin.ModelAdmin):
+    list_display = (
+        "bank_account",
+        "start_date",
+        "end_date",
+        "status",
+        "statement_balance",
+        "book_balance",
+        "difference",
+        "completed_by",
+        "completed_at",
+    )
+    list_filter = ("status", "bank_account")
+    search_fields = ("bank_account__account_name", "bank_account__account_number")
+    readonly_fields = (
+        "difference",
+        "completed_at",
+        "completed_by",
+        "created_at",
+        "updated_at",
+    )
+    inlines = [ReconciliationItemInline, ReconciliationAdjustmentInline]
+    actions = ["mark_as_completed", "reopen_reconciliation"]
+
+    @admin.display(description="Difference", ordering="difference")
+    def difference_display(self, obj):
+        if obj.difference == 0:
+            return format_html('<span style="color: green;">0.00</span>')
+        return format_html(
+            '<span style="color: red;">{}</span>', obj.difference
+        )
+
+    @admin.action(description="Mark selected as completed")
+    def mark_as_completed(self, request, queryset):
+        from apps.accounting.models.enums import ReconciliationStatus
+
+        updated = queryset.filter(
+            status=ReconciliationStatus.IN_PROGRESS,
+        ).update(
+            status=ReconciliationStatus.COMPLETED,
+            completed_at=timezone.now(),
+            completed_by=request.user,
+        )
+        self.message_user(request, f"{updated} reconciliation(s) marked as completed.")
+
+    @admin.action(description="Reopen selected reconciliations")
+    def reopen_reconciliation(self, request, queryset):
+        from apps.accounting.models.enums import ReconciliationStatus
+
+        updated = queryset.filter(
+            status=ReconciliationStatus.COMPLETED,
+        ).update(
+            status=ReconciliationStatus.IN_PROGRESS,
+            completed_at=None,
+            completed_by=None,
+        )
+        self.message_user(request, f"{updated} reconciliation(s) reopened.")

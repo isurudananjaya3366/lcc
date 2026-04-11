@@ -158,3 +158,62 @@ class PeriodStatus(models.TextChoices):
     OPEN = "OPEN", "Open"
     CLOSED = "CLOSED", "Closed"
     LOCKED = "LOCKED", "Locked"
+
+
+# ════════════════════════════════════════════════════════════════════════
+# Account Reconciliation Enumerations (SP10)
+# ════════════════════════════════════════════════════════════════════════
+
+
+class BankAccountType(models.TextChoices):
+    """
+    Type of bank account for reconciliation.
+
+    CHECKING/SAVINGS/CASH → linked to Asset GL accounts.
+    CREDIT_CARD → linked to Liability GL accounts.
+    """
+
+    CHECKING = "CHECKING", "Checking"
+    SAVINGS = "SAVINGS", "Savings"
+    CREDIT_CARD = "CREDIT_CARD", "Credit Card"
+    CASH = "CASH", "Cash"
+
+
+class StatementFormat(models.TextChoices):
+    """Supported bank statement file formats."""
+
+    CSV = "CSV", "CSV"
+    OFX = "OFX", "OFX"
+    MT940 = "MT940", "MT940"
+
+
+class ImportStatus(models.TextChoices):
+    """Bank statement import processing status."""
+
+    PENDING = "PENDING", "Pending"
+    IMPORTED = "IMPORTED", "Imported"
+    FAILED = "FAILED", "Failed"
+
+
+class MatchStatus(models.TextChoices):
+    """Reconciliation match status for statement lines."""
+
+    UNMATCHED = "UNMATCHED", "Unmatched"
+    MATCHED = "MATCHED", "Matched"
+    PARTIAL = "PARTIAL", "Partial Match"
+    EXCLUDED = "EXCLUDED", "Excluded"
+
+
+class ReconciliationStatus(models.TextChoices):
+    """Bank reconciliation session lifecycle status."""
+
+    IN_PROGRESS = "IN_PROGRESS", "In Progress"
+    COMPLETED = "COMPLETED", "Completed"
+    CANCELLED = "CANCELLED", "Cancelled"
+
+
+class MatchType(models.TextChoices):
+    """How a reconciliation match was created."""
+
+    AUTO = "AUTO", "Automatic"
+    MANUAL = "MANUAL", "Manual"
