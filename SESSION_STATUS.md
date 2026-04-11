@@ -1,6 +1,6 @@
 # Session Status - LankaCommerce Cloud POS
 
-> **Last Updated:** Session 41 — Phase-06 SP07 Payslip Generation DEEP AUDIT COMPLETE (88 tasks, 64 tests ALL PASSING, 4 migrations, Groups A-F, 6 models, 3 services, 2 bugs fixed, 22 API tests)
+> **Last Updated:** Session 42 — Phase-06 SP08 Chart of Accounts DEEP AUDIT COMPLETE (86 tasks, 158 tests ALL PASSING, 4 migrations, Groups A-F, 4 models, 3 services, 3 audit fixes, 37 API tests)
 > **Purpose:** Complete handoff document for the next chat session. This file contains ALL context needed to continue work without the previous chat's memory.
 
 ---
@@ -54,12 +54,13 @@ Phase-06_ERP-Advanced-Modules/SubPhase-04_Leave-Management (ALL 90 tasks complet
 Phase-06_ERP-Advanced-Modules/SubPhase-05_Salary-Structure (ALL 86 tasks complete, DEEP AUDITED, 93 tests, 11 models, 5 services, 4 migrations, ~30 gaps fixed, 6 groups A-F)
 Phase-06_ERP-Advanced-Modules/SubPhase-06_Payroll-Processing (ALL 92 tasks complete, DEEP AUDITED, 167 tests, 20 models, 10 services, 10 migrations, ~50 gaps fixed, 6 groups A-F)
 Phase-06_ERP-Advanced-Modules/SubPhase-07_Payslip-Generation (ALL 88 tasks complete, DEEP AUDITED, 64 tests, 6 models, 3 services, 4 migrations, 2 bugs fixed, 22 API tests, 6 groups A-F)
+Phase-06_ERP-Advanced-Modules/SubPhase-08_Chart-of-Accounts (ALL 86 tasks complete, DEEP AUDITED, 158 tests, 4 models, 3 services, 4 migrations, 3 audit fixes, 37 API tests, 6 groups A-F)
 ```
 
 ### Next Document to Implement
 
 ```
-Document-Series/Phase-06_ERP-Advanced-Modules/SubPhase-08
+Document-Series/Phase-06_ERP-Advanced-Modules/SubPhase-09
 ```
 
 ---
@@ -125,7 +126,7 @@ The `users` app provides **complementary** tenant-scoped models (profile, prefer
 
 | Test Scope             | Passed | Failed | Notes                                                                                                                              |
 | ---------------------- | ------ | ------ | ---------------------------------------------------------------------------------------------------------------------------------- | --- | ------------------ | --- | --- | ------------------------------------------------------ |
-| **Full suite**         | 10089  | 0      | All tests passing (0 errors)                                                                                                       |
+| **Full suite**         | 10247  | 0      | All tests passing (0 errors)                                                                                                       |
 | **Products tests**     | 1175   | 0      | SP01-SP05 (base+variants+bundles+BOM)                                                                                              |
 | **Attributes tests**   | 350    | 0      | SP02 models+API+integration (147+124+79)                                                                                           |
 | **Users tests**        | 298    | 0      | 71 API + 227 model tests                                                                                                           |
@@ -159,6 +160,7 @@ The `users` app provides **complementary** tenant-scoped models (profile, prefer
 | **Attendance tests**   | 69     | 0      | SP03 models(21)+services(12)+API(36) (PostgreSQL)                                                                                  |
 | **Leave tests**        | 72     | 0      | SP04 models+services+API (PostgreSQL, tenant-isolated)                                                                             |
 | **Payroll tests**      | 167    | 0      | SP05 models(37)+services(29) + SP06 models(25)+serializers(8)+services(17)+API(24)+SP05-existing(27) (PostgreSQL, tenant-isolated) |
+| **Accounting tests**   | 158    | 0      | SP08 models(31)+default_coa(29)+services(45)+admin_serializers(16)+API(37) (PostgreSQL, tenant-isolated)                           |
 
 ---
 

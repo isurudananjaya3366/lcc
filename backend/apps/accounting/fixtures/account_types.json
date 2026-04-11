@@ -1,0 +1,62 @@
+[
+  {
+    "model": "accounting.accounttypeconfig",
+    "pk": 1,
+    "fields": {
+      "type_name": "ASSET",
+      "normal_balance": "DEBIT",
+      "code_start": 1000,
+      "code_end": 1999,
+      "display_order": 1,
+      "description": "Assets represent resources owned or controlled by the business that provide future economic benefits. Assets include cash, bank balances, inventory, equipment, property, and amounts owed by customers (accounts receivable). Assets have a debit normal balance and increase with debit entries."
+    }
+  },
+  {
+    "model": "accounting.accounttypeconfig",
+    "pk": 2,
+    "fields": {
+      "type_name": "LIABILITY",
+      "normal_balance": "CREDIT",
+      "code_start": 2000,
+      "code_end": 2999,
+      "display_order": 2,
+      "description": "Liabilities represent obligations owed by the business to external parties. These are debts or financial commitments that must be settled in the future through transfer of assets or provision of services. Liabilities have a credit normal balance and increase with credit entries."
+    }
+  },
+  {
+    "model": "accounting.accounttypeconfig",
+    "pk": 3,
+    "fields": {
+      "type_name": "EQUITY",
+      "normal_balance": "CREDIT",
+      "code_start": 3000,
+      "code_end": 3999,
+      "display_order": 3,
+      "description": "Equity represents the owner's stake in the business. It is the residual interest in assets after deducting liabilities. Equity includes capital contributed by owners and profits retained in the business. Equity has a credit normal balance and increases with credit entries."
+    }
+  },
+  {
+    "model": "accounting.accounttypeconfig",
+    "pk": 4,
+    "fields": {
+      "type_name": "REVENUE",
+      "normal_balance": "CREDIT",
+      "code_start": 4000,
+      "code_end": 4999,
+      "display_order": 4,
+      "description": "Revenue represents income earned by the business from its normal operations and other sources. Revenue increases equity and is recognized when earned, regardless of when cash is received. Revenue has a credit normal balance and increases with credit entries."
+    }
+  },
+  {
+    "model": "accounting.accounttypeconfig",
+    "pk": 5,
+    "fields": {
+      "type_name": "EXPENSE",
+      "normal_balance": "DEBIT",
+      "code_start": 5000,
+      "code_end": 5999,
+      "display_order": 5,
+      "description": "Expenses represent costs incurred by the business in the process of earning revenue. Expenses decrease equity and are recognized when incurred, regardless of when cash is paid. Expenses have a debit normal balance and increase with debit entries."
+    }
+  }
+]

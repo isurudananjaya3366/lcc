@@ -1,0 +1,761 @@
+[
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "1000",
+      "name": "Assets",
+      "account_type": "asset",
+      "is_header": true,
+      "is_system": false,
+      "description": "All assets owned by the business including current and fixed assets."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "1100",
+      "name": "Cash",
+      "account_type": "asset",
+      "is_header": true,
+      "is_system": false,
+      "description": "Physical currency and cash equivalents held by the business."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "1101",
+      "name": "Cash on Hand",
+      "account_type": "asset",
+      "is_header": false,
+      "is_system": false,
+      "description": "Main cash drawer or register for daily sales and receipts."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "1102",
+      "name": "Petty Cash",
+      "account_type": "asset",
+      "is_header": false,
+      "is_system": false,
+      "description": "Small cash fund for minor expenses and incidentals."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "1110",
+      "name": "Bank Accounts",
+      "account_type": "asset",
+      "is_header": true,
+      "is_system": false,
+      "description": "Funds held in banks and financial institutions."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "1111",
+      "name": "Commercial Bank - Current Account",
+      "account_type": "asset",
+      "is_header": false,
+      "is_system": false,
+      "description": "Main operating bank account for business transactions."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "1112",
+      "name": "Commercial Bank - Savings Account",
+      "account_type": "asset",
+      "is_header": false,
+      "is_system": false,
+      "description": "Savings account for reserve funds and interest earnings."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "1200",
+      "name": "Accounts Receivable",
+      "account_type": "asset",
+      "is_header": true,
+      "is_system": false,
+      "description": "Amounts owed to the business by customers and others."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "1201",
+      "name": "Trade Receivables",
+      "account_type": "asset",
+      "is_header": false,
+      "is_system": true,
+      "description": "Amounts owed by customers for goods or services sold on credit."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "1202",
+      "name": "Other Receivables",
+      "account_type": "asset",
+      "is_header": false,
+      "is_system": false,
+      "description": "Non-trade receivables including employee advances and other amounts due."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "1250",
+      "name": "VAT Input (Tax Paid on Purchases)",
+      "account_type": "asset",
+      "is_header": false,
+      "is_system": true,
+      "description": "Value Added Tax paid on purchases, offset against VAT collected."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "1300",
+      "name": "Inventory",
+      "account_type": "asset",
+      "is_header": true,
+      "is_system": false,
+      "description": "Goods held for resale or used in production."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "1301",
+      "name": "Merchandise Inventory",
+      "account_type": "asset",
+      "is_header": false,
+      "is_system": true,
+      "description": "Finished goods available for sale to customers."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "1302",
+      "name": "Raw Materials",
+      "account_type": "asset",
+      "is_header": false,
+      "is_system": false,
+      "description": "Materials and supplies used in production or assembly."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "1303",
+      "name": "Work in Progress",
+      "account_type": "asset",
+      "is_header": false,
+      "is_system": false,
+      "description": "Partially completed goods in production process."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "1500",
+      "name": "Fixed Assets",
+      "account_type": "asset",
+      "is_header": true,
+      "is_system": false,
+      "description": "Long-term tangible property used in business operations."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "1501",
+      "name": "Equipment",
+      "account_type": "asset",
+      "is_header": false,
+      "is_system": false,
+      "description": "Machinery, tools, and equipment used in business operations."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "1502",
+      "name": "Vehicles",
+      "account_type": "asset",
+      "is_header": false,
+      "is_system": false,
+      "description": "Motor vehicles used for business purposes."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "1503",
+      "name": "Furniture & Fixtures",
+      "account_type": "asset",
+      "is_header": false,
+      "is_system": false,
+      "description": "Office furniture, shelving, display cases, and fixtures."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "1504",
+      "name": "Computer Equipment",
+      "account_type": "asset",
+      "is_header": false,
+      "is_system": false,
+      "description": "Computers, servers, printers, and technology hardware."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "1599",
+      "name": "Accumulated Depreciation",
+      "account_type": "asset",
+      "is_header": false,
+      "is_system": true,
+      "description": "Cumulative depreciation expense on all fixed assets (contra-asset)."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "2000",
+      "name": "Liabilities",
+      "account_type": "liability",
+      "is_header": true,
+      "is_system": false,
+      "description": "All obligations and amounts owed by the business."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "2100",
+      "name": "Accounts Payable",
+      "account_type": "liability",
+      "is_header": true,
+      "is_system": false,
+      "description": "Amounts owed by the business to suppliers and vendors."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "2101",
+      "name": "Trade Payables",
+      "account_type": "liability",
+      "is_header": false,
+      "is_system": true,
+      "description": "Amounts owed to suppliers for goods or services purchased on credit."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "2102",
+      "name": "Other Payables",
+      "account_type": "liability",
+      "is_header": false,
+      "is_system": false,
+      "description": "Miscellaneous amounts owed not related to trade purchases."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "2150",
+      "name": "VAT Output (Tax Collected on Sales)",
+      "account_type": "liability",
+      "is_header": false,
+      "is_system": true,
+      "description": "Value Added Tax collected from customers on sales."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "2200",
+      "name": "Tax Payables",
+      "account_type": "liability",
+      "is_header": true,
+      "is_system": false,
+      "description": "Tax obligations owed to government authorities."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "2210",
+      "name": "PAYE Payable",
+      "account_type": "liability",
+      "is_header": false,
+      "is_system": true,
+      "description": "Pay As You Earn income tax withheld from employee salaries."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "2220",
+      "name": "Income Tax Payable",
+      "account_type": "liability",
+      "is_header": false,
+      "is_system": false,
+      "description": "Corporate or business income tax payable to Inland Revenue."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "2230",
+      "name": "NBT Payable",
+      "account_type": "liability",
+      "is_header": false,
+      "is_system": false,
+      "description": "Nation Building Tax payable to government."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "2300",
+      "name": "Statutory Payables",
+      "account_type": "liability",
+      "is_header": true,
+      "is_system": false,
+      "description": "Sri Lankan statutory employer obligations."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "2310",
+      "name": "EPF Payable",
+      "account_type": "liability",
+      "is_header": false,
+      "is_system": true,
+      "description": "Employees' Provident Fund contributions (employee + employer portions)."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "2320",
+      "name": "ETF Payable",
+      "account_type": "liability",
+      "is_header": false,
+      "is_system": true,
+      "description": "Employees' Trust Fund contributions (employer portion only)."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "2500",
+      "name": "Long-term Liabilities",
+      "account_type": "liability",
+      "is_header": true,
+      "is_system": false,
+      "description": "Obligations due beyond one year from the reporting date."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "3000",
+      "name": "Owner's Equity",
+      "account_type": "equity",
+      "is_header": true,
+      "is_system": false,
+      "description": "Owner's residual interest in business assets after deducting liabilities."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "3100",
+      "name": "Capital",
+      "account_type": "equity",
+      "is_header": false,
+      "is_system": false,
+      "description": "Capital contributed by the owner or shareholders."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "3200",
+      "name": "Retained Earnings",
+      "account_type": "equity",
+      "is_header": false,
+      "is_system": true,
+      "description": "Accumulated net profits retained in the business after distributions."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "3900",
+      "name": "Drawings",
+      "account_type": "equity",
+      "is_header": false,
+      "is_system": false,
+      "description": "Owner withdrawals from the business (contra-equity)."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "4000",
+      "name": "Revenue",
+      "account_type": "revenue",
+      "is_header": true,
+      "is_system": false,
+      "description": "Income earned from business operations and other sources."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "4100",
+      "name": "Sales Revenue",
+      "account_type": "revenue",
+      "is_header": true,
+      "is_system": false,
+      "description": "Revenue from the sale of goods and products."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "4110",
+      "name": "Product Sales",
+      "account_type": "revenue",
+      "is_header": false,
+      "is_system": false,
+      "description": "Revenue from selling merchandise and physical products."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "4120",
+      "name": "Service Sales",
+      "account_type": "revenue",
+      "is_header": false,
+      "is_system": false,
+      "description": "Revenue from providing services to customers."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "4200",
+      "name": "Service Revenue",
+      "account_type": "revenue",
+      "is_header": true,
+      "is_system": false,
+      "description": "Revenue from professional and consulting services."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "4210",
+      "name": "Consulting Services",
+      "account_type": "revenue",
+      "is_header": false,
+      "is_system": false,
+      "description": "Revenue from consulting and advisory services."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "4220",
+      "name": "Professional Services",
+      "account_type": "revenue",
+      "is_header": false,
+      "is_system": false,
+      "description": "Revenue from professional service engagements."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "4900",
+      "name": "Other Income",
+      "account_type": "revenue",
+      "is_header": true,
+      "is_system": false,
+      "description": "Non-operating income from miscellaneous sources."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "4910",
+      "name": "Interest Income",
+      "account_type": "revenue",
+      "is_header": false,
+      "is_system": false,
+      "description": "Interest earned on bank deposits and investments."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "4920",
+      "name": "Miscellaneous Income",
+      "account_type": "revenue",
+      "is_header": false,
+      "is_system": false,
+      "description": "Other income not classified elsewhere."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "5000",
+      "name": "Expenses",
+      "account_type": "expense",
+      "is_header": true,
+      "is_system": false,
+      "description": "All costs incurred to generate revenue and operate the business."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "5100",
+      "name": "Cost of Goods Sold",
+      "account_type": "expense",
+      "is_header": false,
+      "is_system": true,
+      "description": "Direct cost of merchandise sold to customers."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "5200",
+      "name": "Personnel Costs",
+      "account_type": "expense",
+      "is_header": true,
+      "is_system": false,
+      "description": "Employee compensation and statutory employer contributions."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "5210",
+      "name": "Salaries & Wages",
+      "account_type": "expense",
+      "is_header": false,
+      "is_system": false,
+      "description": "Gross salaries and wages paid to employees."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "5220",
+      "name": "EPF Expense (Employer Portion)",
+      "account_type": "expense",
+      "is_header": false,
+      "is_system": false,
+      "description": "Employer's contribution to Employees' Provident Fund (12%)."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "5230",
+      "name": "ETF Expense (Employer Portion)",
+      "account_type": "expense",
+      "is_header": false,
+      "is_system": false,
+      "description": "Employer's contribution to Employees' Trust Fund (3%)."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "5300",
+      "name": "Rent Expense",
+      "account_type": "expense",
+      "is_header": false,
+      "is_system": false,
+      "description": "Rent paid for business premises."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "5400",
+      "name": "Utilities",
+      "account_type": "expense",
+      "is_header": true,
+      "is_system": false,
+      "description": "Utility costs for business operations."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "5410",
+      "name": "Electricity",
+      "account_type": "expense",
+      "is_header": false,
+      "is_system": false,
+      "description": "Electricity charges for business premises."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "5420",
+      "name": "Water",
+      "account_type": "expense",
+      "is_header": false,
+      "is_system": false,
+      "description": "Water supply charges."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "5430",
+      "name": "Internet & Telephone",
+      "account_type": "expense",
+      "is_header": false,
+      "is_system": false,
+      "description": "Internet, telephone, and communication costs."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "5500",
+      "name": "Marketing & Advertising",
+      "account_type": "expense",
+      "is_header": false,
+      "is_system": false,
+      "description": "Advertising, promotions, and marketing expenses."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "5600",
+      "name": "Office & Administrative",
+      "account_type": "expense",
+      "is_header": true,
+      "is_system": false,
+      "description": "Office supplies, professional fees, and administrative costs."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "5610",
+      "name": "Office Supplies",
+      "account_type": "expense",
+      "is_header": false,
+      "is_system": false,
+      "description": "Stationery, printing, and general office supplies."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "5620",
+      "name": "Professional Fees",
+      "account_type": "expense",
+      "is_header": false,
+      "is_system": false,
+      "description": "Accounting, legal, and other professional service fees."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "5630",
+      "name": "Insurance",
+      "account_type": "expense",
+      "is_header": false,
+      "is_system": false,
+      "description": "Business insurance premiums."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "5700",
+      "name": "Depreciation Expense",
+      "account_type": "expense",
+      "is_header": false,
+      "is_system": false,
+      "description": "Depreciation of fixed assets over their useful lives."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "5800",
+      "name": "Financial Costs",
+      "account_type": "expense",
+      "is_header": true,
+      "is_system": false,
+      "description": "Bank charges, interest, and financial transaction costs."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "5810",
+      "name": "Bank Charges",
+      "account_type": "expense",
+      "is_header": false,
+      "is_system": false,
+      "description": "Bank service fees and transaction charges."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "5820",
+      "name": "Interest Expense",
+      "account_type": "expense",
+      "is_header": false,
+      "is_system": false,
+      "description": "Interest paid on loans and credit facilities."
+    }
+  },
+  {
+    "model": "accounting.account",
+    "fields": {
+      "code": "5900",
+      "name": "Miscellaneous Expenses",
+      "account_type": "expense",
+      "is_header": false,
+      "is_system": false,
+      "description": "Other operating expenses not classified elsewhere."
+    }
+  }
+]
