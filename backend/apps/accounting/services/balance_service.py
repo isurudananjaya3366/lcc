@@ -11,7 +11,7 @@ from decimal import ROUND_HALF_UP, Decimal
 from django.db import models
 
 from apps.accounting.models import Account
-from apps.accounting.models.journal import JournalEntry
+from apps.accounting.models.journal import LegacyJournalEntry
 
 logger = logging.getLogger(__name__)
 
@@ -48,7 +48,7 @@ class AccountBalanceService:
         account = Account.objects.get(pk=account_id)
         opening = account.opening_balance or Decimal("0.00")
 
-        entries = JournalEntry.objects.filter(
+        entries = LegacyJournalEntry.objects.filter(
             account_id=account_id, status="posted"
         )
         if as_of_date is not None:

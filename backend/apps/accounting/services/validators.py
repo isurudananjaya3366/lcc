@@ -10,7 +10,7 @@ from django.core.exceptions import ValidationError
 
 from apps.accounting.models import Account
 from apps.accounting.models.enums import AccountStatus
-from apps.accounting.models.journal import JournalEntry
+from apps.accounting.models.journal import LegacyJournalEntry
 
 logger = logging.getLogger(__name__)
 
@@ -115,7 +115,7 @@ class AccountValidator:
                 f"{child_count} child account(s). Delete children first."
             )
 
-        entry_count = JournalEntry.objects.filter(account=account).count()
+        entry_count = LegacyJournalEntry.objects.filter(account=account).count()
         if entry_count:
             raise ValidationError(
                 f"Cannot delete account {account.code} ({account.name}) "

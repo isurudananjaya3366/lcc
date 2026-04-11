@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 
 from apps.accounting.models import Account, COATemplate, IndustryType
 from apps.accounting.models.enums import AccountStatus
-from apps.accounting.models.journal import JournalEntry
+from apps.accounting.models.journal import LegacyJournalEntry
 from apps.accounting.services.balance_service import AccountBalanceService
 from apps.accounting.services.coa_initializer import (
     COAInitializerService,
@@ -198,14 +198,14 @@ class TestAccountBalanceService:
 
     def test_calculate_balance_with_entries(self, tenant_context, user):
         acc = self._create_account()
-        JournalEntry.objects.create(
+        LegacyJournalEntry.objects.create(
             reference_number="JE-001",
             account=acc,
             debit=Decimal("500.00"),
             status="posted",
             created_by=user,
         )
-        JournalEntry.objects.create(
+        LegacyJournalEntry.objects.create(
             reference_number="JE-002",
             account=acc,
             credit=Decimal("200.00"),
@@ -218,7 +218,7 @@ class TestAccountBalanceService:
 
     def test_draft_entries_excluded(self, tenant_context, user):
         acc = self._create_account()
-        JournalEntry.objects.create(
+        LegacyJournalEntry.objects.create(
             reference_number="JE-DRAFT",
             account=acc,
             debit=Decimal("999.00"),
@@ -234,7 +234,7 @@ class TestAccountBalanceService:
             name="Sales Revenue",
             account_type="revenue",
         )
-        JournalEntry.objects.create(
+        LegacyJournalEntry.objects.create(
             reference_number="JE-R01",
             account=acc,
             credit=Decimal("750.00"),
@@ -281,7 +281,7 @@ class TestAccountBalanceService:
         from datetime import date
 
         acc = self._create_account()
-        JournalEntry.objects.create(
+        LegacyJournalEntry.objects.create(
             reference_number="JE-H1",
             account=acc,
             debit=Decimal("100.00"),
@@ -289,7 +289,7 @@ class TestAccountBalanceService:
             entry_date=date(2025, 1, 10),
             created_by=user,
         )
-        JournalEntry.objects.create(
+        LegacyJournalEntry.objects.create(
             reference_number="JE-H2",
             account=acc,
             debit=Decimal("200.00"),
@@ -400,7 +400,7 @@ class TestAccountValidatorDeletion:
             name="Has Entry",
             account_type="expense",
         )
-        JournalEntry.objects.create(
+        LegacyJournalEntry.objects.create(
             reference_number="JE-DEL",
             account=acc,
             debit=Decimal("10.00"),

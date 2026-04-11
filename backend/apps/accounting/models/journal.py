@@ -1,11 +1,10 @@
 """
-JournalEntry model for the accounting application.
+Legacy journal entry line model for the accounting application.
 
-Defines the JournalEntry model which records individual debit
-and credit entries in the double-entry bookkeeping system. Each
-entry links to an account and records either a debit or credit
-amount in LKR (₨). Entries are grouped by a reference number
-to form balanced journal transactions.
+This module contains the legacy JournalEntry model which records
+individual debit and credit entries. This model will be superseded
+by the JournalEntryLine model in SP09 Group B. Kept for backward
+compatibility with existing code and migrations.
 """
 
 from django.conf import settings
@@ -13,41 +12,31 @@ from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils import timezone
 
-from apps.core.mixins import UUIDMixin, TimestampMixin
 from apps.accounting.constants import (
     DEFAULT_ENTRY_STATUS,
     ENTRY_STATUS_CHOICES,
     ENTRY_STATUS_POSTED,
 )
+from apps.core.mixins import TimestampMixin, UUIDMixin
 
 # Price field constants (consistent across all apps)
 PRICE_MAX_DIGITS = 10
 PRICE_DECIMAL_PLACES = 2
 
 
-class JournalEntry(UUIDMixin, TimestampMixin, models.Model):
+class LegacyJournalEntry(UUIDMixin, TimestampMixin, models.Model):
     """
-    Double-entry journal entry line.
+    Legacy double-entry journal entry line.
 
     Records an individual debit or credit entry against an account.
     Entries are grouped by reference_number to form balanced
     transactions where total debits must equal total credits.
     All monetary values are in LKR (₨).
 
-    Double-entry rule:
-        For every transaction, the sum of debit amounts must
-        equal the sum of credit amounts across all entries
-        sharing the same reference_number.
-
-    Fields:
-        reference_number: Groups entries into a single transaction.
-        account: FK to the Account being debited or credited.
-        entry_date: Date of the journal entry.
-        debit: Debit amount in LKR (0 if credit entry).
-        credit: Credit amount in LKR (0 if debit entry).
-        description: Description of this entry line.
-        status: Entry status (draft, posted, reversed).
-        created_by: User who created the entry.
+    NOTE: This model predates the SP09 Journal Entry system.
+    It will be superseded by JournalEntryLine once SP09 Group B
+    is implemented. The db_table is preserved for migration
+    compatibility.
     """
 
     # ── Reference Number ────────────────────────────────────────────

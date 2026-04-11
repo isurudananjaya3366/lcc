@@ -209,9 +209,9 @@ class Account(UUIDMixin, TimestampMixin, MPTTModel):
 
     def recalculate_balance(self):
         """Recalculate current_balance from journal entries."""
-        from apps.accounting.models.journal import JournalEntry
+        from apps.accounting.models.journal import LegacyJournalEntry
 
-        entries = JournalEntry.objects.filter(
+        entries = LegacyJournalEntry.objects.filter(
             account=self, status="posted"
         ).aggregate(
             total_debit=models.Sum("debit"),

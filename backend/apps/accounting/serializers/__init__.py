@@ -7,6 +7,8 @@ from apps.accounting.serializers.account import (
 )
 from apps.accounting.serializers.account_type import AccountTypeConfigSerializer
 from apps.accounting.serializers.coa_template import COATemplateSerializer
+from apps.accounting.serializers.journal_entry import JournalEntrySerializer
+from apps.accounting.serializers.journal_line import JournalEntryLineSerializer
 
 __all__ = [
     "AccountChildrenSerializer",
@@ -14,4 +16,6 @@ __all__ = [
     "AccountTreeSerializer",
     "AccountTypeConfigSerializer",
     "COATemplateSerializer",
+    "JournalEntryLineSerializer",
+    "JournalEntrySerializer",
 ]

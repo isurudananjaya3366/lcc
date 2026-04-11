@@ -1,10 +1,9 @@
 """Fixtures for accounting module tests."""
 
 import pytest
-
 from django.contrib.auth import get_user_model
 from django.db import connection
-from django_tenants.utils import get_tenant_model, get_tenant_domain_model
+from django_tenants.utils import get_tenant_domain_model, get_tenant_model
 
 TenantModel = get_tenant_model()
 DomainModel = get_tenant_domain_model()
@@ -152,4 +151,81 @@ def account(tenant_context):
         name="Cash on Hand",
         account_type="asset",
         description="Primary cash account.",
+    )
+
+
+# ════════════════════════════════════════════════════════════════════════
+# Journal Entry Fixtures (SP09)
+# ════════════════════════════════════════════════════════════════════════
+
+
+@pytest.fixture
+def debit_account(tenant_context):
+    """Create a debit (expense) account for journal entry tests."""
+    from apps.accounting.models import Account
+
+    return Account.objects.create(
+        code="5300",
+        name="Rent Expense",
+        account_type="expense",
+        description="Office rent.",
+    )
+
+
+@pytest.fixture
+def credit_account(tenant_context):
+    """Create a credit (asset) account for journal entry tests."""
+    from apps.accounting.models import Account
+
+    return Account.objects.create(
+        code="1100",
+        name="Bank Account",
+        account_type="asset",
+        description="Main bank account.",
+    )
+
+
+@pytest.fixture
+def journal_entry(tenant_context, debit_account, credit_account, user):
+    """Create a balanced draft journal entry with two lines."""
+    import datetime
+    from decimal import Decimal
+
+    from apps.accounting.models import JournalEntry, JournalEntryLine
+
+    entry = JournalEntry.objects.create(
+        entry_date=datetime.date(2026, 1, 15),
+        description="Test journal entry",
+        created_by=user,
+    )
+    JournalEntryLine.objects.create(
+        journal_entry=entry,
+        account=debit_account,
+        debit_amount=Decimal("10000.00"),
+        credit_amount=Decimal("0"),
+        description="Debit line",
+        sort_order=0,
+    )
+    JournalEntryLine.objects.create(
+        journal_entry=entry,
+        account=credit_account,
+        debit_amount=Decimal("0"),
+        credit_amount=Decimal("10000.00"),
+        description="Credit line",
+        sort_order=1,
+    )
+    # Update cached totals
+    entry.total_debit = Decimal("10000.00")
+    entry.total_credit = Decimal("10000.00")
+    entry.save(update_fields=["total_debit", "total_credit"])
+    return entry
+
+
+@pytest.fixture
+def second_user(tenant_context):
+    """Create a second user for approval segregation tests."""
+    User = get_user_model()
+    return User.objects.create_user(
+        email="approver@example.com",
+        password="testpass123",
     )
