@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>C-FORM - EPF Return {{ epf_return.reference_number }}</title>
+  <style>
+    body { font-family: Arial, sans-serif; font-size: 10pt; margin: 20mm; }
+    h1 { text-align: center; font-size: 16pt; margin-bottom: 5px; }
+    h2 { font-size: 12pt; border-bottom: 1px solid #333; padding-bottom: 4px; margin-top: 20px; }
+    table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+    th, td { border: 1px solid #999; padding: 5px 7px; text-align: left; font-size: 9pt; }
+    th { background: #f0f0f0; font-weight: bold; }
+    td.amount { text-align: right; }
+    .total-row { font-weight: bold; background: #f5f5f5; }
+    .header-table { width: 50%; border: none; }
+    .header-table td { border: none; padding: 3px 5px; }
+    .header-table td:first-child { font-weight: bold; width: 40%; }
+    .footer { margin-top: 30px; font-size: 8pt; color: #666; }
+  </style>
+</head>
+<body>
+  <h1>C-FORM — EMPLOYEES' PROVIDENT FUND</h1>
+  <p style="text-align:center; color:#555;">Central Bank of Sri Lanka</p>
+
+  <h2>Employer Details</h2>
+  <table class="header-table">
+    <tr><td>EPF Registration No</td><td>{{ tax_config.epf_registration_no|default:"N/A" }}</td></tr>
+    <tr><td>Reference</td><td>{{ epf_return.reference_number }}</td></tr>
+    <tr><td>Period</td><td>{{ period.start_date|date:"Y-m-d" }} to {{ period.end_date|date:"Y-m-d" }}</td></tr>
+    <tr><td>Total Members</td><td>{{ epf_return.total_employees }}</td></tr>
+  </table>
+
+  <h2>Summary</h2>
+  <table class="header-table">
+    <tr><td>Employee Contribution (8%)</td><td class="amount">{{ epf_return.total_employee_contribution }}</td></tr>
+    <tr><td>Employer Contribution (12%)</td><td class="amount">{{ epf_return.total_employer_contribution }}</td></tr>
+    <tr class="total-row"><td>Total Contribution (20%)</td><td class="amount">{{ epf_return.total_contribution }}</td></tr>
+  </table>
+
+  <h2>Member Schedule</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th><th>Name</th><th>NIC</th><th>Gross Salary</th>
+        <th>Employee (8%)</th><th>Employer (12%)</th><th>Total (20%)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for emp in schedule %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ emp.employee_name }}</td>
+        <td>{{ emp.nic }}</td>
+        <td class="amount">{{ emp.gross_salary }}</td>
+        <td class="amount">{{ emp.employee_contribution }}</td>
+        <td class="amount">{{ emp.employer_contribution }}</td>
+        <td class="amount">{{ emp.total_contribution }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="7" style="text-align:center;">No members in this period</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>Declaration</h2>
+  <p>I certify that the particulars given above are correct.</p>
+  <div style="margin-top:30px;">
+    <p>Authorized Signatory: ________________________</p>
+    <p>Date: {{ generated_date }}</p>
+  </div>
+
+  <div class="footer">
+    <p>Generated on {{ generated_date }} | LankaCommerce Cloud</p>
+  </div>
+</body>
+</html>

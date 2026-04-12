@@ -32,12 +32,15 @@ from apps.accounting.models.enums import (
     StatementFormat,
     TemplateCategory,
 )
+from apps.accounting.models.epf_return import EPFReturn
+from apps.accounting.models.etf_return import ETFReturn
 from apps.accounting.models.journal import LegacyJournalEntry
 from apps.accounting.models.journal_attachment import JournalEntryAttachment
 from apps.accounting.models.journal_entry import JournalEntry
 from apps.accounting.models.journal_line import JournalEntryLine
 from apps.accounting.models.journal_template import JournalEntryTemplate
 from apps.accounting.models.matching_rule import MatchingRule
+from apps.accounting.models.paye_return import PAYEReturn
 from apps.accounting.models.reconciliation import Reconciliation
 from apps.accounting.models.reconciliation_adjustment import ReconciliationAdjustment
 from apps.accounting.models.reconciliation_item import ReconciliationItem
@@ -45,6 +48,11 @@ from apps.accounting.models.recurring_entry import RecurringEntry
 from apps.accounting.models.report_config import ReportConfig
 from apps.accounting.models.report_result import ReportResult
 from apps.accounting.models.statement_line import StatementLine
+from apps.accounting.models.tax_configuration import TaxConfiguration
+from apps.accounting.models.tax_period import TaxPeriodRecord
+from apps.accounting.models.tax_submission import TaxSubmission
+from apps.accounting.models.vat_return import VATReturn
+from apps.accounting.tax.enums import FilingStatus, TaxPeriod, TaxType
 
 __all__ = [
     "Account",
@@ -71,6 +79,9 @@ __all__ = [
     "MatchStatus",
     "MatchType",
     "NormalBalance",
+    "EPFReturn",
+    "ETFReturn",
+    "PAYEReturn",
     "PeriodStatus",
     "Reconciliation",
     "ReconciliationAdjustment",
@@ -82,6 +93,13 @@ __all__ = [
     "ReportResult",
     "StatementFormat",
     "StatementLine",
+    "TaxConfiguration",
+    "TaxPeriod",
+    "TaxPeriodRecord",
+    "TaxSubmission",
+    "TaxType",
     "TemplateCategory",
     "TenantAuditLog",
+    "VATReturn",
+    "FilingStatus",
 ]

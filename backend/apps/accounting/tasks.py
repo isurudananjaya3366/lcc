@@ -248,3 +248,51 @@ def _email_report(config, result, recipients):
         logger.info("Report emailed to %s for config %s", recipients, config.pk)
     except Exception:
         logger.warning("Failed to email report for config %s", config.pk)
+
+
+# ── Tax Filing Deadline Reminders ──────────────────────────────────
+
+
+@shared_task(bind=True, max_retries=3, default_retry_delay=60)
+def check_tax_filing_deadlines(self):
+    """Daily task: check pending tax filings and send reminders.
+
+    Scheduled via Celery Beat to run at 08:00 every day.
+    """
+    from apps.accounting.services.filing_reminder import FilingReminderService
+
+    logger.info("Starting tax filing deadline check …")
+    service = FilingReminderService()
+    pending = service.get_pending_filings()
+
+    reminders_sent = 0
+    errors = []
+
+    for period in pending:
+        try:
+            urgency = service.get_urgency_level(period.due_date)
+            days = service.get_days_remaining(period.due_date)
+
+            if not service.should_send_reminder(period.due_date):
+                continue
+
+            reminder_data = {
+                "tax_type": period.tax_type,
+                "period": f"{period.year}/{period.period_number:02d}",
+                "due_date": str(period.due_date),
+                "days_remaining": days,
+                "urgency": urgency,
+                "period_id": str(period.pk),
+            }
+            if service.send_reminder_email(reminder_data):
+                reminders_sent += 1
+        except Exception as exc:
+            logger.exception("Error processing period %s", period.pk)
+            errors.append(str(exc))
+
+    logger.info("Tax deadline check done — %d reminders sent.", reminders_sent)
+    return {
+        "reminders_sent": reminders_sent,
+        "pending_filings": pending.count(),
+        "errors": errors,
+    }

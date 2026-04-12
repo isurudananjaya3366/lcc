@@ -18,6 +18,16 @@ from apps.accounting.serializers.report import (
     ScheduleReportSerializer,
     TrialBalanceQuerySerializer,
 )
+from apps.accounting.serializers.tax import (
+    EPFReturnSerializer,
+    ETFReturnSerializer,
+    PAYEReturnSerializer,
+    TaxCalendarSerializer,
+    TaxConfigurationSerializer,
+    TaxPeriodRecordSerializer,
+    TaxSubmissionSerializer,
+    VATReturnSerializer,
+)
 
 __all__ = [
     "AccountChildrenSerializer",
@@ -27,11 +37,19 @@ __all__ = [
     "BalanceSheetQuerySerializer",
     "CashFlowQuerySerializer",
     "COATemplateSerializer",
+    "EPFReturnSerializer",
+    "ETFReturnSerializer",
     "GeneralLedgerQuerySerializer",
     "JournalEntryLineSerializer",
     "JournalEntrySerializer",
+    "PAYEReturnSerializer",
     "ProfitLossQuerySerializer",
     "ReportQuerySerializer",
     "ScheduleReportSerializer",
+    "TaxCalendarSerializer",
+    "TaxConfigurationSerializer",
+    "TaxPeriodRecordSerializer",
+    "TaxSubmissionSerializer",
     "TrialBalanceQuerySerializer",
+    "VATReturnSerializer",
 ]

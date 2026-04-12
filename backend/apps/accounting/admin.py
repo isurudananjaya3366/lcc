@@ -329,3 +329,142 @@ class ReconciliationAdmin(admin.ModelAdmin):
             completed_by=None,
         )
         self.message_user(request, f"{updated} reconciliation(s) reopened.")
+
+
+# ──────────────────────────────────────────────────────────────────
+# Tax Reporting Admin
+# ──────────────────────────────────────────────────────────────────
+
+from apps.accounting.models import (
+    EPFReturn,
+    ETFReturn,
+    PAYEReturn,
+    TaxConfiguration,
+    TaxPeriodRecord,
+    TaxSubmission,
+    VATReturn,
+)
+
+
+@admin.register(TaxConfiguration)
+class TaxConfigurationAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "vat_registration_no",
+        "is_svat_registered",
+        "epf_registration_no",
+        "etf_registration_no",
+        "is_active",
+    )
+    list_filter = ("is_active", "is_svat_registered")
+    fieldsets = (
+        ("VAT", {"fields": ("vat_registration_no", "is_svat_registered", "vat_filing_period")}),
+        ("EPF / ETF", {"fields": ("epf_registration_no", "etf_registration_no")}),
+        ("TIN", {"fields": ("tin_number",)}),
+        ("Status", {"fields": ("is_active",)}),
+    )
+
+
+@admin.register(TaxPeriodRecord)
+class TaxPeriodRecordAdmin(admin.ModelAdmin):
+    list_display = (
+        "tax_type",
+        "year",
+        "period_number",
+        "start_date",
+        "end_date",
+        "due_date",
+        "filing_status",
+    )
+    list_filter = ("tax_type", "filing_status", "year")
+    search_fields = ("tax_type",)
+    ordering = ("-year", "-period_number")
+
+
+@admin.register(VATReturn)
+class VATReturnAdmin(admin.ModelAdmin):
+    list_display = (
+        "reference_number",
+        "output_vat",
+        "input_vat",
+        "net_vat_payable",
+        "status",
+        "created_at",
+    )
+    list_filter = ("status",)
+    search_fields = ("reference_number",)
+    readonly_fields = (
+        "reference_number",
+        "output_vat",
+        "input_vat",
+        "net_vat_payable",
+        "line_items",
+    )
+
+
+@admin.register(PAYEReturn)
+class PAYEReturnAdmin(admin.ModelAdmin):
+    list_display = (
+        "reference_number",
+        "total_employees",
+        "total_remuneration",
+        "total_paye_deducted",
+        "status",
+        "created_at",
+    )
+    list_filter = ("status",)
+    search_fields = ("reference_number",)
+    readonly_fields = (
+        "reference_number",
+        "total_remuneration",
+        "total_paye_deducted",
+        "employee_details",
+    )
+
+
+@admin.register(EPFReturn)
+class EPFReturnAdmin(admin.ModelAdmin):
+    list_display = (
+        "reference_number",
+        "total_employees",
+        "total_employee_contribution",
+        "total_employer_contribution",
+        "total_contribution",
+        "status",
+    )
+    list_filter = ("status",)
+    search_fields = ("reference_number",)
+    readonly_fields = (
+        "reference_number",
+        "total_contribution",
+        "employee_schedule",
+    )
+
+
+@admin.register(ETFReturn)
+class ETFReturnAdmin(admin.ModelAdmin):
+    list_display = (
+        "reference_number",
+        "total_employees",
+        "total_contribution",
+        "total_gross_salary",
+        "status",
+    )
+    list_filter = ("status",)
+    search_fields = ("reference_number",)
+    readonly_fields = ("reference_number", "employee_schedule")
+
+
+@admin.register(TaxSubmission)
+class TaxSubmissionAdmin(admin.ModelAdmin):
+    list_display = (
+        "tax_period",
+        "submission_reference",
+        "submitted_at",
+        "submitted_by",
+        "status",
+    )
+    list_filter = ("status",)
+    search_fields = ("submission_reference",)
+    readonly_fields = ("created_at", "updated_at")
+    raw_id_fields = ("tax_period", "submitted_by")

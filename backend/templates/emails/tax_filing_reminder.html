@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  body { font-family: Arial, sans-serif; margin: 0; padding: 20px; color: #333; }
+  .container { max-width: 600px; margin: auto; }
+  .header { padding: 15px; text-align: center; border-radius: 6px 6px 0 0; }
+  .header.overdue, .header.urgent { background: #dc3545; color: #fff; }
+  .header.warning { background: #ffc107; color: #000; }
+  .header.upcoming, .header.normal { background: #0dcaf0; color: #fff; }
+  .content { padding: 20px; border: 1px solid #dee2e6; border-top: none; }
+  table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+  td { padding: 8px 12px; border-bottom: 1px solid #eee; }
+  td:first-child { font-weight: bold; width: 40%; color: #555; }
+  .footer { font-size: 12px; color: #888; text-align: center; padding: 15px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header {{ urgency }}">
+    <h2 style="margin:0;">Tax Filing
+      {% if urgency == 'overdue' %}Overdue{% elif urgency == 'urgent' %}Due Tomorrow{% else %}Reminder{% endif %}
+    </h2>
+  </div>
+  <div class="content">
+    <p>Dear Finance Team,</p>
+    <p>The following tax return requires your attention:</p>
+    <table>
+      <tr><td>Tax Type</td><td>{{ tax_type }}</td></tr>
+      <tr><td>Period</td><td>{{ period }}</td></tr>
+      <tr><td>Due Date</td><td>{{ due_date }}</td></tr>
+      <tr><td>Days Remaining</td><td>{{ days_remaining }}</td></tr>
+      <tr><td>Status</td><td>{{ urgency|upper }}</td></tr>
+    </table>
+    <p>Please file before the deadline to avoid penalties.</p>
+  </div>
+  <div class="footer">&mdash; ERP Tax Reporting Module</div>
+</div>
+</body>
+</html>

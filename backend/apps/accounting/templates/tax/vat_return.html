@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>VAT Return - {{ vat_return.reference_number }}</title>
+  <style>
+    body { font-family: Arial, sans-serif; font-size: 11pt; margin: 20mm; }
+    h1 { text-align: center; font-size: 16pt; margin-bottom: 5px; }
+    h2 { font-size: 13pt; border-bottom: 1px solid #333; padding-bottom: 4px; margin-top: 20px; }
+    table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+    th, td { border: 1px solid #999; padding: 6px 8px; text-align: left; font-size: 10pt; }
+    th { background: #f0f0f0; font-weight: bold; }
+    td.amount { text-align: right; }
+    .header-info { display: flex; justify-content: space-between; margin-bottom: 15px; }
+    .header-info div { width: 48%; }
+    .summary-table td:first-child { font-weight: bold; width: 60%; }
+    .total-row { font-weight: bold; background: #f5f5f5; }
+    .footer { margin-top: 30px; font-size: 9pt; color: #666; }
+  </style>
+</head>
+<body>
+  <h1>VAT Return (Form 200)</h1>
+  <p style="text-align:center; color:#555;">Sri Lanka Inland Revenue Department</p>
+
+  <div class="header-info">
+    <div>
+      <p><strong>Reference:</strong> {{ vat_return.reference_number }}</p>
+      <p><strong>Period:</strong> {{ period.start_date|date:"Y-m-d" }} to {{ period.end_date|date:"Y-m-d" }}</p>
+      <p><strong>Due Date:</strong> {{ period.due_date|date:"Y-m-d" }}</p>
+    </div>
+    <div>
+      {% if tax_config %}
+      <p><strong>VAT Reg No:</strong> {{ tax_config.vat_registration_no|default:"N/A" }}</p>
+      <p><strong>TIN:</strong> {{ tax_config.tin_number|default:"N/A" }}</p>
+      <p><strong>SVAT:</strong> {{ tax_config.is_svat_registered|yesno:"Yes,No" }}</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <h2>Section A: Output VAT (Sales)</h2>
+  <table>
+    <thead>
+      <tr><th>Invoice #</th><th>Date</th><th>Taxable Amount</th><th>VAT Rate</th><th>VAT Amount</th></tr>
+    </thead>
+    <tbody>
+      {% for item in line_items.standard_rated %}
+      <tr>
+        <td>{{ item.invoice_number }}</td>
+        <td>{{ item.date }}</td>
+        <td class="amount">{{ item.taxable_amount }}</td>
+        <td class="amount">{{ item.vat_rate }}%</td>
+        <td class="amount">{{ item.vat_amount }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5" style="text-align:center;">No standard-rated sales</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% if line_items.zero_rated %}
+  <h3>Zero-Rated Sales (Exports)</h3>
+  <table>
+    <thead><tr><th>Invoice #</th><th>Date</th><th>Amount</th></tr></thead>
+    <tbody>
+      {% for item in line_items.zero_rated %}
+      <tr>
+        <td>{{ item.invoice_number }}</td>
+        <td>{{ item.date }}</td>
+        <td class="amount">{{ item.taxable_amount }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+
+  <h2>Section B: Input VAT (Purchases)</h2>
+  <table>
+    <thead>
+      <tr><th>Invoice #</th><th>Date</th><th>VAT Amount</th><th>Claimable</th><th>Type</th></tr>
+    </thead>
+    <tbody>
+      {% for item in line_items.purchases %}
+      <tr>
+        <td>{{ item.supplier_invoice }}</td>
+        <td>{{ item.date }}</td>
+        <td class="amount">{{ item.vat_amount }}</td>
+        <td class="amount">{{ item.claimable_vat }}</td>
+        <td>{{ item.purchase_type }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5" style="text-align:center;">No purchase VAT claims</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>Section C: Net VAT Calculation</h2>
+  <table class="summary-table">
+    <tr><td>Total Output VAT (A)</td><td class="amount">{{ vat_return.output_vat }}</td></tr>
+    <tr><td>Total Input VAT (B)</td><td class="amount">{{ vat_return.input_vat }}</td></tr>
+    <tr class="total-row"><td>Net VAT Payable (A - B)</td><td class="amount">{{ vat_return.net_vat_payable }}</td></tr>
+  </table>
+
+  <h2>Declaration</h2>
+  <p>I declare that the information given in this return is true and correct.</p>
+  <div style="margin-top:30px;">
+    <p>Signature: ________________________</p>
+    <p>Date: {{ generated_date }}</p>
+  </div>
+
+  <div class="footer">
+    <p>Generated on {{ generated_date }} | LankaCommerce Cloud</p>
+  </div>
+</body>
+</html>

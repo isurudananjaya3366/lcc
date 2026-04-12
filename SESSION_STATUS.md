@@ -1,6 +1,6 @@
 # Session Status - LankaCommerce Cloud POS
 
-> **Last Updated:** Session 47 — Phase-06 SP11 Financial Reports DEEP AUDITED (92/92 tasks verified, 8 gaps fixed, 299/299 accounting tests passing, SP11_AUDIT_REPORT.md created)
+> **Last Updated:** Session 48 — Phase-06 SP12 Tax Reporting & Compliance DEEP AUDITED (88/88 tasks verified, 6 bugs fixed, 369/369 accounting tests passing, SP12_AUDIT_REPORT.md created)
 > **Purpose:** Complete handoff document for the next chat session. This file contains ALL context needed to continue work without the previous chat's memory.
 
 ---
@@ -58,12 +58,13 @@ Phase-06_ERP-Advanced-Modules/SubPhase-08_Chart-of-Accounts (ALL 86 tasks comple
 Phase-06_ERP-Advanced-Modules/SubPhase-09_Journal-Entries (ALL 94 tasks complete, DEEP AUDITED, 44 tests, 7 models, 7 services, 6 migrations, 7 audit fixes, 6 groups A-F)
 Phase-06_ERP-Advanced-Modules/SubPhase-10_Account-Reconciliation (ALL 84 tasks complete, DEEP AUDITED, 38 tests, 7 models, 4 services, 6 migrations, 1 bug fixed, 19 methods + 8 fields added, 6 groups A-F)
 Phase-06_ERP-Advanced-Modules/SubPhase-11_Financial-Reports (ALL 92 tasks complete, DEEP AUDITED, 59 tests, 2 models, 5 generators, 2 exporters, 7 serializers, 1 viewset, 1 migration, 5 templates, Celery task, 8 audit gaps fixed, SP11_AUDIT_REPORT.md, 6 groups A-F)
+Phase-06_ERP-Advanced-Modules/SubPhase-12_Tax-Reporting (ALL 88 tasks complete, DEEP AUDITED, 70 tests, 7 models, 5 services, 8 serializers, 8 views, 5 migrations, 4 templates, Celery task, 6 bugs fixed, SP12_AUDIT_REPORT.md, 6 groups A-F)
 ```
 
 ### Next Document to Implement
 
 ```
-Document-Series/Phase-06_ERP-Advanced-Modules/SubPhase-12
+Document-Series/Phase-07_Frontend-Infrastructure-ERP-Dashboard/SubPhase-01
 ```
 
 ---
@@ -163,7 +164,36 @@ The `users` app provides **complementary** tenant-scoped models (profile, prefer
 | **Attendance tests**   | 69     | 0      | SP03 models(21)+services(12)+API(36) (PostgreSQL)                                                                                                                                        |
 | **Leave tests**        | 72     | 0      | SP04 models+services+API (PostgreSQL, tenant-isolated)                                                                                                                                   |
 | **Payroll tests**      | 167    | 0      | SP05 models(37)+services(29) + SP06 models(25)+serializers(8)+services(17)+API(24)+SP05-existing(27) (PostgreSQL, tenant-isolated)                                                       |
-| **Accounting tests**   | 299    | 0      | SP08 models(31)+default_coa(29)+services(45)+admin_serializers(16)+API(37) + SP09 journal_entry(44) + SP10 reconciliation(38) + SP11 financial_reports(59) (PostgreSQL, tenant-isolated) |
+| **Accounting tests**   | 369    | 0      | SP08 models(31)+default_coa(29)+services(45)+admin_serializers(16)+API(37) + SP09 journal_entry(44) + SP10 reconciliation(38) + SP11 financial_reports(59) + SP12 tax_reporting(70) (PostgreSQL, tenant-isolated) |
+
+---
+
+## What Was Completed This Session (Session 48)
+
+### SP12: Tax Reporting & Compliance — Deep Audit & Bug Fixes
+
+**Phase-06_ERP-Advanced-Modules/SubPhase-12_Tax-Reporting — DEEP AUDIT**
+
+Comprehensive audit of all 88 tasks across 6 groups (A–F) against source task documents. 6 bugs identified and immediately fixed (serializer field mismatches, view queryset field names, test corrections). Full regression: 369/369 accounting tests passing (70 SP12-specific). SP12_AUDIT_REPORT.md created with per-group task-by-task status, bug details, fix descriptions, and certification.
+
+**Implementation Summary:**
+- **Group A (Tasks 01-16):** Tax Configuration — TaxType/TaxPeriod/FilingStatus enums, TaxConfiguration model (VAT/EPF/ETF/TIN regex validators), TaxPeriodRecord model
+- **Group B (Tasks 17-34):** VAT Return — VATReturn model, VATReturnGenerator service (sales/purchase VAT, zero-rated, exempt stub, SVAT adjustment), IRD Form 200 PDF template, CSV export
+- **Group C (Tasks 35-50):** PAYE Reporting — PAYEReturn model, PAYEReturnGenerator (7 Sri Lankan tax brackets: 0-36%), T-10 PDF template, YTD tracking
+- **Group D (Tasks 51-68):** EPF/ETF Returns — EPFReturn (8%+12%=20%), ETFReturn (3%), generators, CBSL C-Form + ETF Board PDF templates
+- **Group E (Tasks 69-80):** Filing & Reminders — TaxSubmission model, FilingReminderService (due date calculation with weekend adjustment), Celery task, email reminders, dashboard widget
+- **Group F (Tasks 81-88):** API, Testing & Docs — 7 admin classes, 8 serializers, 8 views/viewsets, URL routes, 70 tests, API documentation
+
+**Bugs Found & Fixed:**
+1. Serializer field name mismatches — 4 serializers used `"tax_period"` instead of `"period"`
+2. Non-existent `filed_by` field in 3 serializers (PAYE/EPF/ETF)
+3. View queryset `select_related` field name mismatches in 4 viewsets
+4. Test enum values (uppercase vs lowercase)
+5. Test model FK names (`tax_period=` vs `period=`)
+6. Test weekend date adjustment and missing fixture
+
+**Migrations:** 0018 (config+period), 0019 (VAT), 0020 (PAYE), 0021 (EPF+ETF), 0022 (submission)  
+**Test Result:** 369 passed in ~16s (--reuse-db), 0 failures
 
 ---
 

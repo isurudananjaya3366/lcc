@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ETF Return {{ etf_return.reference_number }}</title>
+  <style>
+    body { font-family: Arial, sans-serif; font-size: 10pt; margin: 20mm; }
+    h1 { text-align: center; font-size: 16pt; margin-bottom: 5px; }
+    h2 { font-size: 12pt; border-bottom: 1px solid #333; padding-bottom: 4px; margin-top: 20px; }
+    table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+    th, td { border: 1px solid #999; padding: 5px 7px; text-align: left; font-size: 9pt; }
+    th { background: #f0f0f0; font-weight: bold; }
+    td.amount { text-align: right; }
+    .total-row { font-weight: bold; background: #f5f5f5; }
+    .header-table { width: 50%; border: none; }
+    .header-table td { border: none; padding: 3px 5px; }
+    .header-table td:first-child { font-weight: bold; width: 40%; }
+    .footer { margin-top: 30px; font-size: 8pt; color: #666; }
+  </style>
+</head>
+<body>
+  <h1>ETF RETURN — EMPLOYEES' TRUST FUND</h1>
+  <p style="text-align:center; color:#555;">Employees' Trust Fund Board</p>
+
+  <h2>Employer Details</h2>
+  <table class="header-table">
+    <tr><td>ETF Registration No</td><td>{{ tax_config.etf_registration_no|default:"N/A" }}</td></tr>
+    <tr><td>Reference</td><td>{{ etf_return.reference_number }}</td></tr>
+    <tr><td>Period</td><td>{{ period.start_date|date:"Y-m-d" }} to {{ period.end_date|date:"Y-m-d" }}</td></tr>
+    <tr><td>Total Employees</td><td>{{ etf_return.total_employees }}</td></tr>
+  </table>
+
+  <h2>Summary</h2>
+  <table class="header-table">
+    <tr><td>Total Gross Salary</td><td class="amount">{{ summary.total_gross_salary }}</td></tr>
+    <tr class="total-row"><td>Total ETF Contribution (3%)</td><td class="amount">{{ etf_return.total_contribution }}</td></tr>
+  </table>
+
+  <h2>Employee Schedule</h2>
+  <table>
+    <thead>
+      <tr><th>#</th><th>Name</th><th>NIC</th><th>Gross Salary</th><th>ETF (3%)</th></tr>
+    </thead>
+    <tbody>
+      {% for emp in employees %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ emp.name }}</td>
+        <td>{{ emp.nic }}</td>
+        <td class="amount">{{ emp.gross_salary }}</td>
+        <td class="amount">{{ emp.etf_contribution }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5" style="text-align:center;">No employees in this period</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>Declaration</h2>
+  <p>I certify that the particulars given above are correct.</p>
+  <div style="margin-top:30px;">
+    <p>Authorized Signatory: ________________________</p>
+    <p>Date: {{ generated_date }}</p>
+  </div>
+
+  <div class="footer">
+    <p>Generated on {{ generated_date }} | LankaCommerce Cloud</p>
+  </div>
+</body>
+</html>
