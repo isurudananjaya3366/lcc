@@ -1,6 +1,6 @@
 # Session Status - LankaCommerce Cloud POS
 
-> **Last Updated:** Session 45 — Phase-06 SP10 Account Reconciliation DEEP AUDITED (84 tasks, 38 tests, 6 migrations, Groups A-F, 7 models, 4 services, 1 bug fixed, 19 methods + 8 fields added, admin/serializers/viewsets/URLs, API docs, SP10_AUDIT_REPORT.md created)
+> **Last Updated:** Session 47 — Phase-06 SP11 Financial Reports DEEP AUDITED (92/92 tasks verified, 8 gaps fixed, 299/299 accounting tests passing, SP11_AUDIT_REPORT.md created)
 > **Purpose:** Complete handoff document for the next chat session. This file contains ALL context needed to continue work without the previous chat's memory.
 
 ---
@@ -57,12 +57,13 @@ Phase-06_ERP-Advanced-Modules/SubPhase-07_Payslip-Generation (ALL 88 tasks compl
 Phase-06_ERP-Advanced-Modules/SubPhase-08_Chart-of-Accounts (ALL 86 tasks complete, DEEP AUDITED, 158 tests, 4 models, 3 services, 4 migrations, 3 audit fixes, 37 API tests, 6 groups A-F)
 Phase-06_ERP-Advanced-Modules/SubPhase-09_Journal-Entries (ALL 94 tasks complete, DEEP AUDITED, 44 tests, 7 models, 7 services, 6 migrations, 7 audit fixes, 6 groups A-F)
 Phase-06_ERP-Advanced-Modules/SubPhase-10_Account-Reconciliation (ALL 84 tasks complete, DEEP AUDITED, 38 tests, 7 models, 4 services, 6 migrations, 1 bug fixed, 19 methods + 8 fields added, 6 groups A-F)
+Phase-06_ERP-Advanced-Modules/SubPhase-11_Financial-Reports (ALL 92 tasks complete, DEEP AUDITED, 59 tests, 2 models, 5 generators, 2 exporters, 7 serializers, 1 viewset, 1 migration, 5 templates, Celery task, 8 audit gaps fixed, SP11_AUDIT_REPORT.md, 6 groups A-F)
 ```
 
 ### Next Document to Implement
 
 ```
-Document-Series/Phase-06_ERP-Advanced-Modules/SubPhase-11
+Document-Series/Phase-06_ERP-Advanced-Modules/SubPhase-12
 ```
 
 ---
@@ -126,43 +127,109 @@ The `users` app provides **complementary** tenant-scoped models (profile, prefer
 
 ## Test Results (Docker PostgreSQL)
 
-| Test Scope             | Passed | Failed | Notes                                                                                                                                                       |
-| ---------------------- | ------ | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | --- | ------------------ | --- | --- | ------------------------------------------------------ |
-| **Full suite**         | 10247  | 0      | All tests passing (0 errors)                                                                                                                                |
-| **Products tests**     | 1175   | 0      | SP01-SP05 (base+variants+bundles+BOM)                                                                                                                       |
-| **Attributes tests**   | 350    | 0      | SP02 models+API+integration (147+124+79)                                                                                                                    |
-| **Users tests**        | 298    | 0      | 71 API + 227 model tests                                                                                                                                    |
-| **Core tests (total)** | 5828   | 0      | All core/ tests combined                                                                                                                                    |
-| **Tenant tests**       | 2608   | 0      | All 40 previously failing fixed                                                                                                                             |
-| **Celery tests**       | 25     | 0      | Task infrastructure tests                                                                                                                                   |
-| **Exception tests**    | 155    | 0      | Exception/handler/logging tests                                                                                                                             |
-| **Cache tests**        | 107    | 0      | Caching layer tests (audited)                                                                                                                               |
-| **Storage tests**      | 181    | 0      | File storage tests (SP10, audited)                                                                                                                          |
-| **API Docs tests**     | 154    | 0      | SP11 drf-spectacular tests                                                                                                                                  |
-| **Pagination tests**   | 73     | 0      | SP12 Group A                                                                                                                                                |
-| **Filter tests**       | 100    | 0      | SP12 Group B                                                                                                                                                |
-| **Validator tests**    | 200    | 0      | SP12 Group C                                                                                                                                                |
-| **DateTime tests**     | 122    | 0      | SP12 Group D                                                                                                                                                |
-| **Sri Lanka tests**    | 293    | 0      | SP12 Group E                                                                                                                                                |
-| **Integration tests**  | 61     | 0      | SP12 Group F cross-module                                                                                                                                   |
-| **Pricing mock tests** | 141    | 0      | SP06 models+API+integration (6 groups)                                                                                                                      |
-| **Pricing prod tests** | 53     | 0      | SP06 real PostgreSQL via django-tenants                                                                                                                     |
-| **Media unit tests**   | 183    | 0      | SP07 DB-free unit tests (7 test files)                                                                                                                      |
-| **Media prod tests**   | 29     | 0      | SP07 real PostgreSQL integration tests                                                                                                                      |
-| **Warehouse tests**    | 220    | 0      | SP08 143 unit + 77 integration (PostgreSQL)                                                                                                                 |
-| **Quote tests**        | 118    | 0      | SP04 models+services+views+pdf+email (PostgreSQL)                                                                                                           |
-| **Order tests**        | 55     | 0      | SP05 models+services+API (PostgreSQL)                                                                                                                       |
-| **Invoice tests**      | 56     | 0      | SP06 models+services+API+PDF (PostgreSQL)                                                                                                                   |
-| **Payment tests**      | 69     | 0      | SP07 models+services+API (PostgreSQL)                                                                                                                       |     | **Customer tests** | 90  | 0   | SP08 models+services+API (PostgreSQL, tenant-isolated) |
-| **Vendor tests**       | 84     | 0      | SP10 models+services+API (PostgreSQL, tenant-isolated)                                                                                                      |
-| **Purchase tests**     | 38     | 0      | SP11 models+services+API (PostgreSQL, tenant-isolated)                                                                                                      |
-| **Vendor Bills tests** | 40     | 0      | SP12 models+services+API (PostgreSQL, tenant-isolated)                                                                                                      |
-| **Employee tests**     | 127    | 0      | SP01 models+services+API (PostgreSQL, tenant-isolated)                                                                                                      |
-| **Organization tests** | 97     | 0      | SP02 models(29)+services(37)+API(31) (PostgreSQL)                                                                                                           |
-| **Attendance tests**   | 69     | 0      | SP03 models(21)+services(12)+API(36) (PostgreSQL)                                                                                                           |
-| **Leave tests**        | 72     | 0      | SP04 models+services+API (PostgreSQL, tenant-isolated)                                                                                                      |
-| **Payroll tests**      | 167    | 0      | SP05 models(37)+services(29) + SP06 models(25)+serializers(8)+services(17)+API(24)+SP05-existing(27) (PostgreSQL, tenant-isolated)                          |
-| **Accounting tests**   | 240    | 0      | SP08 models(31)+default_coa(29)+services(45)+admin_serializers(16)+API(37) + SP09 journal_entry(44) + SP10 reconciliation(38) (PostgreSQL, tenant-isolated) |
+| Test Scope             | Passed | Failed | Notes                                                                                                                                                                                    |
+| ---------------------- | ------ | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --- | ------------------ | --- | --- | ------------------------------------------------------ |
+| **Full suite**         | 10247  | 0      | All tests passing (0 errors)                                                                                                                                                             |
+| **Products tests**     | 1175   | 0      | SP01-SP05 (base+variants+bundles+BOM)                                                                                                                                                    |
+| **Attributes tests**   | 350    | 0      | SP02 models+API+integration (147+124+79)                                                                                                                                                 |
+| **Users tests**        | 298    | 0      | 71 API + 227 model tests                                                                                                                                                                 |
+| **Core tests (total)** | 5828   | 0      | All core/ tests combined                                                                                                                                                                 |
+| **Tenant tests**       | 2608   | 0      | All 40 previously failing fixed                                                                                                                                                          |
+| **Celery tests**       | 25     | 0      | Task infrastructure tests                                                                                                                                                                |
+| **Exception tests**    | 155    | 0      | Exception/handler/logging tests                                                                                                                                                          |
+| **Cache tests**        | 107    | 0      | Caching layer tests (audited)                                                                                                                                                            |
+| **Storage tests**      | 181    | 0      | File storage tests (SP10, audited)                                                                                                                                                       |
+| **API Docs tests**     | 154    | 0      | SP11 drf-spectacular tests                                                                                                                                                               |
+| **Pagination tests**   | 73     | 0      | SP12 Group A                                                                                                                                                                             |
+| **Filter tests**       | 100    | 0      | SP12 Group B                                                                                                                                                                             |
+| **Validator tests**    | 200    | 0      | SP12 Group C                                                                                                                                                                             |
+| **DateTime tests**     | 122    | 0      | SP12 Group D                                                                                                                                                                             |
+| **Sri Lanka tests**    | 293    | 0      | SP12 Group E                                                                                                                                                                             |
+| **Integration tests**  | 61     | 0      | SP12 Group F cross-module                                                                                                                                                                |
+| **Pricing mock tests** | 141    | 0      | SP06 models+API+integration (6 groups)                                                                                                                                                   |
+| **Pricing prod tests** | 53     | 0      | SP06 real PostgreSQL via django-tenants                                                                                                                                                  |
+| **Media unit tests**   | 183    | 0      | SP07 DB-free unit tests (7 test files)                                                                                                                                                   |
+| **Media prod tests**   | 29     | 0      | SP07 real PostgreSQL integration tests                                                                                                                                                   |
+| **Warehouse tests**    | 220    | 0      | SP08 143 unit + 77 integration (PostgreSQL)                                                                                                                                              |
+| **Quote tests**        | 118    | 0      | SP04 models+services+views+pdf+email (PostgreSQL)                                                                                                                                        |
+| **Order tests**        | 55     | 0      | SP05 models+services+API (PostgreSQL)                                                                                                                                                    |
+| **Invoice tests**      | 56     | 0      | SP06 models+services+API+PDF (PostgreSQL)                                                                                                                                                |
+| **Payment tests**      | 69     | 0      | SP07 models+services+API (PostgreSQL)                                                                                                                                                    |     | **Customer tests** | 90  | 0   | SP08 models+services+API (PostgreSQL, tenant-isolated) |
+| **Vendor tests**       | 84     | 0      | SP10 models+services+API (PostgreSQL, tenant-isolated)                                                                                                                                   |
+| **Purchase tests**     | 38     | 0      | SP11 models+services+API (PostgreSQL, tenant-isolated)                                                                                                                                   |
+| **Vendor Bills tests** | 40     | 0      | SP12 models+services+API (PostgreSQL, tenant-isolated)                                                                                                                                   |
+| **Employee tests**     | 127    | 0      | SP01 models+services+API (PostgreSQL, tenant-isolated)                                                                                                                                   |
+| **Organization tests** | 97     | 0      | SP02 models(29)+services(37)+API(31) (PostgreSQL)                                                                                                                                        |
+| **Attendance tests**   | 69     | 0      | SP03 models(21)+services(12)+API(36) (PostgreSQL)                                                                                                                                        |
+| **Leave tests**        | 72     | 0      | SP04 models+services+API (PostgreSQL, tenant-isolated)                                                                                                                                   |
+| **Payroll tests**      | 167    | 0      | SP05 models(37)+services(29) + SP06 models(25)+serializers(8)+services(17)+API(24)+SP05-existing(27) (PostgreSQL, tenant-isolated)                                                       |
+| **Accounting tests**   | 299    | 0      | SP08 models(31)+default_coa(29)+services(45)+admin_serializers(16)+API(37) + SP09 journal_entry(44) + SP10 reconciliation(38) + SP11 financial_reports(59) (PostgreSQL, tenant-isolated) |
+
+---
+
+## What Was Completed This Session (Session 47)
+
+### SP11: Financial Reports — Deep Audit & Gap Fixes
+
+**Phase-06_ERP-Advanced-Modules/SubPhase-11_Financial-Reports — DEEP AUDIT**
+
+Comprehensive audit of all 92 tasks across 6 groups (A–F) against source task documents. 8 gaps identified and immediately fixed. Full regression: 299/299 accounting tests passing (59 SP11-specific). SP11_AUDIT_REPORT.md created with per-group task-by-task status, gap details, fix descriptions, and certification.
+
+**Gaps Found & Fixed:**
+
+1. **openpyxl missing from requirements (Task 81)** — ExcelReportExporter imports openpyxl but it wasn't in requirements/base.txt or local.txt. Added `openpyxl==3.1.5` and installed in Docker.
+
+2. **Comparison data not passed through format_output (Tasks 26, 43)** — All 5 generators' `format_output()` returned fixed dicts, discarding comparison/variance data. Updated all 5 to pass through `comparison` and `variances` keys when present.
+
+3. **No variance classification (Task 27)** — Enhanced `BaseReportGenerator._calculate_variance()` with: direction (increase/decrease/no_change), classification (favorable/unfavorable/neutral based on account_type), materiality flag (≥10% or ≥Rs. 100,000). Added `_classify_variance()` static method and class constants.
+
+4. **No variance summary in TB (Task 27)** — Rewrote `TrialBalanceGenerator._calculate_variances()` to union all account codes, pass account_type, build variance_summary with material_variances_count, favorable/unfavorable counts, top 10 material variances.
+
+5. **No format=pdf/excel API parameter (Task 30)** — Updated `FinancialReportViewSet._generate_response()` to accept `request`, check `format` query param (json/pdf/excel), return appropriate response. All 5 action methods updated.
+
+6. **No API documentation (Task 92)** — Created `docs/api/reports.md` (346 lines) with all endpoints, query params, response formats, export options, error responses.
+
+7. **No email report method (Task 88)** — Added `_email_report()` to tasks.py with Django EmailMessage, PDF attachment via PDFReportExporter, error handling.
+
+8. **No comparison date validation (Task 26)** — Added overlap warning log to TB `_get_comparison_data()` with import logging and logger.
+
+**Files Modified:** requirements/base.txt, requirements/local.txt, reports/base.py, all 5 generators, views/reports.py, tasks.py  
+**Files Created:** docs/api/reports.md, SP11_AUDIT_REPORT.md  
+**Test Result:** 299 passed in 910.63s, 0 failures
+
+---
+
+## What Was Completed This Session (Session 46)
+
+### SP11: Financial Reports — Phase 06
+
+**Phase-06_ERP-Advanced-Modules/SubPhase-11_Financial-Reports**
+
+Full implementation of all 92 tasks across 6 groups (A–F). 1 migration (0017). 59/59 new tests ALL PASSING on Docker PostgreSQL. 299 total accounting tests passing (240 existing + 59 new). 2 models, 5 generators, 2 exporters, 7 serializers, 1 viewset, 5 templates, 1 Celery task.
+
+**Group A (Tasks 01-16): Module Structure, Enums & Models**
+Report module package structure (reports/, generators/, exporters/). Enums: ReportType (TRIAL_BALANCE/PROFIT_LOSS/BALANCE_SHEET/CASH_FLOW/GENERAL_LEDGER), ReportPeriod (DAILY/WEEKLY/MONTHLY/QUARTERLY/YEARLY/CUSTOM), DetailLevel (SUMMARY/DETAILED/TRANSACTION), ComparisonType (NONE/PREVIOUS_PERIOD/PREVIOUS_YEAR/BUDGET). ReportConfig model (name, report_type, period_type, dates, comparison fields, detail_level, include_zero_balances, clean() validation). ReportResult model (config FK, report_data JSONField, report_metadata JSONField, generation_time_ms, is_success, error_message). BaseReportGenerator ABC — Template Method pattern with generate(), validate_config(), get_data() (abstract), format_output() (abstract), \_make_json_safe() (Decimal→float converter), \_get_date_range(), \_get_comparison_range(), \_should_include_account(), \_calculate_variance(), \_get_cached_result(). Migration 0017.
+
+**Group B (Tasks 17-30): Trial Balance Generator**
+TrialBalanceGenerator — uses accounting constants (lowercase account types), ACCOUNT_TYPE_ORDER dict for display ordering, \_calculate_balance(), \_calculate_opening_balance(), \_calculate_period_movements(), \_calculate_closing_balance(), \_group_by_type(), \_validate_totals(). HTML template for PDF export (trial_balance.html).
+
+**Group C (Tasks 31-48): Profit & Loss Generator**
+ProfitLossGenerator — code ranges: Revenue≤4899, OtherIncome≥4900, COGS 5100-5199, OpEx 5200-5799, OtherExp 5800-5899. Calculates gross_profit, operating_income, net_income. Output format: data["revenue"]["total"], data["net_income"]["amount"], data["gross_profit"]["amount"], data["operating_expenses"]["total"]. HTML template (profit_loss.html).
+
+**Group D (Tasks 49-64): Balance Sheet Generator**
+BalanceSheetGenerator — code ranges: Current Assets 1100-1199, Fixed 1200-1799, Deprec 1800-1899, Current Liab 2100-2199, LT Liab 2200-2999, Capital 3100-3199, RE 3200-3299. Includes \_calculate_current_net_income() for retained earnings. Output format: data["assets"]["total_assets"], data["equity"]["total_equity"], data["total_liabilities_equity"], data["is_balanced"]. HTML template (balance_sheet.html).
+
+**Group E (Tasks 65-80): Cash Flow & General Ledger Generators**
+CashFlowGenerator (indirect method) — Cash 1001-1049, AR 1150-1159, Inventory 1160-1169, Prepaid 1170-1189, AP 2100-2199, Deprec Exp 5600-5699, Fixed 1200-1399, LT Debt 2200-2299, Equity 3000-3999. Output: data["operating_activities"], data["investing_activities"], data["financing_activities"]. GeneralLedgerGenerator — account_code/code_from/code_to filtering, running balance. Output: data["accounts"] list with account_code, transactions (each with running_balance), summary. Templates: cash_flow.html, general_ledger.html.
+
+**Group F (Tasks 81-92): Serializers, Views, Exporters, URLs & Celery**
+Serializers: ReportQuerySerializer, TB/PL/BS/CF/GL query serializers, ScheduleReportSerializer (7 total). ReportViewSet with list, trial_balance, profit_loss, balance_sheet, cash_flow, general_ledger actions. Exporters: PDFExporter (WeasyPrint with HTML fallback), ExcelExporter (openpyxl). URLs: reports route registered. Celery task: generate_scheduled_report — calls generator.generate() directly (returns saved ReportResult).
+
+**Bugs Fixed During Implementation:**
+
+1. **Decimal JSON Serialization**: format_output() returned Decimal values which JSONField couldn't serialize. Fixed by adding \_make_json_safe() in base.py that converts via custom JSONEncoder (Decimal→float, date→isoformat).
+2. **ReportResult.**str** TypeError**: `{self.generated_at:%Y-%m-%d %H:%M}` failed when generated_at is None (unsaved instances). Fixed with conditional strftime.
+3. **Celery Task Double-Save Bug**: generator.generate() returns saved ReportResult, but task tried to create another ReportResult. Fixed to use the result directly.
 
 ---
 

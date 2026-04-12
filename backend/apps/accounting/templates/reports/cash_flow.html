@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cash Flow Statement</title>
+  <style>
+    body { font-family: Arial, sans-serif; font-size: 12px; margin: 20px; }
+    h1 { text-align: center; font-size: 18px; margin-bottom: 4px; }
+    .subtitle { text-align: center; color: #555; margin-bottom: 16px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+    th, td { padding: 5px 8px; }
+    th { text-align: left; background: #f5f5f5; border-bottom: 2px solid #333; }
+    td.num { text-align: right; font-variant-numeric: tabular-nums; }
+    tr.section-header td { font-weight: bold; background: #e8e8e8; border-top: 1px solid #ccc; padding-top: 8px; }
+    tr.subtotal td { border-top: 1px solid #999; font-weight: bold; }
+    tr.grand-total td { border-top: 3px double #333; font-weight: bold; font-size: 13px; }
+    .negative { color: red; }
+  </style>
+</head>
+<body>
+  <h1>Cash Flow Statement</h1>
+  <div class="subtitle">
+    For the period {{ period.start_date }} to {{ period.end_date }}
+  </div>
+
+  <table>
+    <thead>
+      <tr><th>Description</th><th style="text-align:right;">Amount</th></tr>
+    </thead>
+    <tbody>
+      {# ── Operating Activities ────────────────── #}
+      <tr class="section-header"><td colspan="2">Cash Flows from Operating Activities</td></tr>
+      <tr><td>&nbsp;&nbsp;Net Income</td><td class="num">{{ operating_activities.net_income|floatformat:2 }}</td></tr>
+      <tr><td>&nbsp;&nbsp;Add: Depreciation</td><td class="num">{{ operating_activities.depreciation|floatformat:2 }}</td></tr>
+      {% for item in operating_activities.working_capital_changes %}
+        <tr><td>&nbsp;&nbsp;{{ item.label }}</td><td class="num {% if item.change < 0 %}negative{% endif %}">{{ item.change|floatformat:2 }}</td></tr>
+      {% endfor %}
+      <tr class="subtotal"><td>Net Cash from Operating Activities</td><td class="num">{{ operating_activities.total|floatformat:2 }}</td></tr>
+
+      {# ── Investing Activities ────────────────── #}
+      <tr class="section-header"><td colspan="2">Cash Flows from Investing Activities</td></tr>
+      {% for item in investing_activities.items %}
+        <tr><td>&nbsp;&nbsp;{{ item.label }}</td><td class="num {% if item.change < 0 %}negative{% endif %}">{{ item.change|floatformat:2 }}</td></tr>
+      {% endfor %}
+      <tr class="subtotal"><td>Net Cash from Investing Activities</td><td class="num">{{ investing_activities.net|floatformat:2 }}</td></tr>
+
+      {# ── Financing Activities ────────────────── #}
+      <tr class="section-header"><td colspan="2">Cash Flows from Financing Activities</td></tr>
+      {% for item in financing_activities.items %}
+        <tr><td>&nbsp;&nbsp;{{ item.label }}</td><td class="num {% if item.change < 0 %}negative{% endif %}">{{ item.change|floatformat:2 }}</td></tr>
+      {% endfor %}
+      <tr class="subtotal"><td>Net Cash from Financing Activities</td><td class="num">{{ financing_activities.net|floatformat:2 }}</td></tr>
+
+      {# ── Summary ─────────────────────────────── #}
+      <tr class="subtotal"><td>Net Change in Cash</td><td class="num {% if net_cash_change < 0 %}negative{% endif %}">{{ net_cash_change|floatformat:2 }}</td></tr>
+      <tr><td>Beginning Cash Balance</td><td class="num">{{ beginning_cash|floatformat:2 }}</td></tr>
+      <tr class="grand-total"><td>Ending Cash Balance</td><td class="num">{{ ending_cash|floatformat:2 }}</td></tr>
+    </tbody>
+  </table>
+</body>
+</html>

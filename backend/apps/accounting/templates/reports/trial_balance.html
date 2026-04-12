@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Trial Balance</title>
+  <style>
+    body { font-family: Arial, sans-serif; font-size: 12px; margin: 20px; }
+    h1 { text-align: center; font-size: 18px; margin-bottom: 4px; }
+    .subtitle { text-align: center; color: #555; margin-bottom: 16px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+    th, td { border: 1px solid #ccc; padding: 6px 8px; }
+    th { background: #f5f5f5; text-align: center; font-weight: bold; }
+    td.num { text-align: right; font-variant-numeric: tabular-nums; }
+    td.code { white-space: nowrap; }
+    tr.group-header td { background: #e8e8e8; font-weight: bold; }
+    tr.subtotal td { border-top: 2px solid #333; font-weight: bold; }
+    tr.grand-total td { border-top: 3px double #333; font-weight: bold; background: #f0f0f0; }
+    .balanced { color: green; }
+    .imbalanced { color: red; font-weight: bold; }
+    .meta { font-size: 11px; color: #666; margin-top: 12px; }
+  </style>
+</head>
+<body>
+  <h1>Trial Balance</h1>
+  <div class="subtitle">
+    {% if period.start_date and period.end_date %}
+      For the period {{ period.start_date }} to {{ period.end_date }}
+    {% elif period.as_of_date %}
+      As of {{ period.as_of_date }}
+    {% endif %}
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th rowspan="2">Code</th>
+        <th rowspan="2">Account Name</th>
+        <th colspan="2">Opening Balance</th>
+        <th colspan="2">Period Movement</th>
+        <th colspan="2">Closing Balance</th>
+      </tr>
+      <tr>
+        <th>Debit</th>
+        <th>Credit</th>
+        <th>Debit</th>
+        <th>Credit</th>
+        <th>Debit</th>
+        <th>Credit</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for group in account_groups %}
+        <tr class="group-header">
+          <td colspan="8">{{ group.display_name }}</td>
+        </tr>
+        {% for acct in group.accounts %}
+          <tr>
+            <td class="code">{{ acct.account_code }}</td>
+            <td>{{ acct.account_name }}</td>
+            <td class="num">{{ acct.opening_debit|floatformat:2 }}</td>
+            <td class="num">{{ acct.opening_credit|floatformat:2 }}</td>
+            <td class="num">{{ acct.period_debit|floatformat:2 }}</td>
+            <td class="num">{{ acct.period_credit|floatformat:2 }}</td>
+            <td class="num">{{ acct.closing_debit|floatformat:2 }}</td>
+            <td class="num">{{ acct.closing_credit|floatformat:2 }}</td>
+          </tr>
+        {% endfor %}
+        <tr class="subtotal">
+          <td colspan="2">Subtotal — {{ group.display_name }}</td>
+          <td class="num">{{ group.subtotals.opening_debit|floatformat:2 }}</td>
+          <td class="num">{{ group.subtotals.opening_credit|floatformat:2 }}</td>
+          <td class="num">{{ group.subtotals.period_debit|floatformat:2 }}</td>
+          <td class="num">{{ group.subtotals.period_credit|floatformat:2 }}</td>
+          <td class="num">{{ group.subtotals.closing_debit|floatformat:2 }}</td>
+          <td class="num">{{ group.subtotals.closing_credit|floatformat:2 }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr class="grand-total">
+        <td colspan="2">Grand Total</td>
+        <td class="num">{{ grand_totals.opening_debit|floatformat:2 }}</td>
+        <td class="num">{{ grand_totals.opening_credit|floatformat:2 }}</td>
+        <td class="num">{{ grand_totals.period_debit|floatformat:2 }}</td>
+        <td class="num">{{ grand_totals.period_credit|floatformat:2 }}</td>
+        <td class="num">{{ grand_totals.closing_debit|floatformat:2 }}</td>
+        <td class="num">{{ grand_totals.closing_credit|floatformat:2 }}</td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <div class="meta">
+    {% if is_balanced %}
+      <span class="balanced">&#10003; Trial Balance is balanced.</span>
+    {% else %}
+      <span class="imbalanced">&#10007; Trial Balance is NOT balanced.</span>
+      {% for err in validation.errors %}
+        <br>{{ err }}
+      {% endfor %}
+    {% endif %}
+  </div>
+</body>
+</html>

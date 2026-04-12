@@ -212,6 +212,8 @@ referencing==0.37.0
     #   jsonschema-specifications
 reportlab==4.4.10
     # via -r requirements/base.in
+openpyxl==3.1.5
+    # via -r requirements/base.in (Excel export for financial reports)
 rpds-py==0.30.0
     # via
     #   jsonschema

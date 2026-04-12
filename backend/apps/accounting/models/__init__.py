@@ -42,6 +42,8 @@ from apps.accounting.models.reconciliation import Reconciliation
 from apps.accounting.models.reconciliation_adjustment import ReconciliationAdjustment
 from apps.accounting.models.reconciliation_item import ReconciliationItem
 from apps.accounting.models.recurring_entry import RecurringEntry
+from apps.accounting.models.report_config import ReportConfig
+from apps.accounting.models.report_result import ReportResult
 from apps.accounting.models.statement_line import StatementLine
 
 __all__ = [
@@ -76,6 +78,8 @@ __all__ = [
     "ReconciliationStatus",
     "RecurringEntry",
     "RecurringFrequency",
+    "ReportConfig",
+    "ReportResult",
     "StatementFormat",
     "StatementLine",
     "TemplateCategory",

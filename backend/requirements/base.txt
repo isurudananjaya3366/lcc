@@ -106,6 +106,8 @@ pillow==12.1.1
     # via -r requirements/base.in
 reportlab==4.4.10
     # via -r requirements/base.in (PDF generation for quotes)
+openpyxl==3.1.5
+    # via -r requirements/base.in (Excel export for financial reports)
 prompt-toolkit==3.0.52
     # via click-repl
 psycopg[binary]==3.3.2

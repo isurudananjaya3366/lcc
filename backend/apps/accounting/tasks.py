@@ -143,3 +143,108 @@ def process_recurring_entries(self):
     except Exception as exc:
         logger.exception("Failed to process recurring entries")
         raise self.retry(exc=exc)
+
+
+@shared_task(bind=True, max_retries=3, default_retry_delay=60)
+def generate_scheduled_report(self, config_id):
+    """
+    Generate a financial report from a saved ReportConfig.
+
+    Triggered by Celery Beat or on-demand scheduling. Creates the
+    appropriate report generator, runs generation, stores the result,
+    and optionally exports to the configured format.
+    """
+    try:
+        from apps.accounting.models import ReportConfig
+        from apps.accounting.reports.enums import ReportType
+        from apps.accounting.reports.generators import (
+            BalanceSheetGenerator,
+            CashFlowGenerator,
+            GeneralLedgerGenerator,
+            ProfitLossGenerator,
+            TrialBalanceGenerator,
+        )
+
+        config = ReportConfig.objects.get(pk=config_id)
+
+        generator_map = {
+            ReportType.TRIAL_BALANCE: TrialBalanceGenerator,
+            ReportType.PROFIT_LOSS: ProfitLossGenerator,
+            ReportType.BALANCE_SHEET: BalanceSheetGenerator,
+            ReportType.CASH_FLOW: CashFlowGenerator,
+            ReportType.GENERAL_LEDGER: GeneralLedgerGenerator,
+        }
+
+        generator_cls = generator_map.get(config.report_type)
+        if not generator_cls:
+            logger.error("Unknown report type: %s", config.report_type)
+            return None
+
+        generator = generator_cls(config)
+        result = generator.generate()
+
+        if not result.is_success:
+            logger.error(
+                "Report generation failed for config %s: %s",
+                config_id,
+                result.error_message,
+            )
+            return None
+
+        logger.info(
+            "Generated %s report (config=%s) in %dms",
+            config.report_type,
+            config_id,
+            result.generation_time_ms,
+        )
+
+        # Email report if recipients are configured
+        recipients = getattr(config, "email_recipients", None)
+        if recipients:
+            _email_report(config, result, recipients)
+
+        return str(result.pk)
+
+    except ReportConfig.DoesNotExist:
+        logger.error("ReportConfig %s not found", config_id)
+        return None
+    except Exception as exc:
+        logger.exception("Failed to generate report for config %s", config_id)
+        raise self.retry(exc=exc)
+
+
+def _email_report(config, result, recipients):
+    """Email the generated report to specified recipients."""
+    from django.core.mail import EmailMessage
+
+    subject = f"Financial Report: {config.get_report_type_display()}"
+    body = (
+        f"Your {config.get_report_type_display()} report has been "
+        f"generated successfully.\n\n"
+        f"Report: {config.name}\n"
+        f"Generated in: {result.generation_time_ms}ms\n"
+    )
+
+    email = EmailMessage(
+        subject=subject,
+        body=body,
+        to=recipients if isinstance(recipients, list) else [recipients],
+    )
+
+    try:
+        from apps.accounting.reports.exporters.pdf_exporter import PDFReportExporter
+
+        exporter = PDFReportExporter()
+        response = exporter.to_pdf_response(
+            result.report_type, result.report_data,
+        )
+        filename = f"{config.report_type}_report.pdf"
+        email.attach(filename, response.content, "application/pdf")
+    except Exception:
+        logger.warning("Could not attach PDF to email for config %s", config.pk)
+
+    try:
+        email.send(fail_silently=True)
+        logger.info("Report emailed to %s for config %s", recipients, config.pk)
+    except Exception:
+        logger.warning("Failed to email report for config %s", config.pk)

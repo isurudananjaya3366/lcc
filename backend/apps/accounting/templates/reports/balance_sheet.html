@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Balance Sheet</title>
+  <style>
+    body { font-family: Arial, sans-serif; font-size: 12px; margin: 20px; }
+    h1 { text-align: center; font-size: 18px; margin-bottom: 4px; }
+    .subtitle { text-align: center; color: #555; margin-bottom: 16px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+    th, td { padding: 5px 8px; }
+    th { text-align: left; background: #f5f5f5; border-bottom: 2px solid #333; }
+    td.num { text-align: right; font-variant-numeric: tabular-nums; }
+    tr.section-header td { font-weight: bold; background: #e8e8e8; border-top: 1px solid #ccc; padding-top: 8px; }
+    tr.subsection td { font-weight: bold; background: #f0f0f0; }
+    tr.subtotal td { border-top: 1px solid #999; font-weight: bold; }
+    tr.grand-total td { border-top: 3px double #333; font-weight: bold; font-size: 13px; }
+    .balanced { color: green; }
+    .imbalanced { color: red; font-weight: bold; }
+    .meta { font-size: 11px; color: #666; margin-top: 12px; }
+    .indent { padding-left: 24px; }
+  </style>
+</head>
+<body>
+  <h1>Balance Sheet</h1>
+  <div class="subtitle">As of {{ as_of_date }}</div>
+
+  <table>
+    <thead>
+      <tr><th>Account</th><th style="text-align:right;">Amount</th></tr>
+    </thead>
+    <tbody>
+      {# ── ASSETS ───────────────────────────────── #}
+      <tr class="section-header"><td colspan="2">ASSETS</td></tr>
+
+      <tr class="subsection"><td colspan="2">Current Assets</td></tr>
+      {% for acct in assets.current_assets.accounts %}
+        <tr><td class="indent">{{ acct.account_code }} — {{ acct.account_name }}</td><td class="num">{{ acct.balance|floatformat:2 }}</td></tr>
+      {% endfor %}
+      <tr class="subtotal"><td>Total Current Assets</td><td class="num">{{ assets.current_assets.total|floatformat:2 }}</td></tr>
+
+      <tr class="subsection"><td colspan="2">Fixed Assets</td></tr>
+      {% for acct in assets.fixed_assets.accounts %}
+        <tr><td class="indent">{{ acct.account_code }} — {{ acct.account_name }}</td><td class="num">{{ acct.balance|floatformat:2 }}</td></tr>
+      {% endfor %}
+
+      {% if assets.accumulated_depreciation.accounts %}
+      <tr class="subsection"><td colspan="2">Less: Accumulated Depreciation</td></tr>
+      {% for acct in assets.accumulated_depreciation.accounts %}
+        <tr><td class="indent">{{ acct.account_code }} — {{ acct.account_name }}</td><td class="num">({{ acct.balance|floatformat:2 }})</td></tr>
+      {% endfor %}
+      {% endif %}
+      <tr class="subtotal"><td>Net Fixed Assets</td><td class="num">{{ assets.net_fixed_assets|floatformat:2 }}</td></tr>
+
+      <tr class="grand-total"><td>TOTAL ASSETS</td><td class="num">{{ assets.total_assets|floatformat:2 }}</td></tr>
+
+      {# ── LIABILITIES ──────────────────────────── #}
+      <tr class="section-header"><td colspan="2">LIABILITIES</td></tr>
+
+      <tr class="subsection"><td colspan="2">Current Liabilities</td></tr>
+      {% for acct in liabilities.current_liabilities.accounts %}
+        <tr><td class="indent">{{ acct.account_code }} — {{ acct.account_name }}</td><td class="num">{{ acct.balance|floatformat:2 }}</td></tr>
+      {% endfor %}
+      <tr class="subtotal"><td>Total Current Liabilities</td><td class="num">{{ liabilities.current_liabilities.total|floatformat:2 }}</td></tr>
+
+      <tr class="subsection"><td colspan="2">Long-Term Liabilities</td></tr>
+      {% for acct in liabilities.long_term_liabilities.accounts %}
+        <tr><td class="indent">{{ acct.account_code }} — {{ acct.account_name }}</td><td class="num">{{ acct.balance|floatformat:2 }}</td></tr>
+      {% endfor %}
+      <tr class="subtotal"><td>Total Long-Term Liabilities</td><td class="num">{{ liabilities.long_term_liabilities.total|floatformat:2 }}</td></tr>
+
+      <tr class="subtotal"><td>TOTAL LIABILITIES</td><td class="num">{{ liabilities.total_liabilities|floatformat:2 }}</td></tr>
+
+      {# ── EQUITY ───────────────────────────────── #}
+      <tr class="section-header"><td colspan="2">EQUITY</td></tr>
+      {% for acct in equity.accounts %}
+        <tr><td class="indent">{{ acct.account_code }} — {{ acct.account_name }}</td><td class="num">{{ acct.balance|floatformat:2 }}</td></tr>
+      {% endfor %}
+      {% if equity.current_net_income %}
+        <tr><td class="indent">Current Period Net Income</td><td class="num">{{ equity.current_net_income|floatformat:2 }}</td></tr>
+      {% endif %}
+      <tr class="subtotal"><td>TOTAL EQUITY</td><td class="num">{{ equity.total_equity|floatformat:2 }}</td></tr>
+
+      {# ── TOTAL L+E ────────────────────────────── #}
+      <tr class="grand-total"><td>TOTAL LIABILITIES &amp; EQUITY</td><td class="num">{{ total_liabilities_equity|floatformat:2 }}</td></tr>
+    </tbody>
+  </table>
+
+  <div class="meta">
+    {% if is_balanced %}
+      <span class="balanced">&#10003; Balance Sheet equation verified: Assets = Liabilities + Equity</span>
+    {% else %}
+      <span class="imbalanced">&#10007; Balance Sheet is NOT balanced. Assets ≠ Liabilities + Equity</span>
+    {% endif %}
+  </div>
+</body>
+</html>

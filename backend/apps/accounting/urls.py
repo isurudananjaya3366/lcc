@@ -13,6 +13,7 @@ from apps.accounting.views import (
     JournalEntryViewSet,
     MatchingRuleViewSet,
     ReconciliationViewSet,
+    ReportViewSet,
 )
 
 app_name = "accounting"
@@ -23,5 +24,6 @@ router.register(r"entries", JournalEntryViewSet, basename="journal-entry")
 router.register(r"bank-accounts", BankAccountViewSet, basename="bank-account")
 router.register(r"reconciliations", ReconciliationViewSet, basename="reconciliation")
 router.register(r"matching-rules", MatchingRuleViewSet, basename="matching-rule")
+router.register(r"reports", ReportViewSet, basename="report")
 
 urlpatterns = router.urls

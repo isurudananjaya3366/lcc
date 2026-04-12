@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>General Ledger</title>
+  <style>
+    body { font-family: Arial, sans-serif; font-size: 12px; margin: 20px; }
+    h1 { text-align: center; font-size: 18px; margin-bottom: 4px; }
+    .subtitle { text-align: center; color: #555; margin-bottom: 16px; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+    th, td { border: 1px solid #ccc; padding: 4px 8px; }
+    th { background: #f5f5f5; text-align: center; font-weight: bold; }
+    td.num { text-align: right; font-variant-numeric: tabular-nums; }
+    .acct-header { background: #e0e0e0; font-weight: bold; padding: 8px; margin-top: 16px; border: 1px solid #999; }
+    .acct-footer { background: #f8f8f8; font-weight: bold; }
+    .balance-row td { font-style: italic; }
+    .summary { margin-top: 12px; font-size: 11px; color: #666; }
+    .balanced { color: green; }
+    .imbalanced { color: red; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>General Ledger</h1>
+  <div class="subtitle">
+    {{ filter }}<br>
+    For the period {{ period.start_date }} to {{ period.end_date }}
+  </div>
+
+  {% for acct in accounts %}
+  <div class="acct-header">
+    {{ acct.account_code }} — {{ acct.account_name }}
+    ({{ acct.account_type|title }}, Normal: {{ acct.normal_balance|title }})
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Entry #</th>
+        <th>Description</th>
+        <th>Debit</th>
+        <th>Credit</th>
+        <th>Balance</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="balance-row">
+        <td colspan="3">Opening Balance</td>
+        <td class="num"></td>
+        <td class="num"></td>
+        <td class="num">{{ acct.opening_balance|floatformat:2 }} {{ acct.opening_balance_type }}</td>
+      </tr>
+      {% for txn in acct.transactions %}
+        <tr>
+          <td>{{ txn.date }}</td>
+          <td>{{ txn.entry_number }}</td>
+          <td>{{ txn.description }}</td>
+          <td class="num">{% if txn.debit_amount %}{{ txn.debit_amount|floatformat:2 }}{% endif %}</td>
+          <td class="num">{% if txn.credit_amount %}{{ txn.credit_amount|floatformat:2 }}{% endif %}</td>
+          <td class="num">{{ txn.running_balance|floatformat:2 }}</td>
+        </tr>
+      {% endfor %}
+      <tr class="acct-footer">
+        <td colspan="3">Closing Balance ({{ acct.transaction_count }} transactions)</td>
+        <td class="num">{{ acct.total_debits|floatformat:2 }}</td>
+        <td class="num">{{ acct.total_credits|floatformat:2 }}</td>
+        <td class="num">{{ acct.closing_balance|floatformat:2 }} {{ acct.closing_balance_type }}</td>
+      </tr>
+    </tbody>
+  </table>
+  {% endfor %}
+
+  <div class="summary">
+    <strong>Summary:</strong>
+    {{ summary.total_accounts }} accounts,
+    {{ summary.total_transactions }} transactions,
+    Total Debits: {{ summary.total_debit_movements|floatformat:2 }},
+    Total Credits: {{ summary.total_credit_movements|floatformat:2 }}
+    {% if summary.balanced %}
+      <span class="balanced">&#10003; Balanced</span>
+    {% else %}
+      <span class="imbalanced">&#10007; Imbalanced</span>
+    {% endif %}
+  </div>
+</body>
+</html>

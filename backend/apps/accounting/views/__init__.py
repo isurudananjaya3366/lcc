@@ -7,6 +7,7 @@ from apps.accounting.views.reconciliation import (
     MatchingRuleViewSet,
     ReconciliationViewSet,
 )
+from apps.accounting.views.reports import ReportViewSet
 
 __all__ = [
     "AccountViewSet",
@@ -14,4 +15,5 @@ __all__ = [
     "JournalEntryViewSet",
     "MatchingRuleViewSet",
     "ReconciliationViewSet",
+    "ReportViewSet",
 ]

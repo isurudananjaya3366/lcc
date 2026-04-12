@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Profit &amp; Loss Statement</title>
+  <style>
+    body { font-family: Arial, sans-serif; font-size: 12px; margin: 20px; }
+    h1 { text-align: center; font-size: 18px; margin-bottom: 4px; }
+    .subtitle { text-align: center; color: #555; margin-bottom: 16px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+    th, td { padding: 5px 8px; }
+    th { text-align: left; background: #f5f5f5; border-bottom: 2px solid #333; }
+    td.num { text-align: right; font-variant-numeric: tabular-nums; }
+    tr.section-header td { font-weight: bold; background: #f0f0f0; border-top: 1px solid #ccc; padding-top: 8px; }
+    tr.subtotal td { border-top: 1px solid #999; font-weight: bold; }
+    tr.grand-total td { border-top: 3px double #333; font-weight: bold; font-size: 13px; }
+    .pct { color: #666; font-size: 11px; }
+    .negative { color: red; }
+  </style>
+</head>
+<body>
+  <h1>Profit &amp; Loss Statement</h1>
+  <div class="subtitle">
+    {% if period.start_date and period.end_date %}
+      For the period {{ period.start_date }} to {{ period.end_date }}
+    {% endif %}
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Account</th>
+        <th style="text-align:right;">Amount</th>
+        <th style="text-align:right;">% of Revenue</th>
+      </tr>
+    </thead>
+    <tbody>
+      {# ── Revenue ──────────────────────────────── #}
+      <tr class="section-header"><td colspan="3">Revenue</td></tr>
+      {% for acct in revenue.accounts %}
+        <tr>
+          <td>&nbsp;&nbsp;{{ acct.account_code }} — {{ acct.account_name }}</td>
+          <td class="num">{{ acct.balance|floatformat:2 }}</td>
+          <td class="num pct"></td>
+        </tr>
+      {% endfor %}
+      <tr class="subtotal">
+        <td>Total Revenue</td>
+        <td class="num">{{ revenue.total|floatformat:2 }}</td>
+        <td class="num pct">100.00%</td>
+      </tr>
+
+      {# ── COGS ─────────────────────────────────── #}
+      <tr class="section-header"><td colspan="3">Cost of Goods Sold</td></tr>
+      {% for acct in cost_of_goods_sold.accounts %}
+        <tr>
+          <td>&nbsp;&nbsp;{{ acct.account_code }} — {{ acct.account_name }}</td>
+          <td class="num">{{ acct.balance|floatformat:2 }}</td>
+          <td class="num pct"></td>
+        </tr>
+      {% endfor %}
+      <tr class="subtotal">
+        <td>Total COGS</td>
+        <td class="num">{{ cost_of_goods_sold.total|floatformat:2 }}</td>
+        <td class="num pct"></td>
+      </tr>
+
+      {# ── Gross Profit ─────────────────────────── #}
+      <tr class="subtotal">
+        <td>Gross Profit</td>
+        <td class="num {% if gross_profit.amount < 0 %}negative{% endif %}">{{ gross_profit.amount|floatformat:2 }}</td>
+        <td class="num pct">{{ gross_profit.margin_percentage|floatformat:2 }}%</td>
+      </tr>
+
+      {# ── Operating Expenses ───────────────────── #}
+      <tr class="section-header"><td colspan="3">Operating Expenses</td></tr>
+      {% for acct in operating_expenses.accounts %}
+        <tr>
+          <td>&nbsp;&nbsp;{{ acct.account_code }} — {{ acct.account_name }}</td>
+          <td class="num">{{ acct.balance|floatformat:2 }}</td>
+          <td class="num pct"></td>
+        </tr>
+      {% endfor %}
+      <tr class="subtotal">
+        <td>Total Operating Expenses</td>
+        <td class="num">{{ operating_expenses.total|floatformat:2 }}</td>
+        <td class="num pct"></td>
+      </tr>
+
+      {# ── Operating Income ─────────────────────── #}
+      <tr class="subtotal">
+        <td>Operating Income</td>
+        <td class="num {% if operating_income.amount < 0 %}negative{% endif %}">{{ operating_income.amount|floatformat:2 }}</td>
+        <td class="num pct">{{ operating_income.margin_percentage|floatformat:2 }}%</td>
+      </tr>
+
+      {# ── Other Income ─────────────────────────── #}
+      {% if other_income.accounts %}
+      <tr class="section-header"><td colspan="3">Other Income</td></tr>
+      {% for acct in other_income.accounts %}
+        <tr>
+          <td>&nbsp;&nbsp;{{ acct.account_code }} — {{ acct.account_name }}</td>
+          <td class="num">{{ acct.balance|floatformat:2 }}</td>
+          <td class="num pct"></td>
+        </tr>
+      {% endfor %}
+      <tr class="subtotal">
+        <td>Total Other Income</td>
+        <td class="num">{{ other_income.total|floatformat:2 }}</td>
+        <td class="num pct"></td>
+      </tr>
+      {% endif %}
+
+      {# ── Other Expenses ───────────────────────── #}
+      {% if other_expenses.accounts %}
+      <tr class="section-header"><td colspan="3">Other Expenses</td></tr>
+      {% for acct in other_expenses.accounts %}
+        <tr>
+          <td>&nbsp;&nbsp;{{ acct.account_code }} — {{ acct.account_name }}</td>
+          <td class="num">{{ acct.balance|floatformat:2 }}</td>
+          <td class="num pct"></td>
+        </tr>
+      {% endfor %}
+      <tr class="subtotal">
+        <td>Total Other Expenses</td>
+        <td class="num">{{ other_expenses.total|floatformat:2 }}</td>
+        <td class="num pct"></td>
+      </tr>
+      {% endif %}
+
+      {# ── Net Income ───────────────────────────── #}
+      <tr class="grand-total">
+        <td>Net Income</td>
+        <td class="num {% if net_income.amount < 0 %}negative{% endif %}">{{ net_income.amount|floatformat:2 }}</td>
+        <td class="num pct">{{ net_income.margin_percentage|floatformat:2 }}%</td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+</html>
