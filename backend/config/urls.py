@@ -44,6 +44,8 @@ urlpatterns = [
     path("api/v1/payroll/", include("apps.payroll.urls", namespace="payroll")),
     path("api/v1/payslips/", include("apps.payslip.urls", namespace="payslip")),
     path("api/v1/accounting/", include("apps.accounting.urls", namespace="accounting")),
+    path("api/v1/dashboard/", include("apps.dashboard.urls", namespace="dashboard")),
+    path("api/v1/analytics/", include("apps.analytics.api.urls", namespace="analytics")),
 
     # ──────────────────────────────────────────────
     # API Documentation — drf-spectacular (SP11)

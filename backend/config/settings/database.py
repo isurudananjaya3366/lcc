@@ -19,7 +19,6 @@ because connection details differ per environment.
 
 from config.env import env  # Centralized env loader
 
-
 # ════════════════════════════════════════════════════════════════════════
 # TENANT MODEL SETTINGS
 # ════════════════════════════════════════════════════════════════════════
@@ -319,6 +318,8 @@ TENANT_APPS: list[str] = [
     "apps.leave",                        # Leave management — leave types, policies, applications
     "apps.payroll",                      # Payroll — salary components, templates, EPF/ETF/PAYE
     "apps.payslip",                      # Payslip generation — PDF payslips, distribution, tracking
+    "apps.dashboard",                    # Dashboard & KPIs — business performance metrics & alerts
+    "apps.analytics",                    # Analytics & Reports — business intelligence and reporting
 ]
 
 

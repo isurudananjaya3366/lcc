@@ -19,7 +19,6 @@ from pathlib import Path
 
 from config.env import BASE_DIR, env  # Centralized env loader
 
-
 # ── Future imports (uncomment when packages are installed) ──────────────
 # import dj_database_url                        # database URL parsing
 
@@ -250,7 +249,6 @@ SIMPLE_JWT = {
 # ════════════════════════════════════════════════════════════════════════
 from config.settings.api_docs import *  # noqa: E402, F401, F403
 
-
 # ════════════════════════════════════════════════════════════════════════
 # CELERY  (Tasks 44-46)
 # ════════════════════════════════════════════════════════════════════════
@@ -351,6 +349,11 @@ CELERY_BEAT_SCHEDULE = {
         "schedule": crontab(hour=2, minute=30),  # Daily at 2:30 AM
         "options": {"expires": 3600},
     },
+    # ── SP13 Dashboard KPI Alerts (Task 80) ─────────────────────
+    "check-kpi-alerts": {
+        "task": "apps.dashboard.tasks.check_kpi_alerts",
+        "schedule": crontab(minute="*/30"),  # Every 30 minutes
+    },
 }
 
 
@@ -375,12 +378,12 @@ CHANNEL_LAYERS = {
 # CACHING — Redis  (SP09)
 # ════════════════════════════════════════════════════════════════════════
 from config.settings.cache import *  # noqa: E402, F401, F403
+from config.settings.database import *  # noqa: E402, F401, F403
 
 # ════════════════════════════════════════════════════════════════════════
 # FILE STORAGE — Local / S3  (SP10)
 # ════════════════════════════════════════════════════════════════════════
 from config.settings.storage import *  # noqa: E402, F401, F403  (SP10)
-
 
 # ════════════════════════════════════════════════════════════════════════
 # DATABASE  (Task 23 — Configured in Phase 2)
@@ -392,7 +395,6 @@ from config.settings.storage import *  # noqa: E402, F401, F403  (SP10)
 # Multi-tenancy settings (TENANT_MODEL, TENANT_DOMAIN_MODEL,
 # DATABASE_ROUTERS) are centralized in config/settings/database.py.
 
-from config.settings.database import *  # noqa: E402, F401, F403
 
 DATABASES: dict = {}
 

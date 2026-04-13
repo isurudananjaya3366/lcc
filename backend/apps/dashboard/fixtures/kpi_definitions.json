@@ -1,0 +1,242 @@
+[
+  {
+    "model": "dashboard.kpidefinition",
+    "pk": 1,
+    "fields": {
+      "name": "Today's Sales",
+      "code": "SALES_TODAY",
+      "description": "Total sales revenue for today",
+      "category": "SALES",
+      "default_widget_type": "NUMBER",
+      "calculation_method": "SalesKPICalculator.calculate_todays_sales",
+      "format_type": "currency",
+      "required_permission": "",
+      "is_active": true,
+      "sort_order": 1
+    }
+  },
+  {
+    "model": "dashboard.kpidefinition",
+    "pk": 2,
+    "fields": {
+      "name": "Weekly Sales",
+      "code": "SALES_WEEKLY",
+      "description": "Total sales revenue for this week",
+      "category": "SALES",
+      "default_widget_type": "NUMBER",
+      "calculation_method": "SalesKPICalculator.calculate_weekly_sales",
+      "format_type": "currency",
+      "required_permission": "",
+      "is_active": true,
+      "sort_order": 2
+    }
+  },
+  {
+    "model": "dashboard.kpidefinition",
+    "pk": 3,
+    "fields": {
+      "name": "Monthly Sales",
+      "code": "SALES_MONTHLY",
+      "description": "Total sales revenue for this month",
+      "category": "SALES",
+      "default_widget_type": "NUMBER",
+      "calculation_method": "SalesKPICalculator.calculate_monthly_sales",
+      "format_type": "currency",
+      "required_permission": "",
+      "is_active": true,
+      "sort_order": 3
+    }
+  },
+  {
+    "model": "dashboard.kpidefinition",
+    "pk": 4,
+    "fields": {
+      "name": "Sales Growth",
+      "code": "SALES_GROWTH",
+      "description": "Sales growth percentage compared to previous period",
+      "category": "SALES",
+      "default_widget_type": "TREND",
+      "calculation_method": "SalesKPICalculator.calculate_sales_growth",
+      "format_type": "percent",
+      "required_permission": "",
+      "is_active": true,
+      "sort_order": 4
+    }
+  },
+  {
+    "model": "dashboard.kpidefinition",
+    "pk": 5,
+    "fields": {
+      "name": "Average Order Value",
+      "code": "SALES_AOV",
+      "description": "Average order value for the period",
+      "category": "SALES",
+      "default_widget_type": "NUMBER",
+      "calculation_method": "SalesKPICalculator.calculate_average_order_value",
+      "format_type": "currency",
+      "required_permission": "",
+      "is_active": true,
+      "sort_order": 5
+    }
+  },
+  {
+    "model": "dashboard.kpidefinition",
+    "pk": 6,
+    "fields": {
+      "name": "Orders Count",
+      "code": "SALES_ORDER_COUNT",
+      "description": "Total number of orders for the period",
+      "category": "SALES",
+      "default_widget_type": "NUMBER",
+      "calculation_method": "SalesKPICalculator.calculate_orders_count",
+      "format_type": "count",
+      "required_permission": "",
+      "is_active": true,
+      "sort_order": 6
+    }
+  },
+  {
+    "model": "dashboard.kpidefinition",
+    "pk": 7,
+    "fields": {
+      "name": "Top Selling Products",
+      "code": "SALES_TOP_PRODUCTS",
+      "description": "Top 5 selling products by revenue",
+      "category": "SALES",
+      "default_widget_type": "TABLE",
+      "calculation_method": "SalesKPICalculator.calculate_top_selling_products",
+      "format_type": "number",
+      "required_permission": "",
+      "is_active": true,
+      "sort_order": 7
+    }
+  },
+  {
+    "model": "dashboard.kpidefinition",
+    "pk": 8,
+    "fields": {
+      "name": "Stock Value",
+      "code": "INVENTORY_STOCK_VALUE",
+      "description": "Total inventory value",
+      "category": "INVENTORY",
+      "default_widget_type": "NUMBER",
+      "calculation_method": "InventoryKPICalculator.calculate_stock_value",
+      "format_type": "currency",
+      "required_permission": "",
+      "is_active": true,
+      "sort_order": 1
+    }
+  },
+  {
+    "model": "dashboard.kpidefinition",
+    "pk": 9,
+    "fields": {
+      "name": "Low Stock Items",
+      "code": "INVENTORY_LOW_STOCK",
+      "description": "Number of items below reorder threshold",
+      "category": "INVENTORY",
+      "default_widget_type": "NUMBER",
+      "calculation_method": "InventoryKPICalculator.calculate_low_stock_items",
+      "format_type": "count",
+      "required_permission": "",
+      "is_active": true,
+      "sort_order": 2
+    }
+  },
+  {
+    "model": "dashboard.kpidefinition",
+    "pk": 10,
+    "fields": {
+      "name": "Out of Stock",
+      "code": "INVENTORY_OUT_OF_STOCK",
+      "description": "Number of items with zero stock",
+      "category": "INVENTORY",
+      "default_widget_type": "NUMBER",
+      "calculation_method": "InventoryKPICalculator.calculate_out_of_stock",
+      "format_type": "count",
+      "required_permission": "",
+      "is_active": true,
+      "sort_order": 3
+    }
+  },
+  {
+    "model": "dashboard.kpidefinition",
+    "pk": 11,
+    "fields": {
+      "name": "Revenue",
+      "code": "FINANCIAL_REVENUE",
+      "description": "Current period revenue",
+      "category": "FINANCIAL",
+      "default_widget_type": "NUMBER",
+      "calculation_method": "FinancialKPICalculator.calculate_revenue",
+      "format_type": "currency",
+      "required_permission": "",
+      "is_active": true,
+      "sort_order": 1
+    }
+  },
+  {
+    "model": "dashboard.kpidefinition",
+    "pk": 12,
+    "fields": {
+      "name": "Net Income",
+      "code": "FINANCIAL_NET_INCOME",
+      "description": "Revenue minus expenses",
+      "category": "FINANCIAL",
+      "default_widget_type": "NUMBER",
+      "calculation_method": "FinancialKPICalculator.calculate_net_income",
+      "format_type": "currency",
+      "required_permission": "",
+      "is_active": true,
+      "sort_order": 2
+    }
+  },
+  {
+    "model": "dashboard.kpidefinition",
+    "pk": 13,
+    "fields": {
+      "name": "Gross Profit Margin",
+      "code": "FINANCIAL_GROSS_MARGIN",
+      "description": "Gross profit as percentage of revenue",
+      "category": "FINANCIAL",
+      "default_widget_type": "GAUGE",
+      "calculation_method": "FinancialKPICalculator.calculate_gross_profit_margin",
+      "format_type": "percent",
+      "required_permission": "",
+      "is_active": true,
+      "sort_order": 3
+    }
+  },
+  {
+    "model": "dashboard.kpidefinition",
+    "pk": 14,
+    "fields": {
+      "name": "Employee Count",
+      "code": "HR_EMPLOYEE_COUNT",
+      "description": "Total active employees",
+      "category": "HR",
+      "default_widget_type": "NUMBER",
+      "calculation_method": "HRKPICalculator.calculate_employee_count",
+      "format_type": "count",
+      "required_permission": "",
+      "is_active": true,
+      "sort_order": 1
+    }
+  },
+  {
+    "model": "dashboard.kpidefinition",
+    "pk": 15,
+    "fields": {
+      "name": "Attendance Rate",
+      "code": "HR_ATTENDANCE_RATE",
+      "description": "Monthly attendance percentage",
+      "category": "HR",
+      "default_widget_type": "GAUGE",
+      "calculation_method": "HRKPICalculator.calculate_attendance_rate",
+      "format_type": "percent",
+      "required_permission": "",
+      "is_active": true,
+      "sort_order": 2
+    }
+  }
+]

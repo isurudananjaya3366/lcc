@@ -1,6 +1,6 @@
 # Session Status - LankaCommerce Cloud POS
 
-> **Last Updated:** Session 48 — Phase-06 SP12 Tax Reporting & Compliance DEEP AUDITED (88/88 tasks verified, 6 bugs fixed, 369/369 accounting tests passing, SP12_AUDIT_REPORT.md created)
+> **Last Updated:** Session 50 — Phase-06 SP14 Analytics & Reports (94 tasks, 6 groups A-F, 17 report generators, 5 models, 3 migrations, scheduler service, Celery task, 77 tests all passing, DEEP AUDITED, SP14_AUDIT_REPORT.md, 12 audit gaps fixed)
 > **Purpose:** Complete handoff document for the next chat session. This file contains ALL context needed to continue work without the previous chat's memory.
 
 ---
@@ -59,12 +59,14 @@ Phase-06_ERP-Advanced-Modules/SubPhase-09_Journal-Entries (ALL 94 tasks complete
 Phase-06_ERP-Advanced-Modules/SubPhase-10_Account-Reconciliation (ALL 84 tasks complete, DEEP AUDITED, 38 tests, 7 models, 4 services, 6 migrations, 1 bug fixed, 19 methods + 8 fields added, 6 groups A-F)
 Phase-06_ERP-Advanced-Modules/SubPhase-11_Financial-Reports (ALL 92 tasks complete, DEEP AUDITED, 59 tests, 2 models, 5 generators, 2 exporters, 7 serializers, 1 viewset, 1 migration, 5 templates, Celery task, 8 audit gaps fixed, SP11_AUDIT_REPORT.md, 6 groups A-F)
 Phase-06_ERP-Advanced-Modules/SubPhase-12_Tax-Reporting (ALL 88 tasks complete, DEEP AUDITED, 70 tests, 7 models, 5 services, 8 serializers, 8 views, 5 migrations, 4 templates, Celery task, 6 bugs fixed, SP12_AUDIT_REPORT.md, 6 groups A-F)
+Phase-06_ERP-Advanced-Modules/SubPhase-13_Dashboard-KPIs (ALL 90 tasks complete, DEEP AUDITED, 62 tests, 3 models, 4 calculators, 2 services, 6 serializers, 1 ViewSet, 3 migrations, Celery task, signals, API docs, SP13_AUDIT_REPORT.md, 6 groups A-F)
+Phase-06_ERP-Advanced-Modules/SubPhase-14_Analytics-Reports (ALL 94 tasks complete, DEEP AUDITED, 77 tests, 5 models, 17 report generators, 1 scheduler service, 8 serializers, 1 ViewSet, 3 migrations, Celery task, admin, API docs, 12 audit gaps fixed, SP14_AUDIT_REPORT.md, 6 groups A-F)
 ```
 
 ### Next Document to Implement
 
 ```
-Document-Series/Phase-07_Frontend-Infrastructure-ERP-Dashboard/SubPhase-01
+Phase-07_Frontend-Infrastructure-ERP-Dashboard/SubPhase-01
 ```
 
 ---
@@ -128,72 +130,100 @@ The `users` app provides **complementary** tenant-scoped models (profile, prefer
 
 ## Test Results (Docker PostgreSQL)
 
-| Test Scope             | Passed | Failed | Notes                                                                                                                                                                                    |
-| ---------------------- | ------ | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --- | ------------------ | --- | --- | ------------------------------------------------------ |
-| **Full suite**         | 10247  | 0      | All tests passing (0 errors)                                                                                                                                                             |
-| **Products tests**     | 1175   | 0      | SP01-SP05 (base+variants+bundles+BOM)                                                                                                                                                    |
-| **Attributes tests**   | 350    | 0      | SP02 models+API+integration (147+124+79)                                                                                                                                                 |
-| **Users tests**        | 298    | 0      | 71 API + 227 model tests                                                                                                                                                                 |
-| **Core tests (total)** | 5828   | 0      | All core/ tests combined                                                                                                                                                                 |
-| **Tenant tests**       | 2608   | 0      | All 40 previously failing fixed                                                                                                                                                          |
-| **Celery tests**       | 25     | 0      | Task infrastructure tests                                                                                                                                                                |
-| **Exception tests**    | 155    | 0      | Exception/handler/logging tests                                                                                                                                                          |
-| **Cache tests**        | 107    | 0      | Caching layer tests (audited)                                                                                                                                                            |
-| **Storage tests**      | 181    | 0      | File storage tests (SP10, audited)                                                                                                                                                       |
-| **API Docs tests**     | 154    | 0      | SP11 drf-spectacular tests                                                                                                                                                               |
-| **Pagination tests**   | 73     | 0      | SP12 Group A                                                                                                                                                                             |
-| **Filter tests**       | 100    | 0      | SP12 Group B                                                                                                                                                                             |
-| **Validator tests**    | 200    | 0      | SP12 Group C                                                                                                                                                                             |
-| **DateTime tests**     | 122    | 0      | SP12 Group D                                                                                                                                                                             |
-| **Sri Lanka tests**    | 293    | 0      | SP12 Group E                                                                                                                                                                             |
-| **Integration tests**  | 61     | 0      | SP12 Group F cross-module                                                                                                                                                                |
-| **Pricing mock tests** | 141    | 0      | SP06 models+API+integration (6 groups)                                                                                                                                                   |
-| **Pricing prod tests** | 53     | 0      | SP06 real PostgreSQL via django-tenants                                                                                                                                                  |
-| **Media unit tests**   | 183    | 0      | SP07 DB-free unit tests (7 test files)                                                                                                                                                   |
-| **Media prod tests**   | 29     | 0      | SP07 real PostgreSQL integration tests                                                                                                                                                   |
-| **Warehouse tests**    | 220    | 0      | SP08 143 unit + 77 integration (PostgreSQL)                                                                                                                                              |
-| **Quote tests**        | 118    | 0      | SP04 models+services+views+pdf+email (PostgreSQL)                                                                                                                                        |
-| **Order tests**        | 55     | 0      | SP05 models+services+API (PostgreSQL)                                                                                                                                                    |
-| **Invoice tests**      | 56     | 0      | SP06 models+services+API+PDF (PostgreSQL)                                                                                                                                                |
-| **Payment tests**      | 69     | 0      | SP07 models+services+API (PostgreSQL)                                                                                                                                                    |     | **Customer tests** | 90  | 0   | SP08 models+services+API (PostgreSQL, tenant-isolated) |
-| **Vendor tests**       | 84     | 0      | SP10 models+services+API (PostgreSQL, tenant-isolated)                                                                                                                                   |
-| **Purchase tests**     | 38     | 0      | SP11 models+services+API (PostgreSQL, tenant-isolated)                                                                                                                                   |
-| **Vendor Bills tests** | 40     | 0      | SP12 models+services+API (PostgreSQL, tenant-isolated)                                                                                                                                   |
-| **Employee tests**     | 127    | 0      | SP01 models+services+API (PostgreSQL, tenant-isolated)                                                                                                                                   |
-| **Organization tests** | 97     | 0      | SP02 models(29)+services(37)+API(31) (PostgreSQL)                                                                                                                                        |
-| **Attendance tests**   | 69     | 0      | SP03 models(21)+services(12)+API(36) (PostgreSQL)                                                                                                                                        |
-| **Leave tests**        | 72     | 0      | SP04 models+services+API (PostgreSQL, tenant-isolated)                                                                                                                                   |
-| **Payroll tests**      | 167    | 0      | SP05 models(37)+services(29) + SP06 models(25)+serializers(8)+services(17)+API(24)+SP05-existing(27) (PostgreSQL, tenant-isolated)                                                       |
+| Test Scope             | Passed | Failed | Notes                                                                                                                                                                                                             |
+| ---------------------- | ------ | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --- | ------------------ | --- | --- | ------------------------------------------------------ |
+| **Full suite**         | 10247  | 0      | All tests passing (0 errors)                                                                                                                                                                                      |
+| **Products tests**     | 1175   | 0      | SP01-SP05 (base+variants+bundles+BOM)                                                                                                                                                                             |
+| **Attributes tests**   | 350    | 0      | SP02 models+API+integration (147+124+79)                                                                                                                                                                          |
+| **Users tests**        | 298    | 0      | 71 API + 227 model tests                                                                                                                                                                                          |
+| **Core tests (total)** | 5828   | 0      | All core/ tests combined                                                                                                                                                                                          |
+| **Tenant tests**       | 2608   | 0      | All 40 previously failing fixed                                                                                                                                                                                   |
+| **Celery tests**       | 25     | 0      | Task infrastructure tests                                                                                                                                                                                         |
+| **Exception tests**    | 155    | 0      | Exception/handler/logging tests                                                                                                                                                                                   |
+| **Cache tests**        | 107    | 0      | Caching layer tests (audited)                                                                                                                                                                                     |
+| **Storage tests**      | 181    | 0      | File storage tests (SP10, audited)                                                                                                                                                                                |
+| **API Docs tests**     | 154    | 0      | SP11 drf-spectacular tests                                                                                                                                                                                        |
+| **Pagination tests**   | 73     | 0      | SP12 Group A                                                                                                                                                                                                      |
+| **Filter tests**       | 100    | 0      | SP12 Group B                                                                                                                                                                                                      |
+| **Validator tests**    | 200    | 0      | SP12 Group C                                                                                                                                                                                                      |
+| **DateTime tests**     | 122    | 0      | SP12 Group D                                                                                                                                                                                                      |
+| **Sri Lanka tests**    | 293    | 0      | SP12 Group E                                                                                                                                                                                                      |
+| **Integration tests**  | 61     | 0      | SP12 Group F cross-module                                                                                                                                                                                         |
+| **Pricing mock tests** | 141    | 0      | SP06 models+API+integration (6 groups)                                                                                                                                                                            |
+| **Pricing prod tests** | 53     | 0      | SP06 real PostgreSQL via django-tenants                                                                                                                                                                           |
+| **Media unit tests**   | 183    | 0      | SP07 DB-free unit tests (7 test files)                                                                                                                                                                            |
+| **Media prod tests**   | 29     | 0      | SP07 real PostgreSQL integration tests                                                                                                                                                                            |
+| **Warehouse tests**    | 220    | 0      | SP08 143 unit + 77 integration (PostgreSQL)                                                                                                                                                                       |
+| **Quote tests**        | 118    | 0      | SP04 models+services+views+pdf+email (PostgreSQL)                                                                                                                                                                 |
+| **Order tests**        | 55     | 0      | SP05 models+services+API (PostgreSQL)                                                                                                                                                                             |
+| **Invoice tests**      | 56     | 0      | SP06 models+services+API+PDF (PostgreSQL)                                                                                                                                                                         |
+| **Payment tests**      | 69     | 0      | SP07 models+services+API (PostgreSQL)                                                                                                                                                                             |     | **Customer tests** | 90  | 0   | SP08 models+services+API (PostgreSQL, tenant-isolated) |
+| **Vendor tests**       | 84     | 0      | SP10 models+services+API (PostgreSQL, tenant-isolated)                                                                                                                                                            |
+| **Purchase tests**     | 38     | 0      | SP11 models+services+API (PostgreSQL, tenant-isolated)                                                                                                                                                            |
+| **Vendor Bills tests** | 40     | 0      | SP12 models+services+API (PostgreSQL, tenant-isolated)                                                                                                                                                            |
+| **Employee tests**     | 127    | 0      | SP01 models+services+API (PostgreSQL, tenant-isolated)                                                                                                                                                            |
+| **Organization tests** | 97     | 0      | SP02 models(29)+services(37)+API(31) (PostgreSQL)                                                                                                                                                                 |
+| **Attendance tests**   | 69     | 0      | SP03 models(21)+services(12)+API(36) (PostgreSQL)                                                                                                                                                                 |
+| **Leave tests**        | 72     | 0      | SP04 models+services+API (PostgreSQL, tenant-isolated)                                                                                                                                                            |
+| **Payroll tests**      | 167    | 0      | SP05 models(37)+services(29) + SP06 models(25)+serializers(8)+services(17)+API(24)+SP05-existing(27) (PostgreSQL, tenant-isolated)                                                                                |
 | **Accounting tests**   | 369    | 0      | SP08 models(31)+default_coa(29)+services(45)+admin_serializers(16)+API(37) + SP09 journal_entry(44) + SP10 reconciliation(38) + SP11 financial_reports(59) + SP12 tax_reporting(70) (PostgreSQL, tenant-isolated) |
+| **Analytics tests**    | 77     | 0      | SP14 models(25)+generators(25)+scheduler(13)+API(14) (PostgreSQL, tenant-isolated)                                                                                                                               |
 
 ---
 
-## What Was Completed This Session (Session 48)
+## What Was Completed This Session (Session 50)
 
-### SP12: Tax Reporting & Compliance — Deep Audit & Bug Fixes
+### SP14: Analytics & Reports — Full Implementation
 
-**Phase-06_ERP-Advanced-Modules/SubPhase-12_Tax-Reporting — DEEP AUDIT**
+**Phase-06_ERP-Advanced-Modules/SubPhase-14_Analytics-Reports — 94 tasks, 6 groups (A-F)**
 
-Comprehensive audit of all 88 tasks across 6 groups (A–F) against source task documents. 6 bugs identified and immediately fixed (serializer field mismatches, view queryset field names, test corrections). Full regression: 369/369 accounting tests passing (70 SP12-specific). SP12_AUDIT_REPORT.md created with per-group task-by-task status, bug details, fix descriptions, and certification.
+Full implementation of the analytics and reporting module covering 17 report generators across 5 categories (sales, inventory, purchase, customer, staff), a report scheduling system with Celery integration, and a comprehensive REST API.
 
 **Implementation Summary:**
-- **Group A (Tasks 01-16):** Tax Configuration — TaxType/TaxPeriod/FilingStatus enums, TaxConfiguration model (VAT/EPF/ETF/TIN regex validators), TaxPeriodRecord model
-- **Group B (Tasks 17-34):** VAT Return — VATReturn model, VATReturnGenerator service (sales/purchase VAT, zero-rated, exempt stub, SVAT adjustment), IRD Form 200 PDF template, CSV export
-- **Group C (Tasks 35-50):** PAYE Reporting — PAYEReturn model, PAYEReturnGenerator (7 Sri Lankan tax brackets: 0-36%), T-10 PDF template, YTD tracking
-- **Group D (Tasks 51-68):** EPF/ETF Returns — EPFReturn (8%+12%=20%), ETFReturn (3%), generators, CBSL C-Form + ETF Board PDF templates
-- **Group E (Tasks 69-80):** Filing & Reminders — TaxSubmission model, FilingReminderService (due date calculation with weekend adjustment), Celery task, email reminders, dashboard widget
-- **Group F (Tasks 81-88):** API, Testing & Docs — 7 admin classes, 8 serializers, 8 views/viewsets, URL routes, 70 tests, API documentation
 
-**Bugs Found & Fixed:**
-1. Serializer field name mismatches — 4 serializers used `"tax_period"` instead of `"period"`
-2. Non-existent `filed_by` field in 3 serializers (PAYE/EPF/ETF)
-3. View queryset `select_related` field name mismatches in 4 viewsets
-4. Test enum values (uppercase vs lowercase)
-5. Test model FK names (`tax_period=` vs `period=`)
-6. Test weekend date adjustment and missing fixture
+- **Group A (Tasks 01-16):** Report Framework — `apps.analytics` app structure, enums (ReportCategory, ReportFormat, ReportStatus, ScheduleFrequency), ReportDefinition model (auto-code generation, permissions, filters schema), ReportInstance model (lifecycle methods: mark_generating/completed/failed), BaseReportGenerator ABC (date filtering, CSV export, totals calculation), migration 0001
+- **Group B (Tasks 17-34):** Sales Reports — 5 generators: SalesByProductReport (product aggregation with rankings), SalesByCustomerReport (order counts, AOV), SalesByPeriodReport (daily/weekly/monthly), SalesByChannelReport (POS/web/manual channels), SalesByCashierReport (performance vs team average)
+- **Group C (Tasks 35-52):** Inventory & Purchase Reports — 3 inventory generators: StockLevelReport (current stock vs reorder point), StockMovementReport (IN/OUT/ADJ by warehouse), StockValuationReport (FIFO/LIFO/AVG methods); 3 purchase generators: PurchaseByVendorReport, PurchaseByCategoryReport, VendorPerformanceReport (composite scoring with delivery/lead-time/payment metrics)
+- **Group D (Tasks 53-70):** Customer & Staff Reports — 3 customer generators: CustomerAcquisitionReport (source analysis), CustomerRetentionReport (activity segmentation), CustomerLifetimeValueReport (AOV × frequency × 3yr, tier segmentation); 3 staff generators: StaffAttendanceReport (present/absent/late rates), StaffLeaveReport (utilization by type), StaffOvertimeReport (Sri Lanka multipliers: weekday 1.5x, weekend 2.0x, holiday 2.5x)
+- **Group E (Tasks 71-84):** Report Builder & Scheduling — SavedReport model (user-owned with filters), ScheduledReport model (DAILY/WEEKLY/MONTHLY with next_run calculation), ScheduleHistory model, ReportSchedulerService (GENERATOR_MAP with 17 entries, dynamic class loading), `process_scheduled_reports` Celery shared_task, migration 0002
+- **Group F (Tasks 85-94):** API, Testing & Documentation — 5 admin registrations, 8 serializers, ReportViewSet (list/detail/generate/instances/download/saved/scheduled/history), URL routing under `api/v1/analytics/`, 77 tests across 4 files (test_models, test_generators, test_scheduler, test_api), API documentation
 
-**Migrations:** 0018 (config+period), 0019 (VAT), 0020 (PAYE), 0021 (EPF+ETF), 0022 (submission)  
-**Test Result:** 369 passed in ~16s (--reuse-db), 0 failures
+**Bugs Found & Fixed During Testing:**
+
+1. Annotation conflict: `sku=F("product__sku")` conflicted with InvoiceLineItem.sku field → renamed to `product_sku`
+2. Annotation conflict: `customer_name=F("customer__display_name")` conflicted with Invoice.customer_name → renamed to `display_name`
+3. Annotation conflict: `payment_terms=F("vendor__payment_terms_days")` conflicted with PO.payment_terms → renamed to `vendor_payment_terms`
+4. Non-existent field: `username=F("created_by__username")` — PlatformUser uses email, not username → replaced with `user_email=F("created_by__email")`
+5. Non-existent method: `get_full_name()` → PlatformUser has `full_name` property, fixed in 3 serializer methods
+6. Test `to_csv`: passed list instead of dict (expects `{"data": [...]}`)
+7. Test `__str__`: ReportDefinition returns `f"{name} ({category})"`, test expected just name
+8. Test `transaction=True`: incompatible with django-tenants, removed from all 4 test files
+
+**Migrations:** 0001_initial (ReportDefinition + ReportInstance), 0002 (SavedReport, ScheduledReport, ScheduleHistory + indexes)
+**Test Result:** 77 passed in ~46s (--reuse-db), 0 failures
+
+### SP14: Analytics & Reports — Deep Audit
+
+Comprehensive audit of all 94 tasks across 6 groups (A–F) against task specification documents. 12 gaps identified and immediately fixed. Migration 0003_audit_missing_fields created. SP14_AUDIT_REPORT.md created with per-group task-by-task status, gap details, fix descriptions, and certification.
+
+**Gaps Found & Fixed:**
+
+1. **ReportStatus missing CANCELLED** (Task 05) — Added CANCELLED value to enum
+2. **ReportStatus missing classmethods** (Task 05) — Added `is_terminal()` and `is_successful()`
+3. **ReportDefinition missing sample_output_url** (Task 10) — Added URLField
+4. **ReportDefinition missing get_filter_summary()** (Task 11) — Added method
+5. **ReportInstance missing title field** (Task 14) — Added CharField with auto-generation
+6. **ReportInstance missing celery_task_id** (Task 14) — Added CharField with index
+7. **ReportInstance missing is_scheduled** (Task 14) — Added BooleanField
+8. **ReportInstance missing accessed_at/access_count/expires_at** (Task 14) — Added 3 tracking fields
+9. **ReportInstance missing utility methods** (Task 15) — Added can_cancel(), is_expired(), increment_access(), delete_file(), get_file_size_display(), get_generation_time_display(), save() override, _generate_title()
+10. **SavedReport missing validate_filters_config()** (Task 73) — Added method delegating to definition
+11. **SavedReport missing can_access/make_public/make_private** (Task 74) — Added 3 methods
+12. **API documentation missing** (Task 94) — Created docs/api/analytics.md
+
+**Files Modified:** enums.py, report_definition.py, report_instance.py, saved_report.py
+**Files Created:** docs/api/analytics.md, SP14_AUDIT_REPORT.md, migration 0003_audit_missing_fields.py
+**Test Result:** 77 passed, 0 failures
 
 ---
 
