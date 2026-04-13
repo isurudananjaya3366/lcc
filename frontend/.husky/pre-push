@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+# LankaCommerce Cloud - Pre-push Hook
+# Runs type checking before pushing to remote
+
+cd frontend
+pnpm type-check

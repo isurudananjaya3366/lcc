@@ -1,0 +1,62 @@
+# ============================================================
+# OUTPUT FILE TRACING IGNORE FILE
+# ============================================================
+# Used with Next.js standalone output to reduce Docker image size.
+# Files matching these patterns are excluded from the traced build.
+# ============================================================
+
+# Test Files
+**/*.test.ts
+**/*.test.tsx
+**/*.test.js
+**/*.test.jsx
+**/*.spec.ts
+**/*.spec.tsx
+**/*.spec.js
+**/*.spec.jsx
+**/__tests__/**
+**/__test__/**
+**/__mocks__/**
+
+# Development Files
+**/*.md
+**/README*
+**/CHANGELOG*
+**/.env.example
+**/.env.local
+
+# Documentation
+**/docs/**
+**/examples/**
+**/guides/**
+**/.storybook/**
+
+# Build Artifacts & Cache
+**/.next/cache/**
+**/coverage/**
+**/dist/**
+**/build/**
+
+# Dependencies
+**/node_modules/**
+**/.yarn/**
+**/pnpm-store/**
+
+# IDE & Editor Files
+**/.vscode/**
+**/.idea/**
+**/*.swp
+**/*.swo
+
+# Git
+**/.git/**
+**/.gitignore
+**/.gitattributes
+
+# CI/CD
+**/.github/**
+**/.circleci/**
+
+# Analytics & Reporting
+**/.analyze/**
+**/coverage.json

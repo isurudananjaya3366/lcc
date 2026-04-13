@@ -1,9 +1,19 @@
+import bundleAnalyzer from '@next/bundle-analyzer';
+
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+  openAnalyzer: true,
+});
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // ── Basic Settings ────────────────────────────────────────────
   reactStrictMode: true,
   poweredByHeader: false,
   output: 'standalone',
+  compress: true,
+  trailingSlash: false,
+  productionBrowserSourceMaps: false,
 
   // ── Environment Variables ─────────────────────────────────────
   // Only NEXT_PUBLIC_ variables are exposed to the client bundle.
@@ -24,6 +34,7 @@ const nextConfig = {
   // ── TypeScript ────────────────────────────────────────────────
   typescript: {
     ignoreBuildErrors: false,
+    tsconfigPath: './tsconfig.json',
   },
 
   // ── Images ────────────────────────────────────────────────────
@@ -60,6 +71,12 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
 
@@ -68,6 +85,123 @@ const nextConfig = {
 
   // ── Typed Routes (moved from experimental) ────────────────────
   typedRoutes: true,
+
+  // ── Experimental ──────────────────────────────────────────────
+  experimental: {
+    serverActions: {
+      allowedOrigins: ['localhost:3000', 'app.lankacommerce.cloud'],
+      bodySizeLimit: '2mb',
+    },
+  },
+
+  // ── On-Demand Entries (Dev Performance) ───────────────────────
+  onDemandEntries: {
+    maxInactiveAge: 60 * 1000,
+    pagesBufferLength: 5,
+  },
+
+  // ── Security Headers ──────────────────────────────────────────
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          { key: 'X-DNS-Prefetch-Control', value: 'on' },
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=63072000; includeSubDomains; preload',
+          },
+          { key: 'X-XSS-Protection', value: '1; mode=block' },
+          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'X-Download-Options', value: 'noopen' },
+          { key: 'X-Permitted-Cross-Domain-Policies', value: 'none' },
+          { key: 'Referrer-Policy', value: 'origin-when-cross-origin' },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()',
+          },
+          {
+            key: 'Content-Security-Policy',
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net",
+              "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net",
+              "img-src 'self' data: https: http://localhost:*",
+              "font-src 'self' data: https://cdn.jsdelivr.net",
+              "connect-src 'self' http://localhost:* https://api.lankacommerce.lk https://*.lankacommerce.lk",
+              "frame-ancestors 'self'",
+            ].join('; '),
+          },
+        ],
+      },
+      {
+        source: '/api/:path*',
+        headers: [{ key: 'X-Content-Type-Options', value: 'nosniff' }],
+      },
+    ];
+  },
+
+  // ── Redirects ─────────────────────────────────────────────────
+  async redirects() {
+    return [
+      // Trailing slash normalization
+      {
+        source: '/:path+/',
+        destination: '/:path+',
+        permanent: true,
+      },
+      // www to non-www
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'www.lankacommerce.lk' }],
+        destination: 'https://lankacommerce.lk/:path*',
+        permanent: true,
+      },
+      // Legacy admin → dashboard
+      {
+        source: '/admin/:path*',
+        destination: '/dashboard/:path*',
+        permanent: true,
+      },
+      // Auth shortcuts
+      {
+        source: '/login',
+        destination: '/auth/login',
+        permanent: true,
+      },
+      {
+        source: '/register',
+        destination: '/auth/register',
+        permanent: true,
+      },
+      {
+        source: '/logout',
+        destination: '/auth/logout',
+        permanent: true,
+      },
+      // Convenience shortcuts
+      {
+        source: '/docs',
+        destination: '/documentation',
+        permanent: true,
+      },
+      {
+        source: '/help',
+        destination: '/support/faq',
+        permanent: true,
+      },
+      // HTTPS enforcement
+      {
+        source: '/:path*',
+        has: [
+          { type: 'header', key: 'x-forwarded-proto', value: 'http' },
+        ],
+        destination: 'https://:host/:path*',
+        permanent: true,
+      },
+    ];
+  },
 };
 
-export default nextConfig;
+export default withBundleAnalyzer(nextConfig);

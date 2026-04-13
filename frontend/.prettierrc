@@ -10,5 +10,5 @@
   "bracketSameLine": false,
   "arrowParens": "always",
   "endOfLine": "lf",
-  "printWidth": 80
+  "printWidth": 100
 }

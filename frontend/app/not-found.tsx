@@ -2,36 +2,28 @@ import Link from 'next/link';
 
 export default function NotFound() {
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '100vh',
-        fontFamily: 'var(--font-inter), system-ui, sans-serif',
-      }}
-    >
-      <h1 style={{ fontSize: '6rem', fontWeight: 700, margin: 0 }}>404</h1>
-      <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>
+    <main className="flex min-h-screen flex-col items-center justify-center font-[family-name:var(--font-inter)]">
+      <h1 className="text-8xl font-bold text-gray-900">404</h1>
+      <h2 className="mt-2 text-xl font-medium text-gray-700">
         Page Not Found
       </h2>
-      <p style={{ color: '#666', marginBottom: '1.5rem' }}>
-        The page you&apos;re looking for doesn&apos;t exist.
+      <p className="mt-2 text-gray-500">
+        The page you&apos;re looking for doesn&apos;t exist or has been moved.
       </p>
-      <Link
-        href="/"
-        style={{
-          padding: '0.625rem 1.25rem',
-          fontSize: '1rem',
-          backgroundColor: '#0070f3',
-          color: '#fff',
-          textDecoration: 'none',
-          borderRadius: '0.375rem',
-        }}
-      >
-        Return to Home
-      </Link>
-    </div>
+      <nav className="mt-6 flex gap-4" aria-label="Quick navigation">
+        <Link
+          href="/"
+          className="rounded-md bg-blue-600 px-5 py-2.5 text-white hover:bg-blue-700"
+        >
+          Back to Home
+        </Link>
+        <Link
+          href="/dashboard"
+          className="rounded-md border border-gray-300 px-5 py-2.5 text-gray-700 hover:bg-gray-50"
+        >
+          Dashboard
+        </Link>
+      </nav>
+    </main>
   );
 }

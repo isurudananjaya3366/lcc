@@ -169,5 +169,41 @@ function validateEnv() {
  */
 export const env = validateEnv();
 
+// ════════════════════════════════════════════════════════════════════════
+// HELPER FUNCTIONS
+// ════════════════════════════════════════════════════════════════════════
+
+/** Check if the current environment is production. */
+export function isProduction(): boolean {
+  return env.NODE_ENV === 'production';
+}
+
+/** Check if the current environment is development. */
+export function isDevelopment(): boolean {
+  return env.NODE_ENV === 'development';
+}
+
+/** Check if the current environment is staging (by site URL convention). */
+export function isStaging(): boolean {
+  return env.NEXT_PUBLIC_SITE_URL.includes('staging');
+}
+
+/** Get the validated API base URL. */
+export function getApiUrl(): string {
+  return env.NEXT_PUBLIC_API_URL;
+}
+
+/** Get the validated site URL. */
+export function getSiteUrl(): string {
+  return env.NEXT_PUBLIC_SITE_URL;
+}
+
+/** Check if a feature flag is enabled by name. */
+export function isFeatureEnabled(featureName: string): boolean {
+  const key = `NEXT_PUBLIC_ENABLE_${featureName.toUpperCase()}` as keyof typeof env;
+  const value = env[key];
+  return value === true || value === 'true';
+}
+
 /** Re-export schemas for testing or external validation. */
 export { clientSchema, envSchema, serverSchema };

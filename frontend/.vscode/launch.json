@@ -1,0 +1,74 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Next.js: debug server-side",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/.bin/next",
+      "runtimeArgs": ["dev"],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "skipFiles": [
+        "<node_internals>/**",
+        "node_modules/**",
+        ".next/**"
+      ],
+      "sourceMapPathOverride": {
+        "${workspaceFolder}/app/*": "${workspaceFolder}/app/*",
+        "${workspaceFolder}/lib/*": "${workspaceFolder}/lib/*",
+        "${workspaceFolder}/components/*": "${workspaceFolder}/components/*"
+      }
+    },
+    {
+      "name": "Next.js: debug client-side",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}",
+      "sourceMapPathOverrides": {
+        "${workspaceFolder}/app/*": "${workspaceFolder}/app/*",
+        "${workspaceFolder}/lib/*": "${workspaceFolder}/lib/*",
+        "${workspaceFolder}/components/*": "${workspaceFolder}/components/*"
+      },
+      "sourceMaps": true,
+      "runtimeArgs": [
+        "--disable-extensions"
+      ]
+    },
+    {
+      "name": "Next.js: debug full stack",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/.bin/next",
+      "runtimeArgs": ["dev"],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "skipFiles": [
+        "<node_internals>/**",
+        "node_modules/**"
+      ],
+      "serverReadyAction": {
+        "action": "debugWithChrome",
+        "pattern": "- Local:",
+        "uriFormat": "http://localhost:3000",
+        "killOnServerStop": false
+      }
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Full Stack",
+      "configurations": [
+        "Next.js: debug server-side",
+        "Next.js: debug client-side"
+      ]
+    }
+  ]
+}

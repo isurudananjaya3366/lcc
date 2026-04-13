@@ -1,0 +1,30 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "target": "ES2022",
+    "skipLibCheck": true
+  },
+  "include": [
+    "next.config.ts",
+    "next.config.mjs",
+    "next.config.js",
+    "postcss.config.mjs",
+    "tailwind.config.ts",
+    "scripts/**/*"
+  ],
+  "exclude": [
+    "app",
+    "components",
+    "lib",
+    "hooks",
+    "stores",
+    "types",
+    "services",
+    "constants",
+    "styles",
+    "node_modules"
+  ]
+}

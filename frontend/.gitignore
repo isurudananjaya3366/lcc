@@ -11,6 +11,7 @@ node_modules/
 out/
 dist/
 build/
+.swc/
 
 # ────────────────────────────────────────────────
 # Environment
@@ -33,6 +34,8 @@ next-env.d.ts
 # Testing
 # ────────────────────────────────────────────────
 coverage/
+.nyc_output/
+*.lcov
 .vitest/
 
 # ────────────────────────────────────────────────
@@ -42,6 +45,7 @@ coverage/
 *.swp
 .DS_Store
 Thumbs.db
+desktop.ini
 
 # ────────────────────────────────────────────────
 # Logs

@@ -2,6 +2,14 @@
   "compilerOptions": {
     /* ── Type Checking ──────────────────────────────────────── */
     "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "useUnknownInCatchVariables": true,
+    "alwaysStrict": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitReturns": true,
     /* ── Target & Library ───────────────────────────────────── */
@@ -13,6 +21,7 @@
     "resolveJsonModule": true,
     "allowJs": true,
     "isolatedModules": true,
+    "allowImportingTsExtensions": true,
     /* ── JSX ────────────────────────────────────────────────── */
     "jsx": "react-jsx",
     /* ── Interop ────────────────────────────────────────────── */
@@ -31,11 +40,12 @@
       "@/components/*": ["./components/*"],
       "@/lib/*": ["./lib/*"],
       "@/hooks/*": ["./hooks/*"],
-      "@/types/*": ["./types/*"],
-      "@/styles/*": ["./styles/*"],
+      "@/store/*": ["./stores/*"],
       "@/stores/*": ["./stores/*"],
+      "@/types/*": ["./types/*"],
       "@/services/*": ["./services/*"],
-      "@/constants/*": ["./constants/*"]
+      "@/constants/*": ["./constants/*"],
+      "@/styles/*": ["./styles/*"]
     },
     /* ── Next.js Plugin ─────────────────────────────────────── */
     "plugins": [

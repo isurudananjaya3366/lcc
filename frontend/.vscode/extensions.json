@@ -1,0 +1,16 @@
+{
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "bradlc.vscode-tailwindcss",
+    "csstools.postcss",
+    "usernamehidden.errorlens",
+    "christian-kohler.path-intellisense",
+    "pmneo.tsimporter"
+  ],
+  "unwantedRecommendations": [
+    "hookyqr.beautify",
+    "esbenp.prettier-vscode-prettier-vscode",
+    "numso.prettier-standard-vscode"
+  ]
+}

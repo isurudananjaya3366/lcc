@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect } from 'react';
 
 export default function Error({
@@ -10,45 +11,36 @@ export default function Error({
   reset: () => void;
 }) {
   useEffect(() => {
-    // Log the error to an error reporting service in production
     console.error(error);
   }, [error]);
 
   return (
     <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '100vh',
-        fontFamily: 'var(--font-inter), system-ui, sans-serif',
-      }}
+      className="flex min-h-screen flex-col items-center justify-center font-[family-name:var(--font-inter)]"
+      role="alert"
+      aria-live="assertive"
     >
-      <h2 style={{ fontSize: '1.75rem', marginBottom: '0.5rem' }}>
-        Something went wrong!
-      </h2>
-      <p style={{ color: '#666', marginBottom: '1.5rem' }}>
+      <div className="mb-4 text-5xl">⚠️</div>
+      <h2 className="mb-2 text-2xl font-semibold">Something Went Wrong</h2>
+      <p className="mb-6 text-gray-500">
         An unexpected error has occurred. Please try again.
       </p>
-      <button
-        onClick={() => reset()}
-        style={{
-          padding: '0.625rem 1.25rem',
-          fontSize: '1rem',
-          cursor: 'pointer',
-          backgroundColor: '#0070f3',
-          color: '#fff',
-          border: 'none',
-          borderRadius: '0.375rem',
-        }}
-      >
-        Try Again
-      </button>
+      <div className="flex gap-3">
+        <button
+          onClick={() => reset()}
+          className="rounded-md bg-blue-600 px-5 py-2.5 text-white hover:bg-blue-700"
+        >
+          Try Again
+        </button>
+        <Link
+          href="/"
+          className="rounded-md border border-gray-300 px-5 py-2.5 text-gray-700 hover:bg-gray-50"
+        >
+          Go Home
+        </Link>
+      </div>
       {process.env.NODE_ENV === 'development' && error.digest && (
-        <p style={{ color: '#999', marginTop: '1rem', fontSize: '0.875rem' }}>
-          Digest: {error.digest}
-        </p>
+        <p className="mt-4 text-sm text-gray-400">Digest: {error.digest}</p>
       )}
     </div>
   );
