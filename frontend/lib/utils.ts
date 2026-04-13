@@ -5,6 +5,22 @@
 // All functions are individually exported for tree-shaking.
 // ================================================================
 
+import { type ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+// ── Class Name Utility ─────────────────────────────────────────
+
+/**
+ * Merge class names with intelligent Tailwind CSS conflict resolution.
+ * Combines clsx (conditional classes) with tailwind-merge (conflict resolution).
+ *
+ * @param inputs - Class names, objects, or arrays to merge
+ * @returns Merged class string with conflicts resolved
+ */
+export function cn(...inputs: ClassValue[]): string {
+  return twMerge(clsx(inputs));
+}
+
 // ── Type Guards ────────────────────────────────────────────────
 
 /**

@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
+import { Toaster } from '@/components/ui/sonner';
 import './globals.css';
 
 const inter = Inter({
@@ -54,6 +55,7 @@ export default function RootLayout({
       <body className={`${inter.className} antialiased`}>
         {/* Future providers (theme, auth, store) will wrap children here */}
         {children}
+        <Toaster />
       </body>
     </html>
   );

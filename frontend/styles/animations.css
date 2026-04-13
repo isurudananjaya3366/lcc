@@ -86,6 +86,95 @@
   }
 }
 
+@keyframes slideLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideRight {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-4px);
+  }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+@keyframes shakeY {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateY(-4px);
+  }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateY(4px);
+  }
+}
+
+@keyframes scaleInCenter {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  80% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulseGlow {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
 /* ── Animation Utility Classes ────────────────────────────────── */
 
 .animate-fade-in {
@@ -106,6 +195,74 @@
 
 .animate-scale-in {
   animation: scaleIn var(--duration-default, 200ms) var(--ease-default, ease);
+}
+
+.animate-slide-left {
+  animation: slideLeft var(--duration-default, 200ms) var(--ease-default, ease);
+}
+
+.animate-slide-right {
+  animation: slideRight var(--duration-default, 200ms) var(--ease-default, ease);
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+.animate-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.animate-shake {
+  animation: shake 500ms ease-in-out;
+}
+
+.animate-shake-slow {
+  animation: shake 800ms ease-in-out;
+}
+
+.animate-shake-y {
+  animation: shakeY 500ms ease-in-out;
+}
+
+.animate-scale-in-center {
+  animation: scaleInCenter 300ms ease-out;
+}
+
+.animate-scale-in-fast {
+  animation: scaleIn 100ms ease-out;
+}
+
+.animate-scale-in-slow {
+  animation: scaleIn 400ms ease-out;
+}
+
+.animate-fade-in-fast {
+  animation: fadeIn 100ms ease-out;
+}
+
+.animate-fade-in-slow {
+  animation: fadeIn 300ms ease-out;
+}
+
+.animate-spin-fast {
+  animation: spin 500ms linear infinite;
+}
+
+.animate-spin-slow {
+  animation: spin 2s linear infinite;
+}
+
+.animate-pulse-fast {
+  animation: pulse 1s ease-in-out infinite;
+}
+
+.animate-pulse-slow {
+  animation: pulse 3s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
 }
 
 .animate-shimmer {
