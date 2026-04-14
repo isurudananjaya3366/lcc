@@ -71,12 +71,9 @@ export const productKeys = {
   details: () => ['products', 'detail'] as const,
   detail: (id: string | number) => ['products', 'detail', id] as const,
   categories: () => ['products', 'categories'] as const,
-  variants: (productId: string | number) =>
-    ['products', 'variants', productId] as const,
-  stock: (productId: string | number) =>
-    ['products', 'stock', productId] as const,
-  pricing: (productId: string | number) =>
-    ['products', 'pricing', productId] as const,
+  variants: (productId: string | number) => ['products', 'variants', productId] as const,
+  stock: (productId: string | number) => ['products', 'stock', productId] as const,
+  pricing: (productId: string | number) => ['products', 'pricing', productId] as const,
 };
 
 // ── Inventory Keys ─────────────────────────────────────────────
@@ -84,8 +81,7 @@ export const productKeys = {
 export const inventoryKeys = {
   all: () => ['inventory'] as const,
   lists: () => ['inventory', 'list'] as const,
-  list: (filters?: InventoryFilters) =>
-    ['inventory', 'list', filters] as const,
+  list: (filters?: InventoryFilters) => ['inventory', 'list', filters] as const,
   details: () => ['inventory', 'detail'] as const,
   detail: (id: string | number) => ['inventory', 'detail', id] as const,
   stockLevels: () => ['inventory', 'stockLevels'] as const,
@@ -103,20 +99,15 @@ export const inventoryKeys = {
 export const customerKeys = {
   all: () => ['customers'] as const,
   lists: () => ['customers', 'list'] as const,
-  list: (filters?: CustomerFilters) =>
-    ['customers', 'list', filters] as const,
+  list: (filters?: CustomerFilters) => ['customers', 'list', filters] as const,
   details: () => ['customers', 'detail'] as const,
   detail: (id: string | number) => ['customers', 'detail', id] as const,
-  addresses: (customerId: string | number) =>
-    ['customers', 'addresses', customerId] as const,
-  address: (addressId: string | number) =>
-    ['customers', 'address', addressId] as const,
-  orders: (customerId: string | number) =>
-    ['customers', 'orders', customerId] as const,
+  addresses: (customerId: string | number) => ['customers', 'addresses', customerId] as const,
+  address: (addressId: string | number) => ['customers', 'address', addressId] as const,
+  orders: (customerId: string | number) => ['customers', 'orders', customerId] as const,
   paymentMethods: (customerId: string | number) =>
     ['customers', 'paymentMethods', customerId] as const,
-  paymentMethod: (id: string | number) =>
-    ['customers', 'paymentMethod', id] as const,
+  paymentMethod: (id: string | number) => ['customers', 'paymentMethod', id] as const,
   loyaltyPoints: (customerId: string | number) =>
     ['customers', 'loyaltyPoints', customerId] as const,
 };
@@ -137,6 +128,8 @@ export const salesKeys = {
   payment: (id: string | number) => ['sales', 'payment', id] as const,
   refunds: () => ['sales', 'refunds'] as const,
   refund: (id: string | number) => ['sales', 'refund', id] as const,
+  quotes: () => ['sales', 'quotes'] as const,
+  quote: (id: string | number) => ['sales', 'quote', id] as const,
   analytics: (range: string) => ['sales', 'analytics', range] as const,
   dailySummary: (date: string) => ['sales', 'dailySummary', date] as const,
 };
@@ -154,13 +147,11 @@ export const hrKeys = {
   schedules: () => ['hr', 'schedules'] as const,
   schedule: (id: string | number) => ['hr', 'schedule', id] as const,
   attendance: () => ['hr', 'attendance'] as const,
-  attendanceRecord: (id: string | number) =>
-    ['hr', 'attendanceRecord', id] as const,
+  attendanceRecord: (id: string | number) => ['hr', 'attendanceRecord', id] as const,
   leaves: () => ['hr', 'leaves'] as const,
   leave: (id: string | number) => ['hr', 'leave', id] as const,
   payroll: (period: string) => ['hr', 'payroll', period] as const,
-  performance: (employeeId: string | number) =>
-    ['hr', 'performance', employeeId] as const,
+  performance: (employeeId: string | number) => ['hr', 'performance', employeeId] as const,
 };
 
 // ── Aggregate Export ───────────────────────────────────────────

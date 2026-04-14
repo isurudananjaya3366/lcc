@@ -1,8 +1,10 @@
 /**
  * useInvoices — fetch paginated invoice list
+ * useInvoiceDetails — fetch single invoice
+ * useSendInvoice, useVoidInvoice, useRecordPayment — mutations
  */
 
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { salesKeys } from '@/lib/queryKeys';
 import { invoiceService } from '@/services/api';
 
@@ -28,5 +30,51 @@ export function useInvoices(filters?: InvoiceFilters) {
     staleTime: 1 * 60 * 1000,
     placeholderData: (prev) => prev,
     refetchOnWindowFocus: true,
+  });
+}
+
+export function useInvoiceDetails(invoiceId: string) {
+  return useQuery({
+    queryKey: [...salesKeys.invoices(), invoiceId],
+    queryFn: () => invoiceService.getInvoiceById(invoiceId),
+    select: (res) => res.data,
+    enabled: !!invoiceId,
+  });
+}
+
+export function useSendInvoice() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, email }: { id: string; email?: string }) =>
+      invoiceService.sendInvoice(id, email),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: salesKeys.invoices() });
+    },
+  });
+}
+
+export function useVoidInvoice() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => invoiceService.voidInvoice(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: salesKeys.invoices() });
+    },
+  });
+}
+
+export function useRecordPayment() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      id,
+      payment,
+    }: {
+      id: string;
+      payment: { amount: number; method: string; reference?: string; date?: string };
+    }) => invoiceService.recordPayment(id, payment),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: salesKeys.invoices() });
+    },
   });
 }
