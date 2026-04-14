@@ -2,6 +2,16 @@
 export { useCreateProduct, useUpdateProduct, useDeleteProduct } from './useProductMutations';
 export { useCreateCustomer, useUpdateCustomer, useDeleteCustomer } from './useCustomerMutations';
 export { useCreateOrder, useUpdateOrder, useDeleteOrder } from './useOrderMutations';
+export {
+  useCreateStockAdjustment,
+  useCreateStockTransfer,
+  useApproveStockTransfer,
+  useCompleteStockTransfer,
+  useCancelStockTransfer,
+  useCreateWarehouse,
+  useUpdateWarehouse,
+  useDeleteWarehouse,
+} from './useInventoryMutations';
 
 // Cache invalidation utilities
 export { invalidateCache, removeFromCache, getRelatedResources } from './cacheInvalidation';
