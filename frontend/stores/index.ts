@@ -3,17 +3,43 @@
 // ================================================================
 // Global state management using Zustand.
 // No providers needed — import and use directly in components.
-// Export stores as they are created.
 //
 // Import: import { useAuthStore, useUIStore } from '@/stores'
 // ================================================================
 
-// export { useAuthStore } from './useAuthStore'
-// export { useUIStore } from './useUIStore'
+// ── Types ──────────────────────────────────────────────────────
+export type {
+  BaseStore,
+  StateSlice,
+  ActionSlice,
+  Store,
+  PersistConfig,
+  DevToolsConfig,
+  CreateStoreOptions,
+  ThemeMode,
+  NotificationType,
+  NotificationAction,
+  Notification,
+  Modal,
+  User,
+  Tenant,
+  TenantSettings,
+} from './types';
+
+// ── Utilities ──────────────────────────────────────────────────
+export {
+  createStore,
+  isClient,
+  getPersistConfig,
+  registerStoreReset,
+  resetAllStores,
+  useHydration,
+  useShallow,
+} from './utils';
+
+// ── Stores ─────────────────────────────────────────────────────
+export { useUIStore } from './useUIStore';
+export { useAuthStore } from './useAuthStore';
 // export { useCartStore } from './useCartStore'
-// export { useNotificationStore } from './useNotificationStore'
-// export { useThemeStore } from './useThemeStore'
 // export { usePOSStore } from './usePOSStore'
 // export { useFilterStore } from './useFilterStore'
-
-export {};

@@ -34,3 +34,16 @@ export { useSyncHistory } from './useSyncHistory';
 export { useManualSync } from './useManualSync';
 export { useSyncToasts } from './useSyncToasts';
 export { useCacheRefresh } from './useCacheRefresh';
+
+// Auth hooks
+export { useAuth } from './useAuth';
+export type { UseAuthReturn } from './useAuth';
+
+// Query hooks
+export * from './queries';
+
+// Mutation hooks
+export * from './mutations';
+
+// Infinite query hooks
+export * from './infiniteQueries';
