@@ -67,3 +67,52 @@ export interface AuthResponse<T = void> {
   message?: string;
   data?: T;
 }
+
+// ── Email Verification Types ───────────────────────────────────
+
+export interface VerifyEmailRequest {
+  token: string;
+}
+
+export interface VerifyEmailResponse {
+  success: boolean;
+  message: string;
+  email?: string;
+}
+
+export interface ResendVerificationRequest {
+  email: string;
+}
+
+// ── 2FA Types ──────────────────────────────────────────────────
+
+export interface TwoFactorSetupResponse {
+  secret: string;
+  qrCodeUrl: string;
+  otpauthUrl: string;
+}
+
+export interface TwoFactorVerifySetupRequest {
+  otp: string;
+}
+
+export interface TwoFactorVerifySetupResponse {
+  success: boolean;
+  backupCodes: string[];
+}
+
+export interface TwoFactorVerifyLoginRequest {
+  otp: string;
+  sessionToken: string;
+}
+
+export interface TwoFactorVerifyBackupCodeRequest {
+  backupCode: string;
+  sessionToken: string;
+}
+
+export interface TwoFactorVerifyResponse {
+  accessToken: string;
+  refreshToken: string;
+  user: User;
+}
