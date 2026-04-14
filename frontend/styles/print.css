@@ -1,0 +1,142 @@
+/* ================================================================
+ * Print Stylesheet — Dashboard Layout
+ * ================================================================
+ * Optimizes printed output by hiding chrome, simplifying colours,
+ * and controlling page breaks.
+ * ================================================================ */
+
+@media print {
+  /* ── Hide non-content chrome ───────────────────────────────── */
+  [role='navigation'],
+  [role='banner'],
+  nav,
+  aside,
+  .print\:hidden,
+  button,
+  [aria-label='Mobile navigation'] {
+    display: none !important;
+  }
+
+  /* ── Full-width content ────────────────────────────────────── */
+  main,
+  #main-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  /* ── Reset grid layout ─────────────────────────────────────── */
+  .grid {
+    display: block !important;
+  }
+
+  /* ── Black & white, remove decorations ─────────────────────── */
+  body {
+    color: #000 !important;
+    background: #fff !important;
+    font-size: 12pt !important;
+    line-height: 1.5 !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    color: #000 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    border-color: #999 !important;
+  }
+
+  /* ── Links ─────────────────────────────────────────────────── */
+  a,
+  a:visited {
+    text-decoration: underline !important;
+  }
+
+  a[href]::after {
+    content: ' (' attr(href) ')';
+    font-size: 0.8em;
+    font-weight: normal;
+  }
+
+  a[href^='#']::after,
+  a[href^='javascript:']::after {
+    content: '';
+  }
+
+  /* ── Images ────────────────────────────────────────────────── */
+  img {
+    max-width: 100% !important;
+    page-break-inside: avoid;
+  }
+
+  /* ── Tables ────────────────────────────────────────────────── */
+  table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tr {
+    page-break-inside: avoid;
+  }
+
+  th,
+  td {
+    border: 1px solid #999 !important;
+    padding: 4px 8px !important;
+  }
+
+  /* ── Page break control ────────────────────────────────────── */
+  h1,
+  h2,
+  h3,
+  h4 {
+    page-break-after: avoid;
+  }
+
+  p,
+  blockquote,
+  pre,
+  ul,
+  ol {
+    orphans: 3;
+    widows: 3;
+  }
+
+  pre,
+  blockquote {
+    page-break-inside: avoid;
+  }
+
+  /* ── Page setup ────────────────────────────────────────────── */
+  @page {
+    size: A4;
+    margin: 1in;
+  }
+
+  /* ── Print header (branding + title + date) ────────────────── */
+  body::before {
+    content: 'POS-ERP System — Printed ' attr(data-print-date);
+    display: block;
+    text-align: center;
+    font-size: 10pt;
+    margin-bottom: 16pt;
+    padding-bottom: 8pt;
+    border-bottom: 1px solid #999;
+  }
+
+  /* ── Print footer (page numbers via CSS counter) ───────────── */
+  @page {
+    @bottom-center {
+      content: counter(page) ' / ' counter(pages);
+      font-size: 9pt;
+    }
+  }
+}

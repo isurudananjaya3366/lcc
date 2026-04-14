@@ -2,16 +2,25 @@
 // Layout Components — Barrel Export
 // ================================================================
 // Atomic design: Organisms — page structure elements.
-// Export components as they are created.
 // ================================================================
 
-// export { Header } from './Header'
-// export { Sidebar } from './Sidebar'
-// export { Footer } from './Footer'
-// export { Container } from './Container'
-// export { PageHeader } from './PageHeader'
-// export { Breadcrumb } from './Breadcrumb'
-// export { MainLayout } from './MainLayout'
-// export { DashboardLayout } from './DashboardLayout'
-
-export {};
+export { DashboardLayout } from './DashboardLayout';
+export { MainContent, type MainContentProps } from './MainContent';
+export { PageTransition } from './PageTransition';
+export { SkipNavigation } from './SkipNavigation';
+export { Sidebar } from './Sidebar';
+export { Header } from './Header';
+export { MobileSidebar } from './MobileSidebar';
+export { SidebarOverlay } from './SidebarOverlay';
+export { MobileBottomNav } from './MobileBottomNav';
+export { Breadcrumb } from './Breadcrumb';
+export {
+  PageContainer,
+  PageHeader,
+  PageTitle,
+  PageActions,
+  PageSection,
+  BackButton,
+  TabNavigation,
+  ShortcutsModal,
+} from './Page';

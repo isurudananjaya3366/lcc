@@ -1,0 +1,82 @@
+/* ================================================================
+ * Layout CSS Variables — Dashboard Layout System
+ * ================================================================
+ * Design tokens for the dashboard layout dimensions, spacing,
+ * z-index layers, and animation timing.
+ * ================================================================ */
+
+:root {
+  /* ── Sidebar Dimensions ─────────────────────────────────────── */
+  --sidebar-width: 240px;
+  --sidebar-width-collapsed: 64px;
+  --sidebar-transition-duration: 300ms;
+
+  /* ── Header Dimensions ──────────────────────────────────────── */
+  --header-height: 64px;
+  --header-height-mobile: 56px;
+
+  /* ── Footer Dimensions ──────────────────────────────────────── */
+  --footer-height: 48px;
+
+  /* ── Content Dimensions ─────────────────────────────────────── */
+  --content-padding: 24px;
+  --content-padding-mobile: 16px;
+  --content-max-width: 1440px;
+
+  /* ── Layout Spacing ─────────────────────────────────────────── */
+  --layout-gap: 24px;
+  --layout-gap-sm: 16px;
+  --layout-gap-lg: 32px;
+
+  /* ── Border Radius ──────────────────────────────────────────── */
+  --layout-border-radius: 8px;
+  --layout-border-radius-sm: 4px;
+  --layout-border-radius-lg: 12px;
+
+  /* ── Z-Index Layers ─────────────────────────────────────────── */
+  --z-sidebar: 1000;
+  --z-header: 1100;
+  --z-dropdown: 1150;
+  --z-modal: 1200;
+  --z-tooltip: 1300;
+  --z-skip-nav: 9999;
+
+  /* ── Transition Timing ──────────────────────────────────────── */
+  --transition-fast: 150ms;
+  --transition-base: 200ms;
+  --transition-slow: 300ms;
+
+  /* ── Easing Functions ───────────────────────────────────────── */
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ── Animation Delay ────────────────────────────────────────── */
+  --animation-delay: 50ms;
+  --animation-stagger: 100ms;
+
+  /* ── Container Sizes (reference) ────────────────────────────── */
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+}
+
+/* ── Mobile Overrides (< 640px) ───────────────────────────────── */
+@media (max-width: 640px) {
+  :root {
+    --header-height: var(--header-height-mobile);
+    --content-padding: var(--content-padding-mobile);
+    --layout-gap: var(--layout-gap-sm);
+  }
+}
+
+/* ── Print Styles ─────────────────────────────────────────────── */
+@media print {
+  :root {
+    --sidebar-width: 0px;
+    --sidebar-width-collapsed: 0px;
+    --header-height: 0px;
+    --content-padding: 0px;
+  }
+}

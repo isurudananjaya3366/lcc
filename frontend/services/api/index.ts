@@ -30,6 +30,15 @@ export { default as payrollService } from './payrollService';
 export { default as reportsService } from './reportsService';
 export { default as settingsService } from './settingsService';
 
+// ── Dashboard Service ──────────────────────────────────────────
+export {
+  fetchKPIs,
+  fetchActivityFeed,
+  fetchSalesChart,
+  type KPIData,
+  type SalesChartPoint,
+} from './dashboardService';
+
 // ── Interceptors ───────────────────────────────────────────────
 export { setupRequestInterceptor } from './interceptors/request.interceptor';
 export { setupResponseInterceptor } from './interceptors/response.interceptor';
@@ -125,11 +134,7 @@ export type {
 } from '@/types/reports';
 
 // ── Re-export Utility Types ────────────────────────────────────
-export type {
-  InvoiceStatus,
-  Invoice,
-  InvoiceSearchParams,
-} from './invoiceService';
+export type { InvoiceStatus, Invoice, InvoiceSearchParams } from './invoiceService';
 
 export type {
   SettingCategory,
@@ -147,12 +152,7 @@ export {
   updateQueryString,
 } from '@/lib/queryString';
 
-export {
-  buildUrl,
-  buildApiUrl,
-  buildResourceUrl,
-  isAbsoluteUrl,
-} from '@/lib/urlBuilder';
+export { buildUrl, buildApiUrl, buildResourceUrl, isAbsoluteUrl } from '@/lib/urlBuilder';
 
 export {
   buildFormData,
@@ -181,5 +181,11 @@ export { ApiCache, getApiCache, resetApiCache } from '@/lib/apiCache';
 export { RateLimiter } from '@/lib/rateLimiter';
 
 // ── Error Handling ─────────────────────────────────────────────
-export { ApiException, parseApiError, getErrorMessage, isRetryable, retryRequest } from '@/lib/apiError';
+export {
+  ApiException,
+  parseApiError,
+  getErrorMessage,
+  isRetryable,
+  retryRequest,
+} from '@/lib/apiError';
 export { ErrorBoundary, ApiErrorBoundary } from '@/components/ErrorBoundary';
