@@ -8,7 +8,7 @@
 // ================================================================
 
 // Data hooks
-// export { useDebounce } from './useDebounce'
+export { useDebounce } from './useDebounce';
 // export { useAsync } from './useAsync'
 
 // State hooks

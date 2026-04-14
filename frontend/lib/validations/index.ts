@@ -18,3 +18,4 @@ export {
   type ForgotPasswordFormData,
   type ResetPasswordFormData,
 } from './password';
+export { productFormSchema, type ProductFormData, productFormDefaults } from './product';
