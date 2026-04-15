@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { CheckCircle, Circle, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-type IntegrationStatusType = 'CONNECTED' | 'DISCONNECTED';
+type IntegrationStatusType = 'CONNECTED' | 'DISCONNECTED' | 'ERROR';
 
 const statusConfig: Record<
   IntegrationStatusType,
@@ -19,6 +19,11 @@ const statusConfig: Record<
     label: 'Disconnected',
     className: 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400',
     icon: Circle,
+  },
+  ERROR: {
+    label: 'Error',
+    className: 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-100',
+    icon: AlertCircle,
   },
 };
 

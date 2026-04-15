@@ -28,6 +28,7 @@ export function IntegrationSettingsModal({
 }: IntegrationSettingsModalProps) {
   const [loading, setLoading] = useState(false);
   const [testing, setTesting] = useState(false);
+  const [showDisconnectConfirm, setShowDisconnectConfirm] = useState(false);
 
   const handleSave = async () => {
     setLoading(true);
@@ -78,7 +79,7 @@ export function IntegrationSettingsModal({
         </div>
 
         <div className="flex justify-between">
-          <Button variant="destructive" size="sm" onClick={onDisconnect}>
+          <Button variant="destructive" size="sm" onClick={() => setShowDisconnectConfirm(true)}>
             Disconnect
           </Button>
           <div className="flex gap-2">
@@ -90,6 +91,32 @@ export function IntegrationSettingsModal({
             </Button>
           </div>
         </div>
+
+        {showDisconnectConfirm && (
+          <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-4 space-y-3">
+            <p className="text-sm font-medium text-destructive">
+              Are you sure you want to disconnect {integration.name}?
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Data synchronization will stop immediately. You can reconnect later.
+            </p>
+            <div className="flex gap-2 justify-end">
+              <Button variant="outline" size="sm" onClick={() => setShowDisconnectConfirm(false)}>
+                Cancel
+              </Button>
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={() => {
+                  setShowDisconnectConfirm(false);
+                  onDisconnect?.();
+                }}
+              >
+                Confirm Disconnect
+              </Button>
+            </div>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );

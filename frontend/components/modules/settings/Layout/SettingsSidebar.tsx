@@ -27,9 +27,10 @@ const systemItems: NavItem[] = [
 
 interface SettingsSidebarProps {
   className?: string;
+  onNavigate?: () => void;
 }
 
-export function SettingsSidebar({ className }: SettingsSidebarProps) {
+export function SettingsSidebar({ className, onNavigate }: SettingsSidebarProps) {
   const pathname = usePathname();
 
   const isActive = (href: string) => {
@@ -44,6 +45,7 @@ export function SettingsSidebar({ className }: SettingsSidebarProps) {
       <Link
         key={item.href}
         href={item.href}
+        onClick={onNavigate}
         className={cn(
           'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors',
           active

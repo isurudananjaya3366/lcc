@@ -5,8 +5,8 @@ export interface GeneralSettings {
   emailNotifications: boolean;
   pushNotifications: boolean;
   orderAlerts: boolean;
-  inventoryAlerts: boolean;
-  marketingEmails: boolean;
+  lowStockAlerts: boolean;
+  dailyReports: boolean;
 }
 
 export interface CompanyAddress {

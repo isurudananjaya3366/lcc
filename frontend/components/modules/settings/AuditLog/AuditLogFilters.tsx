@@ -45,11 +45,20 @@ const DATE_RANGE_OPTIONS = [
 ];
 
 export interface AuditLogFilterState {
+  userId?: string;
   action?: string;
   entityType?: string;
   dateRange?: string;
   searchText?: string;
 }
+
+const MOCK_USERS = [
+  { value: 'all', label: 'All Users' },
+  { value: 'u-1', label: 'John Doe' },
+  { value: 'u-2', label: 'Jane Smith' },
+  { value: 'u-3', label: 'Kamal Perera' },
+  { value: 'system', label: 'System' },
+];
 
 interface AuditLogFiltersProps {
   filters: AuditLogFilterState;
@@ -89,7 +98,23 @@ export function AuditLogFilters({ filters, onFilterChange }: AuditLogFiltersProp
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
+        <Select
+          value={filters.userId ?? 'all'}
+          onValueChange={(val) => updateFilter('userId', val)}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="All Users" />
+          </SelectTrigger>
+          <SelectContent>
+            {MOCK_USERS.map((opt) => (
+              <SelectItem key={opt.value} value={opt.value}>
+                {opt.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
         <Select
           value={filters.action ?? 'all'}
           onValueChange={(val) => updateFilter('action', val)}

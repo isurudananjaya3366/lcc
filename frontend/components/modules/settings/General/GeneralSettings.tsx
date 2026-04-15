@@ -13,8 +13,8 @@ const DEFAULT_SETTINGS: GeneralSettingsType = {
   emailNotifications: true,
   pushNotifications: true,
   orderAlerts: true,
-  inventoryAlerts: true,
-  marketingEmails: false,
+  lowStockAlerts: true,
+  dailyReports: false,
 };
 
 interface GeneralSettingsProps {
@@ -63,8 +63,8 @@ export function GeneralSettings({ initialSettings }: GeneralSettingsProps) {
         emailNotifications={settings.emailNotifications}
         pushNotifications={settings.pushNotifications}
         orderAlerts={settings.orderAlerts}
-        inventoryAlerts={settings.inventoryAlerts}
-        marketingEmails={settings.marketingEmails}
+        lowStockAlerts={settings.lowStockAlerts}
+        dailyReports={settings.dailyReports}
         onChange={handleNotificationChange}
       />
 

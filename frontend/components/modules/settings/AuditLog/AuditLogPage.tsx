@@ -121,6 +121,7 @@ export function AuditLogPage() {
 
   const filteredEntries = useMemo(() => {
     return MOCK_ENTRIES.filter((entry) => {
+      if (filters.userId && entry.userId !== filters.userId) return false;
       if (filters.action && entry.action !== filters.action) return false;
       if (filters.entityType && entry.entity !== filters.entityType) return false;
       if (filters.searchText) {
@@ -139,9 +140,7 @@ export function AuditLogPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Audit Log</h1>
-        <p className="text-muted-foreground">
-          Track all system activities and changes.
-        </p>
+        <p className="text-muted-foreground">Track all system activities and changes.</p>
       </div>
 
       <AuditLogFilters filters={filters} onFilterChange={setFilters} />

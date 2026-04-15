@@ -1,8 +1,9 @@
 'use client';
 
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Save } from 'lucide-react';
+import { Loader2, Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { companyFormSchema, type CompanyFormValues } from '@/lib/validations/company';
@@ -32,14 +33,27 @@ const defaultValues: CompanyFormValues = {
 };
 
 export function CompanySettings() {
+  const [isSaving, setIsSaving] = useState(false);
+
   const form = useForm<CompanyFormValues>({
     resolver: zodResolver(companyFormSchema),
     defaultValues,
   });
 
-  const onSubmit = (data: CompanyFormValues) => {
-    // TODO: connect to API
-    console.log('Company settings:', data);
+  const { isDirty } = form.formState;
+
+  const onSubmit = async (data: CompanyFormValues) => {
+    setIsSaving(true);
+    try {
+      // In production: POST/PUT /api/settings/company
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      console.log('Company settings saved:', data);
+      form.reset(data);
+    } catch {
+      console.error('Failed to save company settings');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -56,8 +70,8 @@ export function CompanySettings() {
           <SettingsSectionCard title="Company Logo" description="Upload your company logo">
             <LogoUpload
               value={form.watch('logo')}
-              onChange={(value) => form.setValue('logo', value)}
-              onRemove={() => form.setValue('logo', '')}
+              onChange={(value) => form.setValue('logo', value, { shouldDirty: true })}
+              onRemove={() => form.setValue('logo', '', { shouldDirty: true })}
             />
           </SettingsSectionCard>
 
@@ -67,9 +81,13 @@ export function CompanySettings() {
           <ContactInfoSection form={form} />
 
           <div className="flex justify-end">
-            <Button type="submit">
-              <Save className="mr-2 h-4 w-4" />
-              Save Changes
+            <Button type="submit" disabled={!isDirty || isSaving}>
+              {isSaving ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Save className="mr-2 h-4 w-4" />
+              )}
+              {isSaving ? 'Saving...' : 'Save Changes'}
             </Button>
           </div>
         </form>

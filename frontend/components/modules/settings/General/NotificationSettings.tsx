@@ -8,8 +8,8 @@ interface NotificationSettingsProps {
   emailNotifications: boolean;
   pushNotifications: boolean;
   orderAlerts: boolean;
-  inventoryAlerts: boolean;
-  marketingEmails: boolean;
+  lowStockAlerts: boolean;
+  dailyReports: boolean;
   onChange: (key: string, value: boolean) => void;
 }
 
@@ -30,14 +30,14 @@ const NOTIFICATION_OPTIONS = [
     description: 'Notifications for new and updated orders',
   },
   {
-    key: 'inventoryAlerts',
-    label: 'Inventory Alerts',
-    description: 'Low stock and reorder point notifications',
+    key: 'lowStockAlerts',
+    label: 'Low Stock Alerts',
+    description: 'Notifications when inventory drops below reorder points',
   },
   {
-    key: 'marketingEmails',
-    label: 'Marketing Emails',
-    description: 'Product updates and promotional content',
+    key: 'dailyReports',
+    label: 'Daily Reports',
+    description: 'Daily summary of sales, orders, and inventory activity',
   },
 ];
 
@@ -45,16 +45,16 @@ export function NotificationSettings({
   emailNotifications,
   pushNotifications,
   orderAlerts,
-  inventoryAlerts,
-  marketingEmails,
+  lowStockAlerts,
+  dailyReports,
   onChange,
 }: NotificationSettingsProps) {
   const values: Record<string, boolean> = {
     emailNotifications,
     pushNotifications,
     orderAlerts,
-    inventoryAlerts,
-    marketingEmails,
+    lowStockAlerts,
+    dailyReports,
   };
 
   return (
