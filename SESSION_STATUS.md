@@ -1,6 +1,6 @@
 # Session Status - LankaCommerce Cloud POS
 
-> **Last Updated:** Session 60 — Phase-07 SP10 Sales Orders UI DEEP AUDITED (94 tasks, 6 groups A-F, 12 audit fixes, 75+ files, 0 TS errors, SP10_FRONTEND_AUDIT_REPORT.md created)
+> **Last Updated:** Session 61 — TypeScript errors fixed (163→0), packages added (msw/recharts/vitest), pnpm-lock.yaml generated, Docker frontend container fixed (Dockerfile.dev updated, NODE_OPTIONS set, lockfile sync fixed)
 > **Purpose:** Complete handoff document for the next chat session. This file contains ALL context needed to continue work without the previous chat's memory.
 
 ---
@@ -202,6 +202,47 @@ Run: `node check_ts.cjs` then `rm check_ts.cjs` when done.
 - **recharts** — needed by `SalesChart.tsx` (added in Session 61)
 - **msw v2** — test mocks; v2 has breaking changes from v1 (e.g., `request.json()` returns `unknown`)
 - **vitest** — test runner for `__tests__/` files
+
+---
+
+## Docker Frontend Container
+
+### Why the Frontend Container Was in a Restart Loop (Fixed in Session 61)
+
+**Root causes:**
+1. **Missing `pnpm-lock.yaml`** — `pnpm install` had never been run with the new packages (msw, recharts, vitest), so the lockfile didn't exist. The Dockerfile used `--frozen-lockfile` which fails without a lockfile.
+2. **`sharp` package corruption** — `node_modules/.pnpm/sharp@0.34.5/node_modules/sharp/package.json` had null bytes (binary corruption), causing `pnpm install` to fail with `ERR_PNPM_BAD_PACKAGE_JSON`.
+
+**Fixes applied:**
+- Generated `pnpm-lock.yaml` by running `pnpm store prune` + `pnpm install` in `frontend/`
+- Changed `docker/frontend/Dockerfile.dev` from `--frozen-lockfile` → `--no-frozen-lockfile`
+- Added `pnpm-workspace.yaml*` to the COPY step in Dockerfile.dev
+- Added `NODE_OPTIONS=--max-old-space-size=4096` to `docker-compose.yml` frontend env (prevents OOM crashes)
+
+### Rebuilding the Frontend Container (After Package Changes)
+
+**Quick command:**
+```bash
+make rebuild-frontend
+```
+
+**Manual steps (if make isn't available):**
+```bash
+docker compose stop frontend
+docker compose rm -f frontend
+docker volume rm $(docker volume ls -q --filter name=pos_) 2>/dev/null || true
+docker compose build --no-cache frontend
+docker compose up -d frontend
+```
+
+**Why remove volumes?** — The anonymous volumes `/app/node_modules` and `/app/.next` contain stale data from the previous broken build. They must be removed for the rebuild to install fresh packages.
+
+### Checking Frontend Container Logs
+```bash
+make logs-frontend
+# or
+docker compose logs -f frontend
+```
 
 ---
 

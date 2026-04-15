@@ -61,6 +61,13 @@ logs-backend: ## View backend container logs
 logs-frontend: ## View frontend container logs
 	$(COMPOSE) logs -f frontend
 
+rebuild-frontend: ## Rebuild frontend container from scratch (fixes restart loops)
+	$(COMPOSE) stop frontend
+	$(COMPOSE) rm -f frontend
+	docker volume rm $$(docker volume ls -q --filter name=pos_) 2>/dev/null || true
+	$(COMPOSE) build --no-cache frontend
+	$(COMPOSE) up -d frontend
+
 logs-service: ## View logs for a specific service (usage: make logs-service s=redis)
 	$(COMPOSE) logs -f $(s)
 
