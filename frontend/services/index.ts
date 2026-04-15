@@ -15,4 +15,4 @@ export { api } from './api';
 // export { orderService } from './orders'
 // export { customerService } from './customers'
 // export { inventoryService } from './inventory'
-// export { posService } from './pos'
+export { posService } from './pos';
