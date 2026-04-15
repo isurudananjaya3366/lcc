@@ -45,3 +45,32 @@ export { useDashboardStats } from './useDashboardStats';
 export type { StatsFilters } from './useDashboardStats';
 export { useReports } from './useReports';
 export type { ReportFilters } from './useReports';
+
+// ── Storefront ─────────────────────────────────────────────────
+export {
+  useProducts as useStoreProducts,
+  useProduct as useStoreProduct,
+  useFeaturedProducts,
+  useSaleProducts,
+  useRelatedProducts,
+  useProductSearch,
+  useProductVariants,
+  useProductReviews,
+  useReviewStats,
+  useProductAvailability,
+  useProductMutations,
+} from './useStoreProducts';
+export type { ProductAvailability } from './useStoreProducts';
+export {
+  useCategories as useStoreCategories,
+  useCategory as useStoreCategory,
+  useCategoryTree,
+  useCategoryProducts,
+  useCategoryBreadcrumb,
+  useFeaturedCategories,
+  flattenCategoryTree,
+  findCategoryById,
+  useCategoryFilters,
+  useCategorySearch,
+} from './useStoreCategories';
+export type { CategoryFilterOptions } from './useStoreCategories';

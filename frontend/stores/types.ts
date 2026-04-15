@@ -26,9 +26,7 @@ export interface ActionSlice {
 }
 
 /** Combined store = state + actions + base */
-export type Store<S extends StateSlice, A extends ActionSlice> = S &
-  A &
-  BaseStore;
+export type Store<S extends StateSlice, A extends ActionSlice> = S & A & BaseStore;
 
 // ── Middleware Configuration Types ─────────────────────────────
 
@@ -41,6 +39,8 @@ export interface PersistConfig<T = unknown> {
   partialize?: (state: T) => Partial<T>;
   /** Schema version — bump when shape changes */
   version?: number;
+  /** Callback invoked when state is rehydrated from storage */
+  onRehydrateStorage?: (state: T) => ((state?: T | undefined, error?: unknown) => void) | void;
 }
 
 export interface DevToolsConfig {

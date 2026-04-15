@@ -1,0 +1,237 @@
+/* ==========================================================================
+   LankaCommerce Store — Global Styles
+   Storefront-specific styles, design tokens, and utility classes.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   CSS Custom Properties — Light Theme (default)
+   -------------------------------------------------------------------------- */
+:root {
+  /* Colors — Primary */
+  --store-color-primary: 214 95% 45%;
+  --store-color-primary-foreground: 0 0% 100%;
+
+  /* Colors — Accent */
+  --store-color-accent: 24 100% 50%;
+  --store-color-accent-foreground: 0 0% 100%;
+
+  /* Colors — Neutral */
+  --store-bg: #ffffff;
+  --store-fg: #171717;
+  --store-muted: #f9fafb;
+  --store-border: #e5e7eb;
+
+  /* Colors — Semantic */
+  --store-color-success: 142 71% 35%;
+  --store-color-error: 0 84% 60%;
+  --store-color-warning: 38 92% 50%;
+  --store-color-info: 214 95% 45%;
+
+  /* Typography */
+  --store-font-family-sans: var(--font-body), system-ui, -apple-system, sans-serif;
+  --store-font-family-mono: var(--font-mono), 'Courier New', monospace;
+
+  /* Spacing — Base unit: 4px */
+  --store-space-base: 0.25rem;
+
+  /* Border Radius */
+  --store-radius-sm: 0.125rem;
+  --store-radius-md: 0.375rem;
+  --store-radius-lg: 0.5rem;
+  --store-radius-xl: 0.75rem;
+  --store-radius-2xl: 1rem;
+  --store-radius-full: 9999px;
+
+  /* Shadows */
+  --store-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --store-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --store-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --store-shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+
+  /* Transitions */
+  --store-transition-fast: 150ms;
+  --store-transition-base: 200ms;
+  --store-transition-slow: 300ms;
+}
+
+/* --------------------------------------------------------------------------
+   Dark Theme Overrides
+   -------------------------------------------------------------------------- */
+[data-store-theme='dark'] {
+  --store-color-primary: 214 90% 60%;
+  --store-color-accent: 24 100% 60%;
+
+  --store-bg: #0a0a0a;
+  --store-fg: #fafafa;
+  --store-muted: #171717;
+  --store-border: #374151;
+
+  --store-color-success: 142 71% 45%;
+  --store-color-error: 0 84% 70%;
+  --store-color-warning: 38 92% 60%;
+  --store-color-info: 214 90% 60%;
+
+  --store-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --store-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --store-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.4);
+  --store-shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.5);
+}
+
+/* --------------------------------------------------------------------------
+   Base Layer
+   -------------------------------------------------------------------------- */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--store-bg);
+    color: var(--store-fg);
+    font-family: var(--store-font-family-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Selection highlight */
+  ::selection {
+    background-color: hsl(var(--store-color-primary) / 0.2);
+    color: var(--store-fg);
+  }
+
+  /* Focus ring utility */
+  :focus-visible {
+    outline: 2px solid hsl(var(--store-color-primary));
+    outline-offset: 2px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Component Layer
+   -------------------------------------------------------------------------- */
+@layer components {
+  .store-button {
+    @apply px-4 py-2 rounded-md font-medium transition-colors;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
+  }
+
+  .store-button-primary {
+    @apply store-button bg-green-600 text-white hover:bg-green-700;
+    @apply focus-visible:ring-green-600;
+  }
+
+  .store-button-secondary {
+    @apply store-button border border-gray-300 text-gray-700 hover:bg-gray-50;
+    @apply focus-visible:ring-gray-400;
+  }
+
+  .store-card {
+    @apply bg-white rounded-lg shadow-sm border border-gray-200;
+    @apply dark:bg-gray-800 dark:border-gray-700;
+  }
+
+  .store-input {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-md;
+    @apply focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent;
+    @apply dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Utility Layer
+   -------------------------------------------------------------------------- */
+@layer utilities {
+  /* Responsive typography */
+  .text-store-h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+  }
+
+  .text-store-h2 {
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+  }
+
+  .text-store-h3 {
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  /* Text gradient */
+  .text-gradient-primary {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--store-color-primary)),
+      hsl(var(--store-color-accent))
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Product image aspect ratio */
+  .aspect-product {
+    aspect-ratio: 3 / 4;
+  }
+
+  /* Animate slide up */
+  .animate-slide-up {
+    animation: slideUp var(--store-transition-slow) ease-out;
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Hide scrollbar */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Store price font */
+  .font-price {
+    font-family: var(--store-font-family-mono);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Print Styles
+   -------------------------------------------------------------------------- */
+@media print {
+  header,
+  footer,
+  nav,
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: white;
+    color: black;
+  }
+}

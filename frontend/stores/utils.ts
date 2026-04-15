@@ -48,7 +48,7 @@ export const isClient = typeof window !== 'undefined';
 export function createStore<T extends object>(
   name: string,
   initializer: StateCreator<T, [['zustand/immer', never]], []>,
-  options?: CreateStoreOptions<T>,
+  options?: CreateStoreOptions<T>
 ) {
   const enablePersist = options?.persist ?? false;
   const enableDevtools = options?.devtools !== false;
@@ -64,21 +64,24 @@ export function createStore<T extends object>(
       persist(immer(initializer), {
         name: persistName,
         storage: createJSONStorage(() =>
-          isClient ? localStorage : ({
-            getItem: () => null,
-            setItem: () => {},
-            removeItem: () => {},
-          } as unknown as Storage),
+          isClient
+            ? localStorage
+            : ({
+                getItem: () => null,
+                setItem: () => {},
+                removeItem: () => {},
+              } as unknown as Storage)
         ),
-        partialize: options?.persistConfig?.partialize as
-          | ((state: T) => unknown)
-          | undefined,
+        partialize: options?.persistConfig?.partialize as ((state: T) => unknown) | undefined,
         version: options?.persistConfig?.version ?? 1,
+        onRehydrateStorage: options?.persistConfig?.onRehydrateStorage as
+          | ((state: T) => ((state?: T, error?: unknown) => void) | void)
+          | undefined,
       }),
       {
         name: `LCC/${name}`,
         enabled: enableDevtools && process.env.NODE_ENV === 'development',
-      },
+      }
     );
   } else {
     storeCreator = devtools(immer(initializer), {
@@ -98,18 +101,17 @@ export function createStore<T extends object>(
  * @param storeName  Short domain name, e.g. `"ui"`, `"auth"`.
  * @param partialize Optional filter for which fields to persist.
  */
-export function getPersistConfig<T>(
-  storeName: string,
-  partialize?: (state: T) => Partial<T>,
-) {
+export function getPersistConfig<T>(storeName: string, partialize?: (state: T) => Partial<T>) {
   return {
     name: `lcc-${storeName}`,
     storage: createJSONStorage(() =>
-      isClient ? localStorage : ({
-        getItem: () => null,
-        setItem: () => {},
-        removeItem: () => {},
-      } as unknown as Storage),
+      isClient
+        ? localStorage
+        : ({
+            getItem: () => null,
+            setItem: () => {},
+            removeItem: () => {},
+          } as unknown as Storage)
     ),
     partialize,
     version: 1,
