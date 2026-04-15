@@ -154,6 +154,46 @@ export const hrKeys = {
   performance: (employeeId: string | number) => ['hr', 'performance', employeeId] as const,
 };
 
+// ── Vendor Keys ────────────────────────────────────────────────
+
+export interface VendorFilters {
+  status?: string;
+  category?: string;
+  search?: string;
+  vendorType?: string;
+}
+
+export const vendorKeys = {
+  all: () => ['vendors'] as const,
+  lists: () => ['vendors', 'list'] as const,
+  list: (filters?: VendorFilters) => ['vendors', 'list', filters] as const,
+  details: () => ['vendors', 'detail'] as const,
+  detail: (id: string | number) => ['vendors', 'detail', id] as const,
+  contacts: (vendorId: string | number) => ['vendors', 'contacts', vendorId] as const,
+  products: (vendorId: string | number) => ['vendors', 'products', vendorId] as const,
+  purchaseOrders: (vendorId: string | number) => ['vendors', 'purchaseOrders', vendorId] as const,
+  performance: (vendorId: string | number) => ['vendors', 'performance', vendorId] as const,
+  stats: () => ['vendors', 'stats'] as const,
+};
+
+// ── Purchase Order Keys ────────────────────────────────────────
+
+export interface POFilters {
+  status?: string;
+  vendorId?: string;
+  search?: string;
+  startDate?: string;
+  endDate?: string;
+}
+
+export const purchaseOrderKeys = {
+  all: () => ['purchaseOrders'] as const,
+  lists: () => ['purchaseOrders', 'list'] as const,
+  list: (filters?: POFilters) => ['purchaseOrders', 'list', filters] as const,
+  details: () => ['purchaseOrders', 'detail'] as const,
+  detail: (id: string | number) => ['purchaseOrders', 'detail', id] as const,
+};
+
 // ── Aggregate Export ───────────────────────────────────────────
 
 export const queryKeys = {
@@ -162,4 +202,6 @@ export const queryKeys = {
   customers: customerKeys,
   sales: salesKeys,
   hr: hrKeys,
+  vendors: vendorKeys,
+  purchaseOrders: purchaseOrderKeys,
 };

@@ -1,0 +1,14 @@
+export { CustomerAvatar } from './CustomerAvatar';
+export { CustomerQuickStats } from './CustomerQuickStats';
+export { CustomerHeader } from './CustomerHeader';
+export { CustomerTabs } from './CustomerTabs';
+export { OverviewTab } from './OverviewTab';
+export { ContactInfoCard } from './ContactInfoCard';
+export { CreditInfoCard } from './CreditInfoCard';
+export { OrdersTab, OrderHistoryTable } from './OrdersTab';
+export { InvoicesTab, InvoiceHistoryTable } from './InvoicesTab';
+export { CommunicationTab } from './CommunicationTab';
+export { CommunicationTimeline } from './CommunicationTimeline';
+export { AddCommunicationForm } from './AddCommunicationForm';
+export { EditCustomerModal } from './EditCustomerModal';
+export { AdjustCreditModal } from './AdjustCreditModal';

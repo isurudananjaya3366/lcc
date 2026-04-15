@@ -25,9 +25,7 @@ const CUSTOMER_ENDPOINT = '/api/v1/customers';
 
 // ── Customer CRUD ──────────────────────────────────────────────
 
-async function getCustomers(
-  params?: CustomerSearchParams
-): Promise<PaginatedResponse<Customer>> {
+async function getCustomers(params?: CustomerSearchParams): Promise<PaginatedResponse<Customer>> {
   const { data } = await apiClient.get(`${CUSTOMER_ENDPOINT}/`, { params });
   return data;
 }
@@ -37,27 +35,19 @@ async function getCustomerById(id: string): Promise<APIResponse<Customer>> {
   return data;
 }
 
-async function getCustomerByNumber(
-  customerNumber: string
-): Promise<APIResponse<Customer>> {
-  const { data } = await apiClient.get(
-    `${CUSTOMER_ENDPOINT}/by-number/${customerNumber}/`
-  );
+async function getCustomerByNumber(customerNumber: string): Promise<APIResponse<Customer>> {
+  const { data } = await apiClient.get(`${CUSTOMER_ENDPOINT}/by-number/${customerNumber}/`);
   return data;
 }
 
-async function getCustomerByEmail(
-  email: string
-): Promise<APIResponse<Customer>> {
+async function getCustomerByEmail(email: string): Promise<APIResponse<Customer>> {
   const { data } = await apiClient.get(
     `${CUSTOMER_ENDPOINT}/by-email/${encodeURIComponent(email)}/`
   );
   return data;
 }
 
-async function createCustomer(
-  customerData: CustomerCreateRequest
-): Promise<APIResponse<Customer>> {
+async function createCustomer(customerData: CustomerCreateRequest): Promise<APIResponse<Customer>> {
   const { data } = await apiClient.post(`${CUSTOMER_ENDPOINT}/`, customerData);
   return data;
 }
@@ -77,9 +67,7 @@ async function deleteCustomer(id: string): Promise<APIResponse<void>> {
 
 // ── Address Management ─────────────────────────────────────────
 
-async function getCustomerAddresses(
-  customerId: string
-): Promise<APIResponse<CustomerAddress[]>> {
+async function getCustomerAddresses(customerId: string): Promise<APIResponse<CustomerAddress[]>> {
   const { data } = await apiClient.get(`${CUSTOMER_ENDPOINT}/${customerId}/addresses/`);
   return data;
 }
@@ -131,9 +119,7 @@ async function setDefaultAddress(
 
 // ── Contact Management ─────────────────────────────────────────
 
-async function getCustomerContacts(
-  customerId: string
-): Promise<APIResponse<CustomerContact[]>> {
+async function getCustomerContacts(customerId: string): Promise<APIResponse<CustomerContact[]>> {
   const { data } = await apiClient.get(`${CUSTOMER_ENDPOINT}/${customerId}/contacts/`);
   return data;
 }
@@ -184,10 +170,7 @@ async function updateCustomerCredit(
   customerId: string,
   creditData: Partial<CustomerCreditLimit>
 ): Promise<APIResponse<CustomerCreditLimit>> {
-  const { data } = await apiClient.patch(
-    `${CUSTOMER_ENDPOINT}/${customerId}/credit/`,
-    creditData
-  );
+  const { data } = await apiClient.patch(`${CUSTOMER_ENDPOINT}/${customerId}/credit/`, creditData);
   return data;
 }
 
@@ -197,10 +180,9 @@ async function getCustomerTransactions(
   customerId: string,
   params?: { startDate?: string; endDate?: string; transactionType?: string }
 ): Promise<PaginatedResponse<CustomerTransaction>> {
-  const { data } = await apiClient.get(
-    `${CUSTOMER_ENDPOINT}/${customerId}/transactions/`,
-    { params }
-  );
+  const { data } = await apiClient.get(`${CUSTOMER_ENDPOINT}/${customerId}/transactions/`, {
+    params,
+  });
   return data;
 }
 
@@ -209,10 +191,9 @@ async function getCustomerStatement(
   startDate: string,
   endDate: string
 ): Promise<APIResponse<CustomerStatement>> {
-  const { data } = await apiClient.get(
-    `${CUSTOMER_ENDPOINT}/${customerId}/statement/`,
-    { params: { startDate, endDate } }
-  );
+  const { data } = await apiClient.get(`${CUSTOMER_ENDPOINT}/${customerId}/statement/`, {
+    params: { startDate, endDate },
+  });
   return data;
 }
 
@@ -234,9 +215,7 @@ async function recordCustomerPayment(
 
 // ── Loyalty Program ────────────────────────────────────────────
 
-async function getCustomerLoyalty(
-  customerId: string
-): Promise<APIResponse<CustomerLoyalty>> {
+async function getCustomerLoyalty(customerId: string): Promise<APIResponse<CustomerLoyalty>> {
   const { data } = await apiClient.get(`${CUSTOMER_ENDPOINT}/${customerId}/loyalty/`);
   return data;
 }
@@ -247,10 +226,11 @@ async function addLoyaltyPoints(
   referenceType: string,
   referenceId: string
 ): Promise<APIResponse<CustomerLoyalty>> {
-  const { data } = await apiClient.post(
-    `${CUSTOMER_ENDPOINT}/${customerId}/loyalty/add-points/`,
-    { points, referenceType, referenceId }
-  );
+  const { data } = await apiClient.post(`${CUSTOMER_ENDPOINT}/${customerId}/loyalty/add-points/`, {
+    points,
+    referenceType,
+    referenceId,
+  });
   return data;
 }
 
@@ -274,17 +254,41 @@ async function addCustomerNote(
   category?: string,
   isPrivate?: boolean
 ): Promise<APIResponse<CustomerNote>> {
-  const { data } = await apiClient.post(
-    `${CUSTOMER_ENDPOINT}/${customerId}/notes/`,
-    { note, category, isPrivate }
-  );
+  const { data } = await apiClient.post(`${CUSTOMER_ENDPOINT}/${customerId}/notes/`, {
+    note,
+    category,
+    isPrivate,
+  });
   return data;
 }
 
-async function getCustomerNotes(
-  customerId: string
-): Promise<APIResponse<CustomerNote[]>> {
+async function getCustomerNotes(customerId: string): Promise<APIResponse<CustomerNote[]>> {
   const { data } = await apiClient.get(`${CUSTOMER_ENDPOINT}/${customerId}/notes/`);
+  return data;
+}
+
+// ── Import / Export ────────────────────────────────────────────
+
+async function exportCustomers(params?: { fields?: string[]; status?: string }): Promise<Blob> {
+  const { data } = await apiClient.get(`${CUSTOMER_ENDPOINT}/export/`, {
+    params,
+    responseType: 'blob',
+  });
+  return data as unknown as Blob;
+}
+
+async function importCustomers(
+  file: File,
+  options?: { updateExisting?: boolean }
+): Promise<APIResponse<{ imported: number; updated: number; errors: string[] }>> {
+  const formData = new FormData();
+  formData.append('file', file);
+  if (options?.updateExisting) {
+    formData.append('update_existing', 'true');
+  }
+  const { data } = await apiClient.post(`${CUSTOMER_ENDPOINT}/import/`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
   return data;
 }
 
@@ -315,6 +319,8 @@ const customerService = {
   redeemLoyaltyPoints,
   addCustomerNote,
   getCustomerNotes,
+  exportCustomers,
+  importCustomers,
 };
 
 export default customerService;

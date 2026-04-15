@@ -27,9 +27,7 @@ const VENDOR_PAYMENT_ENDPOINT = '/api/v1/vendor-payments';
 
 // ── Vendor CRUD ────────────────────────────────────────────────
 
-async function getVendors(
-  params?: VendorSearchParams
-): Promise<PaginatedResponse<Vendor>> {
+async function getVendors(params?: VendorSearchParams): Promise<PaginatedResponse<Vendor>> {
   const { data } = await apiClient.get(`${VENDOR_ENDPOINT}/`, { params });
   return data;
 }
@@ -39,18 +37,12 @@ async function getVendorById(id: string): Promise<APIResponse<Vendor>> {
   return data;
 }
 
-async function getVendorByNumber(
-  vendorNumber: string
-): Promise<APIResponse<Vendor>> {
-  const { data } = await apiClient.get(
-    `${VENDOR_ENDPOINT}/by-number/${vendorNumber}/`
-  );
+async function getVendorByNumber(vendorNumber: string): Promise<APIResponse<Vendor>> {
+  const { data } = await apiClient.get(`${VENDOR_ENDPOINT}/by-number/${vendorNumber}/`);
   return data;
 }
 
-async function createVendor(
-  vendorData: VendorCreateRequest
-): Promise<APIResponse<Vendor>> {
+async function createVendor(vendorData: VendorCreateRequest): Promise<APIResponse<Vendor>> {
   const { data } = await apiClient.post(`${VENDOR_ENDPOINT}/`, vendorData);
   return data;
 }
@@ -70,9 +62,7 @@ async function deleteVendor(id: string): Promise<APIResponse<void>> {
 
 // ── Vendor Contacts ────────────────────────────────────────────
 
-async function getVendorContacts(
-  vendorId: string
-): Promise<APIResponse<VendorContact[]>> {
+async function getVendorContacts(vendorId: string): Promise<APIResponse<VendorContact[]>> {
   const { data } = await apiClient.get(`${VENDOR_ENDPOINT}/${vendorId}/contacts/`);
   return data;
 }
@@ -81,10 +71,7 @@ async function createVendorContact(
   vendorId: string,
   contactData: Omit<VendorContact, 'id' | 'vendorId'>
 ): Promise<APIResponse<VendorContact>> {
-  const { data } = await apiClient.post(
-    `${VENDOR_ENDPOINT}/${vendorId}/contacts/`,
-    contactData
-  );
+  const { data } = await apiClient.post(`${VENDOR_ENDPOINT}/${vendorId}/contacts/`, contactData);
   return data;
 }
 
@@ -104,17 +91,13 @@ async function deleteVendorContact(
   vendorId: string,
   contactId: string
 ): Promise<APIResponse<void>> {
-  const { data } = await apiClient.delete(
-    `${VENDOR_ENDPOINT}/${vendorId}/contacts/${contactId}/`
-  );
+  const { data } = await apiClient.delete(`${VENDOR_ENDPOINT}/${vendorId}/contacts/${contactId}/`);
   return data;
 }
 
 // ── Vendor Products ────────────────────────────────────────────
 
-async function getVendorProducts(
-  vendorId: string
-): Promise<PaginatedResponse<VendorProduct>> {
+async function getVendorProducts(vendorId: string): Promise<PaginatedResponse<VendorProduct>> {
   const { data } = await apiClient.get(`${VENDOR_ENDPOINT}/${vendorId}/products/`);
   return data;
 }
@@ -123,10 +106,7 @@ async function addVendorProduct(
   vendorId: string,
   productData: Omit<VendorProduct, 'id' | 'vendorId'>
 ): Promise<APIResponse<VendorProduct>> {
-  const { data } = await apiClient.post(
-    `${VENDOR_ENDPOINT}/${vendorId}/products/`,
-    productData
-  );
+  const { data } = await apiClient.post(`${VENDOR_ENDPOINT}/${vendorId}/products/`, productData);
   return data;
 }
 
@@ -164,9 +144,7 @@ async function getPurchaseOrders(params?: {
   return data;
 }
 
-async function getPurchaseOrderById(
-  id: string
-): Promise<APIResponse<PurchaseOrder>> {
+async function getPurchaseOrderById(id: string): Promise<APIResponse<PurchaseOrder>> {
   const { data } = await apiClient.get(`${PO_ENDPOINT}/${id}/`);
   return data;
 }
@@ -210,10 +188,7 @@ async function getVendorInvoices(
   vendorId: string,
   params?: { status?: string; startDate?: string; endDate?: string }
 ): Promise<PaginatedResponse<VendorInvoice>> {
-  const { data } = await apiClient.get(
-    `${VENDOR_ENDPOINT}/${vendorId}/invoices/`,
-    { params }
-  );
+  const { data } = await apiClient.get(`${VENDOR_ENDPOINT}/${vendorId}/invoices/`, { params });
   return data;
 }
 
@@ -237,10 +212,7 @@ async function getVendorPayments(
   vendorId: string,
   params?: { startDate?: string; endDate?: string }
 ): Promise<PaginatedResponse<VendorPayment>> {
-  const { data } = await apiClient.get(
-    `${VENDOR_ENDPOINT}/${vendorId}/payments/`,
-    { params }
-  );
+  const { data } = await apiClient.get(`${VENDOR_ENDPOINT}/${vendorId}/payments/`, { params });
   return data;
 }
 
@@ -250,10 +222,9 @@ async function getVendorPerformance(
   vendorId: string,
   period?: string
 ): Promise<APIResponse<VendorPerformance>> {
-  const { data } = await apiClient.get(
-    `${VENDOR_ENDPOINT}/${vendorId}/performance/`,
-    { params: period ? { period } : undefined }
-  );
+  const { data } = await apiClient.get(`${VENDOR_ENDPOINT}/${vendorId}/performance/`, {
+    params: period ? { period } : undefined,
+  });
   return data;
 }
 
@@ -261,6 +232,31 @@ async function getVendorBalance(
   vendorId: string
 ): Promise<APIResponse<{ totalPayable: number; overdue: number; current: number }>> {
   const { data } = await apiClient.get(`${VENDOR_ENDPOINT}/${vendorId}/balance/`);
+  return data;
+}
+
+// ── Import / Export ────────────────────────────────────────────
+
+async function exportVendors(params?: { fields?: string[]; status?: string }): Promise<Blob> {
+  const { data } = await apiClient.get(`${VENDOR_ENDPOINT}/export/`, {
+    params,
+    responseType: 'blob',
+  });
+  return data as unknown as Blob;
+}
+
+async function importVendors(
+  file: File,
+  options?: { updateExisting?: boolean }
+): Promise<APIResponse<{ imported: number; updated: number; errors: string[] }>> {
+  const formData = new FormData();
+  formData.append('file', file);
+  if (options?.updateExisting) {
+    formData.append('update_existing', 'true');
+  }
+  const { data } = await apiClient.post(`${VENDOR_ENDPOINT}/import/`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
   return data;
 }
 
@@ -291,6 +287,8 @@ const vendorService = {
   getVendorPayments,
   getVendorPerformance,
   getVendorBalance,
+  exportVendors,
+  importVendors,
 };
 
 export default vendorService;
