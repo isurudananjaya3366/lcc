@@ -6,24 +6,24 @@
  */
 
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { salesService } from '@/services/api/salesService';
+import salesService from '@/services/api/salesService';
 import { salesKeys } from '@/lib/queryKeys';
-import type { SalesFilters } from '@/lib/queryKeys';
+import type { OrderSearchParams } from '@/types/sales';
 
 const PAGE_SIZE = 20;
 
-export function useInfiniteOrders(filters?: SalesFilters) {
+export function useInfiniteOrders(filters?: Partial<OrderSearchParams>) {
   return useInfiniteQuery({
-    queryKey: [...salesKeys.list(filters ?? {}), 'infinite'],
+    queryKey: [...salesKeys.list(), 'infinite', filters],
     queryFn: ({ pageParam = 1 }) =>
       salesService.getOrders({
         ...filters,
         page: pageParam as number,
-        page_size: PAGE_SIZE,
+        pageSize: PAGE_SIZE,
       }),
     getNextPageParam: (lastPage, allPages) => {
       const loaded = allPages.length * PAGE_SIZE;
-      return loaded < lastPage.count ? allPages.length + 1 : undefined;
+      return loaded < lastPage.pagination.totalCount ? allPages.length + 1 : undefined;
     },
     initialPageParam: 1,
     staleTime: 1 * 60 * 1000,

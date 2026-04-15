@@ -115,11 +115,7 @@ export default function TwoFactorSetupPage() {
         subtitle="Add an extra layer of security to your account"
       />
 
-      {error && (
-        <AuthAlert type="error" onClose={() => setError(null)}>
-          {error}
-        </AuthAlert>
-      )}
+      {error && <AuthAlert type="error" message={error} onClose={() => setError(null)} />}
 
       <div className="space-y-6">
         {/* Step 1: QR Code */}

@@ -356,14 +356,14 @@ describe('ApiException', () => {
   });
 
   it('should create error with properties', () => {
-    const err = new ApiException('Not Found', 'NOT_FOUND', 404);
+    const err = new ApiException('Not Found', { code: 'NOT_FOUND', status: 404 });
     expect(err.message).toBe('Not Found');
     expect(err.code).toBe('NOT_FOUND');
     expect(err.status).toBe(404);
   });
 
   it('should serialize to JSON', () => {
-    const err = new ApiException('fail', 'ERR', 500);
+    const err = new ApiException('fail', { code: 'ERR', status: 500 });
     const json = err.toJSON();
     expect(json.message).toBe('fail');
     expect(json.code).toBe('ERR');
@@ -371,14 +371,14 @@ describe('ApiException', () => {
   });
 
   it('should identify retryable errors', () => {
-    const err500 = new ApiException('Server Error', 'SERVER_ERROR', 500);
-    const err404 = new ApiException('Not Found', 'NOT_FOUND', 404);
+    const err500 = new ApiException('Server Error', { code: 'SERVER_ERROR', status: 500 });
+    const err404 = new ApiException('Not Found', { code: 'NOT_FOUND', status: 404 });
     expect(isRetryable(err500)).toBe(true);
     expect(isRetryable(err404)).toBe(false);
   });
 
   it('should return user-friendly messages', () => {
-    const err = new ApiException('err', 'ERR', 401);
+    const err = new ApiException('err', { code: 'ERR', status: 401 });
     const msg = getErrorMessage(err);
     expect(typeof msg).toBe('string');
     expect(msg.length).toBeGreaterThan(0);

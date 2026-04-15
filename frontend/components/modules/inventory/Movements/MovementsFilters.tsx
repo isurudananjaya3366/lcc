@@ -35,8 +35,8 @@ function getDateRange(days: number): { startDate: string; endDate: string } {
     start.setDate(start.getDate() - days);
   }
   return {
-    startDate: start.toISOString().split('T')[0],
-    endDate: end.toISOString().split('T')[0],
+    startDate: start.toISOString().split('T')[0] ?? '',
+    endDate: end.toISOString().split('T')[0] ?? '',
   };
 }
 

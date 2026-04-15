@@ -8,7 +8,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Loader2, Plus } from 'lucide-react';
 
 import { transferFormSchema, type TransferFormValues } from '@/lib/validations/transfer';
-import { inventoryService } from '@/services/api';
+import inventoryService from '@/services/api/inventoryService';
 import { inventoryKeys } from '@/lib/queryKeys';
 import { useWarehouses } from '@/hooks/queries/useWarehouses';
 
@@ -39,7 +39,7 @@ export function TransferForm() {
   const queryClient = useQueryClient();
 
   const { data: warehousesData, isLoading: warehousesLoading } = useWarehouses();
-  const warehouses = warehousesData?.results ?? [];
+  const warehouses = warehousesData?.data ?? [];
 
   const form = useForm<TransferFormValues>({
     resolver: zodResolver(transferFormSchema),

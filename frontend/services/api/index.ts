@@ -39,9 +39,12 @@ export {
   type SalesChartPoint,
 } from './dashboardService';
 
-// ── Interceptors ───────────────────────────────────────────────
-export { setupRequestInterceptor } from './interceptors/request.interceptor';
-export { setupResponseInterceptor } from './interceptors/response.interceptor';
+// ── Interceptors ──────────────────────────────────────────────
+export { requestInterceptor, requestErrorHandler } from './interceptors/request.interceptor';
+export {
+  responseSuccessHandler,
+  createResponseErrorHandler,
+} from './interceptors/response.interceptor';
 
 // ── Re-export Types ────────────────────────────────────────────
 export type {
@@ -135,57 +138,3 @@ export type {
 
 // ── Re-export Utility Types ────────────────────────────────────
 export type { InvoiceStatus, Invoice, InvoiceSearchParams } from './invoiceService';
-
-export type {
-  SettingCategory,
-  Setting,
-  TenantSettings,
-  TaxRate,
-  FeatureFlag,
-} from './settingsService';
-
-// ── Utility Functions (Tasks 79-83) ───────────────────────────
-export {
-  buildQueryString,
-  parseQueryString,
-  appendQueryString,
-  updateQueryString,
-} from '@/lib/queryString';
-
-export { buildUrl, buildApiUrl, buildResourceUrl, isAbsoluteUrl } from '@/lib/urlBuilder';
-
-export {
-  buildFormData,
-  appendToFormData,
-  formDataToObject,
-  cloneFormData,
-} from '@/lib/formDataBuilder';
-
-export {
-  validateFile,
-  validateFiles,
-  UploadController,
-  uploadFile,
-  uploadFiles,
-  downloadFile,
-  getFilenameFromHeader,
-  getFilenameFromUrl,
-  triggerDownload,
-  getFileExtension,
-  formatFileSize,
-  getMimeType,
-} from '@/lib/fileHelpers';
-
-// ── Advanced Features (Tasks 84-85) ───────────────────────────
-export { ApiCache, getApiCache, resetApiCache } from '@/lib/apiCache';
-export { RateLimiter } from '@/lib/rateLimiter';
-
-// ── Error Handling ─────────────────────────────────────────────
-export {
-  ApiException,
-  parseApiError,
-  getErrorMessage,
-  isRetryable,
-  retryRequest,
-} from '@/lib/apiError';
-export { ErrorBoundary, ApiErrorBoundary } from '@/components/ErrorBoundary';

@@ -34,9 +34,9 @@ export const Outline: Story = {
 };
 
 export const Success: Story = {
-  args: { variant: 'success', children: 'Active' },
+  args: { variant: 'default', children: 'Active' },
 };
 
 export const Warning: Story = {
-  args: { variant: 'warning', children: 'Pending' },
+  args: { variant: 'secondary', children: 'Pending' },
 };

@@ -193,7 +193,7 @@ export function AttributeSelector({
               <div className="mb-2">
                 <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Quick add:</p>
                 <div className="flex flex-wrap gap-1">
-                  {PREDEFINED_VALUES[attr.name]
+                  {(PREDEFINED_VALUES[attr.name] ?? [])
                     .filter((v) => !attr.values.includes(v))
                     .map((value) => (
                       <button

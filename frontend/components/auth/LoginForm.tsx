@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff } from 'lucide-react';
 import Link from 'next/link';
@@ -41,7 +41,7 @@ export function LoginForm({ onSuccess, redirectUrl = '/dashboard' }: LoginFormPr
   const authStore = useAuthStore();
 
   const form = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(loginSchema) as Resolver<LoginFormData>,
     defaultValues: {
       email: '',
       password: '',
@@ -76,7 +76,7 @@ export function LoginForm({ onSuccess, redirectUrl = '/dashboard' }: LoginFormPr
           firstName: response.user.firstName,
           lastName: response.user.lastName,
           role: response.user.role,
-          avatar: response.user.avatar,
+          avatar: response.user.avatar ?? null,
         },
         null as never, // tenant is set separately if applicable
         response.user.permissions ?? []

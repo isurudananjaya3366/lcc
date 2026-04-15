@@ -1,7 +1,7 @@
 'use client';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { salesService } from '@/services/api/salesService';
+import salesService from '@/services/api/salesService';
 import { salesKeys } from '@/lib/queryKeys';
 import type { OrderPayment } from '@/types/sales';
 

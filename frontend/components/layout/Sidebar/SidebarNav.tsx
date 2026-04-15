@@ -18,61 +18,52 @@ export function SidebarNav({ items, isCollapsed }: SidebarNavProps) {
     const result: MenuItem[][] = [[]];
     for (const item of items) {
       if (item.divider) result.push([]);
-      result[result.length - 1].push(item);
+      result[result.length - 1]?.push(item);
     }
     return result;
   }, [items]);
 
   // Keyboard navigation handler
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent) => {
-      const nav = navRef.current;
-      if (!nav) return;
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    const nav = navRef.current;
+    if (!nav) return;
 
-      const focusableItems = Array.from(
-        nav.querySelectorAll<HTMLElement>(
-          'a[role="menuitem"], button[role="menuitem"]'
-        )
-      );
-      const currentIndex = focusableItems.indexOf(
-        document.activeElement as HTMLElement
-      );
+    const focusableItems = Array.from(
+      nav.querySelectorAll<HTMLElement>('a[role="menuitem"], button[role="menuitem"]')
+    );
+    const currentIndex = focusableItems.indexOf(document.activeElement as HTMLElement);
 
-      switch (e.key) {
-        case 'ArrowDown': {
-          e.preventDefault();
-          const next =
-            currentIndex < focusableItems.length - 1 ? currentIndex + 1 : 0;
-          focusableItems[next]?.focus();
-          break;
-        }
-        case 'ArrowUp': {
-          e.preventDefault();
-          const prev =
-            currentIndex > 0 ? currentIndex - 1 : focusableItems.length - 1;
-          focusableItems[prev]?.focus();
-          break;
-        }
-        case 'Home': {
-          e.preventDefault();
-          focusableItems[0]?.focus();
-          break;
-        }
-        case 'End': {
-          e.preventDefault();
-          focusableItems[focusableItems.length - 1]?.focus();
-          break;
-        }
-        case 'Escape': {
-          e.preventDefault();
-          const mainContent = document.getElementById('main-content');
-          mainContent?.focus();
-          break;
-        }
+    switch (e.key) {
+      case 'ArrowDown': {
+        e.preventDefault();
+        const next = currentIndex < focusableItems.length - 1 ? currentIndex + 1 : 0;
+        focusableItems[next]?.focus();
+        break;
       }
-    },
-    []
-  );
+      case 'ArrowUp': {
+        e.preventDefault();
+        const prev = currentIndex > 0 ? currentIndex - 1 : focusableItems.length - 1;
+        focusableItems[prev]?.focus();
+        break;
+      }
+      case 'Home': {
+        e.preventDefault();
+        focusableItems[0]?.focus();
+        break;
+      }
+      case 'End': {
+        e.preventDefault();
+        focusableItems[focusableItems.length - 1]?.focus();
+        break;
+      }
+      case 'Escape': {
+        e.preventDefault();
+        const mainContent = document.getElementById('main-content');
+        mainContent?.focus();
+        break;
+      }
+    }
+  }, []);
 
   return (
     <nav

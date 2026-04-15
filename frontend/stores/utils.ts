@@ -68,7 +68,7 @@ export function createStore<T extends object>(
             getItem: () => null,
             setItem: () => {},
             removeItem: () => {},
-          } as Storage),
+          } as unknown as Storage),
         ),
         partialize: options?.persistConfig?.partialize as
           | ((state: T) => unknown)
@@ -109,7 +109,7 @@ export function getPersistConfig<T>(
         getItem: () => null,
         setItem: () => {},
         removeItem: () => {},
-      } as Storage),
+      } as unknown as Storage),
     ),
     partialize,
     version: 1,

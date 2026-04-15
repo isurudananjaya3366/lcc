@@ -29,7 +29,7 @@ export function SidebarFooter({ isCollapsed }: SidebarFooterProps) {
       )}
       aria-hidden="true"
     >
-      {user?.first_name?.[0]?.toUpperCase() ?? user?.email?.[0]?.toUpperCase() ?? 'U'}
+      {user?.firstName?.[0]?.toUpperCase() ?? user?.email?.[0]?.toUpperCase() ?? 'U'}
     </div>
   );
 
@@ -47,7 +47,7 @@ export function SidebarFooter({ isCollapsed }: SidebarFooterProps) {
             </button>
           </TooltipTrigger>
           <TooltipContent side="right" sideOffset={8} className="space-y-1 p-2">
-            <p className="font-medium">{user?.first_name ?? 'User'}</p>
+            <p className="font-medium">{user?.firstName ?? 'User'}</p>
             <p className="text-xs text-muted-foreground">{user?.email}</p>
             <hr className="my-1 border-border" />
             <button
@@ -68,7 +68,7 @@ export function SidebarFooter({ isCollapsed }: SidebarFooterProps) {
       <div className="flex items-center gap-3">
         {avatar}
         <div className="flex-1 overflow-hidden">
-          <p className="truncate text-sm font-medium text-gray-100">{user?.first_name ?? 'User'}</p>
+          <p className="truncate text-sm font-medium text-gray-100">{user?.firstName ?? 'User'}</p>
           <p className="truncate text-xs text-gray-400">{user?.email}</p>
         </div>
       </div>

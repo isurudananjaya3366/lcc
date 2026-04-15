@@ -6,7 +6,8 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { salesKeys } from '@/lib/queryKeys';
-import { invoiceService } from '@/services/api';
+import invoiceService from '@/services/api/invoiceService';
+import type { InvoiceSearchParams } from '@/services/api/invoiceService';
 
 interface InvoiceFilters {
   search?: string;
@@ -26,7 +27,7 @@ export type { InvoiceFilters };
 export function useInvoices(filters?: InvoiceFilters) {
   return useQuery({
     queryKey: salesKeys.invoices(),
-    queryFn: () => invoiceService.getInvoices(filters),
+    queryFn: () => invoiceService.getInvoices(filters as InvoiceSearchParams | undefined),
     staleTime: 1 * 60 * 1000,
     placeholderData: (prev) => prev,
     refetchOnWindowFocus: true,
@@ -56,7 +57,8 @@ export function useSendInvoice() {
 export function useVoidInvoice() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => invoiceService.voidInvoice(id),
+    mutationFn: ({ id, reason }: { id: string; reason?: string }) =>
+      invoiceService.voidInvoice(id, reason ?? ''),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: salesKeys.invoices() });
     },

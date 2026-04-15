@@ -4,7 +4,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { productKeys } from '@/lib/queryKeys';
-import { categoryService } from '@/services/api';
+import categoryService from '@/services/api/categoryService';
 
 interface CategoryFilters {
   parentId?: string;
@@ -21,12 +21,12 @@ export function useCategories(filters?: CategoryFilters) {
   return useQuery({
     queryKey: productKeys.categories(),
     queryFn: () =>
-      isTree
+      (isTree
         ? categoryService.getCategoryTree()
         : categoryService.getCategories({
             parentId: filters?.parentId,
             includeInactive: filters?.includeInactive,
-          }),
+          })) as unknown as ReturnType<typeof categoryService.getCategoryTree>,
     staleTime: 30 * 60 * 1000,
     gcTime: 60 * 60 * 1000,
     refetchOnMount: false,

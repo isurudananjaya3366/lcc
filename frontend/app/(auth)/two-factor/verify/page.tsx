@@ -94,9 +94,7 @@ function TwoFactorVerifyContent() {
       </div>
 
       {errorMessage && (
-        <AuthAlert type="error" onClose={() => setErrorMessage(null)}>
-          {errorMessage}
-        </AuthAlert>
+        <AuthAlert type="error" message={errorMessage} onClose={() => setErrorMessage(null)} />
       )}
 
       {noSession ? (

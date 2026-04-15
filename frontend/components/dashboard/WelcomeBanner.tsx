@@ -26,7 +26,7 @@ export function WelcomeBanner() {
     }).format(new Date());
   }, []);
 
-  const firstName = user?.first_name || 'User';
+  const firstName = user?.firstName || 'User';
 
   return (
     <div

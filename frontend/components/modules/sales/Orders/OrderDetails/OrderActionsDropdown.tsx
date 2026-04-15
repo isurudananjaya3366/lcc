@@ -10,7 +10,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { MoreVertical, Edit, Printer, Copy, Mail, FileText, XCircle } from 'lucide-react';
-import type { Order, OrderStatus } from '@/types/sales';
+import type { Order } from '@/types/sales';
+import { OrderStatus } from '@/types/sales';
 
 interface OrderActionsDropdownProps {
   order: Order;
@@ -24,14 +25,24 @@ interface OrderActionsDropdownProps {
   };
 }
 
-const editableStatuses: OrderStatus[] = ['DRAFT', 'CONFIRMED', 'PROCESSING', 'PENDING'];
-const cancellableStatuses: OrderStatus[] = ['DRAFT', 'CONFIRMED', 'PROCESSING', 'PENDING'];
+const editableStatuses: OrderStatus[] = [
+  OrderStatus.DRAFT,
+  OrderStatus.CONFIRMED,
+  OrderStatus.PROCESSING,
+  OrderStatus.PENDING,
+];
+const cancellableStatuses: OrderStatus[] = [
+  OrderStatus.DRAFT,
+  OrderStatus.CONFIRMED,
+  OrderStatus.PROCESSING,
+  OrderStatus.PENDING,
+];
 const invoiceableStatuses: OrderStatus[] = [
-  'CONFIRMED',
-  'PROCESSING',
-  'SHIPPED',
-  'DELIVERED',
-  'COMPLETED',
+  OrderStatus.CONFIRMED,
+  OrderStatus.PROCESSING,
+  OrderStatus.SHIPPED,
+  OrderStatus.DELIVERED,
+  OrderStatus.COMPLETED,
 ];
 
 export function OrderActionsDropdown({ order, callbacks }: OrderActionsDropdownProps) {

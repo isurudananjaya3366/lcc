@@ -34,7 +34,7 @@ export function ProductImageGallery({ images }: ProductImageGalleryProps) {
     setSelectedIndex((prev) => (prev < sortedImages.length - 1 ? prev + 1 : 0));
   }, [sortedImages.length]);
 
-  if (sortedImages.length === 0) {
+  if (sortedImages.length === 0 || !currentImage) {
     return (
       <Card>
         <CardHeader>

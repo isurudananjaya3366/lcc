@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Download, Loader2, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { invoiceService } from '@/services/api';
+import invoiceService from '@/services/api/invoiceService';
 
 interface DownloadPDFButtonProps {
   invoiceId: string;

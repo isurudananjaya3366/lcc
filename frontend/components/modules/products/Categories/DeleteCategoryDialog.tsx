@@ -78,7 +78,7 @@ export function DeleteCategoryDialog({
       description={
         isSimpleDelete
           ? 'This category has no products or subcategories. It will be permanently deleted.'
-          : undefined
+          : 'Please select how to handle the associated products and subcategories before deleting.'
       }
       variant="destructive"
       confirmText="Delete Category"

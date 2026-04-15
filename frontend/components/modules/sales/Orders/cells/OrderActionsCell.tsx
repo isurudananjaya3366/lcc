@@ -10,7 +10,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { MoreVertical, Eye, Edit, Copy, Printer, Trash2 } from 'lucide-react';
-import type { Order, OrderStatus } from '@/types/sales';
+import { OrderStatus } from '@/types/sales';
+import type { Order } from '@/types/sales';
 
 interface OrderActionsCellProps {
   order: Order;
@@ -19,11 +20,11 @@ interface OrderActionsCellProps {
 }
 
 const nonEditableStatuses: OrderStatus[] = [
-  'SHIPPED',
-  'DELIVERED',
-  'COMPLETED',
-  'CANCELLED',
-  'REFUNDED',
+  OrderStatus.SHIPPED,
+  OrderStatus.DELIVERED,
+  OrderStatus.COMPLETED,
+  OrderStatus.CANCELLED,
+  OrderStatus.REFUNDED,
 ];
 
 export function OrderActionsCell({ order, onDuplicate, onDelete }: OrderActionsCellProps) {

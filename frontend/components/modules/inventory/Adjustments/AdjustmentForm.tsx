@@ -9,7 +9,7 @@ import { Loader2, Plus } from 'lucide-react';
 
 import { adjustmentFormSchema, type AdjustmentFormValues } from '@/lib/validations/adjustment';
 import { AdjustmentReason } from '@/types/inventory';
-import { inventoryService } from '@/services/api';
+import inventoryService from '@/services/api/inventoryService';
 import { inventoryKeys } from '@/lib/queryKeys';
 
 import {
@@ -49,7 +49,7 @@ export function AdjustmentForm() {
   const queryClient = useQueryClient();
 
   const { data: warehousesData, isLoading: warehousesLoading } = useWarehouses();
-  const warehouses = warehousesData?.results ?? [];
+  const warehouses = warehousesData?.data ?? [];
 
   const form = useForm<AdjustmentFormValues>({
     resolver: zodResolver(adjustmentFormSchema),

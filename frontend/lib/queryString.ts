@@ -69,13 +69,7 @@ function flattenParams(
     } else if (value instanceof Date) {
       pairs.push(encodeEntry(fullKey, value.toISOString(), opts));
     } else if (typeof value === 'object') {
-      flattenParams(
-        value as Record<string, unknown>,
-        fullKey,
-        pairs,
-        opts,
-        depth + 1
-      );
+      flattenParams(value as Record<string, unknown>, fullKey, pairs, opts, depth + 1);
     } else {
       pairs.push(encodeEntry(fullKey, String(value), opts));
     }
@@ -96,9 +90,7 @@ function appendArray(
 
   switch (opts.arrayFormat) {
     case 'comma':
-      pairs.push(
-        encodeEntry(key, values.map(String).join(','), opts)
-      );
+      pairs.push(encodeEntry(key, values.map(String).join(','), opts));
       break;
     case 'bracket':
       for (const v of values) {
@@ -119,11 +111,7 @@ function appendArray(
   }
 }
 
-function encodeEntry(
-  key: string,
-  value: string,
-  opts: Required<QueryStringOptions>
-): string {
+function encodeEntry(key: string, value: string, opts: Required<QueryStringOptions>): string {
   if (!opts.encode) return `${key}=${value}`;
   if (opts.encodeValuesOnly) return `${key}=${encodeURIComponent(value)}`;
   return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
@@ -149,7 +137,11 @@ export function parseQueryString(qs: string): Record<string, string> {
   return result;
 }
 
-export function appendQueryString(url: string, params: Record<string, unknown>, options?: QueryStringOptions): string {
+export function appendQueryString(
+  url: string,
+  params: Record<string, unknown>,
+  options?: QueryStringOptions
+): string {
   const qs = buildQueryString(params, options);
   if (!qs) return url;
   const separator = url.includes('?') ? '&' : '?';
@@ -161,7 +153,7 @@ export function updateQueryString(
   updates: Record<string, unknown>,
   options?: QueryStringOptions
 ): string {
-  const [base, existing] = url.split('?');
+  const [base, existing] = url.split('?') as [string, string | undefined];
   const current = existing ? parseQueryString(existing) : {};
   const merged = { ...current, ...updates };
   const qs = buildQueryString(merged, options);

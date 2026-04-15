@@ -13,6 +13,7 @@ const PLANS = [
     name: 'Starter',
     price: '₨5,000',
     period: '/month',
+    popular: false,
     features: [
       'Up to 5 users',
       'Basic POS',
@@ -41,6 +42,7 @@ const PLANS = [
     name: 'Enterprise',
     price: 'Custom',
     period: '',
+    popular: false,
     features: [
       'Unlimited users',
       'Full ERP suite',

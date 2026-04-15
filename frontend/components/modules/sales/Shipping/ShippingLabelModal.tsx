@@ -1,6 +1,6 @@
 'use client';
 
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Dialog,
@@ -56,7 +56,7 @@ export function ShippingLabelModal({
     formState: { errors },
     reset,
   } = useForm<ShippingFormValues>({
-    resolver: zodResolver(shippingFormSchema),
+    resolver: zodResolver(shippingFormSchema) as Resolver<ShippingFormValues>,
     defaultValues: {
       carrier: '',
       serviceLevel: 'STANDARD',

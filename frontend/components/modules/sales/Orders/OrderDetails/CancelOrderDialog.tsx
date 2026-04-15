@@ -2,15 +2,14 @@
 
 import { useState } from 'react';
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import type { Order } from '@/types/sales';
@@ -38,15 +37,15 @@ export function CancelOrderDialog({ isOpen, onClose, order, onConfirm }: CancelO
   };
 
   return (
-    <AlertDialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Cancel Order {order.orderNumber}?</AlertDialogTitle>
-          <AlertDialogDescription>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Cancel Order {order.orderNumber}?</DialogTitle>
+          <DialogDescription>
             This action cannot be undone. The order will be marked as cancelled and the customer
             will be notified.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
+          </DialogDescription>
+        </DialogHeader>
 
         <div className="py-2">
           <Label htmlFor="cancelReason">Reason for cancellation</Label>
@@ -60,17 +59,15 @@ export function CancelOrderDialog({ isOpen, onClose, order, onConfirm }: CancelO
           />
         </div>
 
-        <AlertDialogFooter>
-          <AlertDialogCancel disabled={isSubmitting}>Keep Order</AlertDialogCancel>
-          <AlertDialogAction
-            onClick={handleConfirm}
-            disabled={isSubmitting}
-            className="bg-red-600 hover:bg-red-700"
-          >
+        <DialogFooter>
+          <Button variant="outline" onClick={onClose} disabled={isSubmitting}>
+            Keep Order
+          </Button>
+          <Button variant="destructive" onClick={handleConfirm} disabled={isSubmitting}>
             {isSubmitting ? 'Cancelling...' : 'Cancel Order'}
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }

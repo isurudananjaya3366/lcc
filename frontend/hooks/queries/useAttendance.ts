@@ -4,7 +4,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { hrKeys } from '@/lib/queryKeys';
-import { attendanceService } from '@/services/api';
+import attendanceService from '@/services/api/attendanceService';
 
 interface AttendanceFilters {
   employeeId?: string;
@@ -23,7 +23,10 @@ export type { AttendanceFilters };
 export function useAttendance(filters: AttendanceFilters) {
   return useQuery({
     queryKey: hrKeys.attendance(),
-    queryFn: () => attendanceService.getAttendance(filters),
+    queryFn: () =>
+      attendanceService.getAttendance(
+        filters as Parameters<typeof attendanceService.getAttendance>[0]
+      ),
     staleTime: 30 * 1000,
     placeholderData: (prev) => prev,
     refetchOnWindowFocus: true,

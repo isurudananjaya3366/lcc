@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -31,7 +31,7 @@ export function NewQuoteForm() {
     setValue,
     formState: { errors },
   } = useForm<QuoteFormValues>({
-    resolver: zodResolver(quoteFormSchema),
+    resolver: zodResolver(quoteFormSchema) as Resolver<QuoteFormValues>,
     defaultValues: {
       customerId: '',
       expiryDate: '',

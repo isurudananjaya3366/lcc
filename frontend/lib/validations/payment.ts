@@ -14,11 +14,9 @@ export type PaymentMethodValue = (typeof paymentMethods)[number]['value'];
 export const paymentFormSchema = z.object({
   paymentMethod: z.enum(
     ['CASH', 'BANK_TRANSFER', 'CREDIT_CARD', 'DEBIT_CARD', 'CHEQUE', 'ONLINE'],
-    { required_error: 'Payment method is required' }
+    { message: 'Payment method is required' }
   ),
-  amount: z.coerce
-    .number({ required_error: 'Amount is required' })
-    .positive('Amount must be positive'),
+  amount: z.coerce.number({ message: 'Amount is required' }).positive('Amount must be positive'),
   referenceNumber: z.string().max(100, 'Max 100 characters').optional(),
   paymentDate: z.string().min(1, 'Payment date is required'),
   notes: z.string().max(500, 'Max 500 characters').optional(),

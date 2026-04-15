@@ -54,7 +54,7 @@ export function ImageUploadZone({
       }
 
       if (errors.length > 0) {
-        setError(errors[0]);
+        setError(errors[0] ?? 'Unknown error');
       }
 
       if (valid.length > 0) {

@@ -45,6 +45,7 @@ export function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
         document.body.style.overflow = '';
       };
     }
+    return undefined;
   }, [isOpen, isMobile]);
 
   // Close on Escape

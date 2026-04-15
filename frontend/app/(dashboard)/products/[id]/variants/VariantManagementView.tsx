@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Plus } from 'lucide-react';
 import type { Product, ProductVariant, ProductStatus } from '@/types/product';
+import { ProductType, UnitOfMeasure } from '@/types/product';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
@@ -15,9 +16,9 @@ const MOCK_PRODUCT: Product = {
   tenantId: 'tenant-1',
   sku: 'PROD-001',
   name: 'Sample Product',
-  productType: 'VARIABLE' as const,
+  productType: ProductType.VARIABLE,
   status: 'ACTIVE' as unknown as ProductStatus,
-  unitOfMeasure: 'PIECE' as const,
+  unitOfMeasure: UnitOfMeasure.PIECE,
   pricing: {
     basePrice: 2500,
     cost: 1800,

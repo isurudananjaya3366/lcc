@@ -6,7 +6,7 @@
  */
 
 import { createMutationHooks } from './mutationFactory';
-import { customerService } from '@/services/api/customerService';
+import customerService from '@/services/api/customerService';
 
 export const {
   useCreate: useCreateCustomer,
@@ -16,5 +16,7 @@ export const {
   resource: 'customers',
   createFn: customerService.createCustomer,
   updateFn: customerService.updateCustomer,
-  deleteFn: customerService.deleteCustomer,
+  deleteFn: async (id: string) => {
+    await customerService.deleteCustomer(id);
+  },
 });

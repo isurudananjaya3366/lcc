@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { useInvoices } from '@/hooks/queries/useInvoices';
 import type { InvoiceFilters as InvoiceFilterParams } from '@/hooks/queries/useInvoices';
+import type { Invoice } from '@/services/api/invoiceService';
+import { InvoiceStatus } from '@/services/api/invoiceService';
 import { InvoicesHeader } from './InvoicesHeader';
 import { InvoiceSummaryCards } from './InvoiceSummaryCards';
 import { InvoiceFilters, type InvoiceFilterValues } from './InvoiceFilters';
@@ -22,13 +24,16 @@ export function InvoicesList() {
   };
 
   const { data, isLoading } = useInvoices(queryFilters);
-  const invoices = Array.isArray(data) ? data : (data?.results ?? []);
+  const invoices: Invoice[] = Array.isArray(data) ? data : (data?.data ?? []);
 
   const totalInvoices = invoices.length;
   const paidTotal = invoices
-    .filter((inv) => inv.status === 'paid')
-    .reduce((sum, inv) => sum + inv.total, 0);
-  const outstandingTotal = invoices.reduce((sum, inv) => sum + (inv.balanceDue || 0), 0);
+    .filter((inv: Invoice) => inv.status === InvoiceStatus.PAID)
+    .reduce((sum: number, inv: Invoice) => sum + inv.total, 0);
+  const outstandingTotal = invoices.reduce(
+    (sum: number, inv: Invoice) => sum + (inv.balanceDue || 0),
+    0
+  );
 
   return (
     <div className="space-y-6">

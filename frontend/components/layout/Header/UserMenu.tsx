@@ -53,9 +53,9 @@ export function UserMenu() {
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
-        <UserAvatar name={user?.first_name} email={user?.email} size="sm" />
+        <UserAvatar name={user?.firstName} email={user?.email} size="sm" />
         <span className="hidden max-w-[100px] truncate text-sm font-medium text-gray-700 dark:text-gray-300 lg:inline">
-          {user?.first_name ?? 'User'}
+          {user?.firstName ?? 'User'}
         </span>
         <ChevronDown
           className={cn(
@@ -75,7 +75,7 @@ export function UserMenu() {
             {/* User info */}
             <div className="border-b px-4 py-3 dark:border-gray-700">
               <p className="truncate text-sm font-medium text-gray-900 dark:text-gray-100">
-                {user?.first_name} {user?.last_name}
+                {user?.firstName} {user?.lastName}
               </p>
               <p className="truncate text-xs text-gray-500 dark:text-gray-400">{user?.email}</p>
             </div>

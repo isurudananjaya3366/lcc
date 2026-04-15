@@ -28,11 +28,11 @@ export const productFormSchema = z
 
     // Pricing
     cost_price: z
-      .number({ invalid_type_error: 'Cost price must be a number' })
+      .number({ message: 'Cost price must be a number' })
       .min(0, 'Cost price must be 0 or greater')
       .transform((v) => Math.round(v * 100) / 100),
     selling_price: z
-      .number({ invalid_type_error: 'Selling price must be a number' })
+      .number({ message: 'Selling price must be a number' })
       .min(0, 'Selling price must be 0 or greater')
       .transform((v) => Math.round(v * 100) / 100),
     tax_category_id: z.string().optional().or(z.literal('')),
@@ -40,12 +40,12 @@ export const productFormSchema = z
     // Inventory
     track_inventory: z.boolean().default(true),
     initial_stock: z
-      .number({ invalid_type_error: 'Initial stock must be a number' })
+      .number({ message: 'Initial stock must be a number' })
       .int('Initial stock must be a whole number')
       .min(0, 'Initial stock must be 0 or greater')
       .optional(),
     reorder_point: z
-      .number({ invalid_type_error: 'Reorder point must be a number' })
+      .number({ message: 'Reorder point must be a number' })
       .int('Reorder point must be a whole number')
       .min(0, 'Reorder point must be 0 or greater')
       .optional(),

@@ -12,7 +12,7 @@ export const adjustmentItemSchema = z.object({
 export const adjustmentFormSchema = z.object({
   warehouseId: z.string().min(1, 'Warehouse is required'),
   reason: z.nativeEnum(AdjustmentReason, {
-    errorMap: () => ({ message: 'Reason is required' }),
+    error: 'Reason is required',
   }),
   reasonNotes: z.string().max(500).optional(),
   items: z.array(adjustmentItemSchema).min(1, 'At least one product must be added'),

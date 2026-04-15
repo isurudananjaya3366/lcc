@@ -5,8 +5,9 @@ import { useSearchParams } from 'next/navigation';
 import { type SortingState, type PaginationState } from '@tanstack/react-table';
 import { useQuery } from '@tanstack/react-query';
 import { inventoryKeys } from '@/lib/queryKeys';
-import { inventoryService } from '@/services/api';
+import inventoryService from '@/services/api/inventoryService';
 
+import { StockMovementStatus } from '@/types/inventory';
 import { TransfersHeader } from './TransfersHeader';
 import { TransfersTable } from './TransfersTable';
 
@@ -30,13 +31,13 @@ export function TransfersList() {
       inventoryService.getStockTransfers({
         sourceWarehouseId: sourceFilter,
         destinationWarehouseId: destFilter,
-        status: statusFilter as 'PENDING' | 'COMPLETED' | 'CANCELLED' | undefined,
+        status: statusFilter as StockMovementStatus | undefined,
       }),
     staleTime: 2 * 60 * 1000,
   });
 
-  const transfers = data?.results ?? [];
-  const totalCount = data?.count ?? 0;
+  const transfers = data?.data ?? [];
+  const totalCount = data?.pagination.totalCount ?? 0;
 
   return (
     <div className="space-y-6">

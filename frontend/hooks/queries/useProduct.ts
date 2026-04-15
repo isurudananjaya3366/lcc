@@ -4,7 +4,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { productKeys } from '@/lib/queryKeys';
-import { productService } from '@/services/api';
+import productService from '@/services/api/productService';
 
 export function useProduct(
   id: string,

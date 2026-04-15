@@ -1,6 +1,6 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
+import { useForm, type Resolver, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
@@ -53,7 +53,7 @@ export function CategoryForm({
     watch,
     formState: { errors },
   } = useForm<CategoryFormData>({
-    resolver: zodResolver(categorySchema),
+    resolver: zodResolver(categorySchema) as Resolver<CategoryFormData>,
     defaultValues: {
       name: initialData?.name || '',
       slug: initialData?.slug || '',
@@ -74,7 +74,7 @@ export function CategoryForm({
   // Image state managed outside RHF since it's a File object
   const imageFileRef = { current: null as File | null };
 
-  const handleFormSubmit = (data: CategoryFormData) => {
+  const handleFormSubmit: SubmitHandler<CategoryFormData> = (data) => {
     onSubmit(data, imageFileRef.current);
   };
 

@@ -8,7 +8,7 @@
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { QueryClient, QueryKey } from '@tanstack/react-query';
-import { productService } from '@/services/api/productService';
+import productService from '@/services/api/productService';
 import { productKeys } from '@/lib/queryKeys';
 import { invalidateCache, removeFromCache, getRelatedResources } from './cacheInvalidation';
 import type { Product, ProductCreateRequest, ProductUpdateRequest } from '@/types/product';
@@ -83,10 +83,10 @@ export function useUpdateProduct() {
         if (!listData) return;
         queryClient.setQueryData<PaginatedResponse<Product>>(key, {
           ...listData,
-          results: listData.results.map((item) => {
+          data: listData.data.map((item) => {
             const productItem = item as Product & { id: string };
             return productItem.id === id ? { ...productItem, ...updates } : item;
-          }),
+          }) as Product[],
         });
       });
 
@@ -126,7 +126,7 @@ export function useDeleteProduct() {
     mutationFn: (id: string) => productService.deleteProduct(id),
 
     onMutate: async (id) => {
-      await queryClient.cancelQueries({ queryKey: productKeys.all });
+      await queryClient.cancelQueries({ queryKey: productKeys.all() });
     },
 
     onSuccess: (_data, id) => {

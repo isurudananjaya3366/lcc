@@ -2,6 +2,7 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { type Resolver } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
@@ -11,7 +12,7 @@ import {
   warehouseFormDefaults,
   type WarehouseFormValues,
 } from '@/lib/validations/warehouse';
-import { warehouseService } from '@/services/api';
+import warehouseService from '@/services/api/warehouseService';
 import { inventoryKeys } from '@/lib/queryKeys';
 
 import { Form } from '@/components/ui/form';
@@ -38,7 +39,7 @@ export function WarehouseForm({ warehouseId }: WarehouseFormProps) {
   });
 
   const form = useForm<WarehouseFormValues>({
-    resolver: zodResolver(warehouseFormSchema),
+    resolver: zodResolver(warehouseFormSchema) as Resolver<WarehouseFormValues>,
     defaultValues: warehouseFormDefaults,
     values: existing?.data
       ? {

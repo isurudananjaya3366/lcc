@@ -4,7 +4,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { inventoryKeys } from '@/lib/queryKeys';
-import { warehouseService } from '@/services/api';
+import warehouseService from '@/services/api/warehouseService';
 
 interface WarehouseFilters {
   status?: 'all' | 'active' | 'inactive';

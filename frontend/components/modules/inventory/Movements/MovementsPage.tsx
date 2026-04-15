@@ -40,8 +40,8 @@ export function MovementsPage() {
 
   const { data, isLoading } = useStockMovements(filters);
 
-  const movements = data?.results ?? [];
-  const totalCount = data?.count ?? 0;
+  const movements = data?.data ?? [];
+  const totalCount = data?.pagination.totalCount ?? 0;
 
   const handleViewChange = useCallback((newView: 'timeline' | 'table') => {
     setView(newView);

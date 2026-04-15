@@ -75,9 +75,10 @@ export function ProductList({
       if (newFilters.status !== 'all') params.set('status', newFilters.status);
       if (newFilters.category) params.set('category', newFilters.category);
       if (newFilters.stock !== 'all') params.set('stock', newFilters.stock);
-      if (newSorting.length > 0) {
-        params.set('sort', newSorting[0].id);
-        params.set('order', newSorting[0].desc ? 'desc' : 'asc');
+      const firstSort = newSorting[0];
+      if (firstSort) {
+        params.set('sort', firstSort.id);
+        params.set('order', firstSort.desc ? 'desc' : 'asc');
       }
       if (newPagination.pageIndex > 0) {
         params.set('page', String(newPagination.pageIndex + 1));

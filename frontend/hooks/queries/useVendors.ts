@@ -4,7 +4,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { customerKeys } from '@/lib/queryKeys';
-import { vendorService } from '@/services/api';
+import vendorService from '@/services/api/vendorService';
 
 interface VendorFilters {
   search?: string;
@@ -23,7 +23,8 @@ export function useVendors(filters?: VendorFilters) {
   return useQuery({
     // Vendors don't have their own top-level key factory; use a manual key
     queryKey: ['vendors', 'list', filters] as const,
-    queryFn: () => vendorService.getVendors(filters),
+    queryFn: () =>
+      vendorService.getVendors(filters as Parameters<typeof vendorService.getVendors>[0]),
     staleTime: 5 * 60 * 1000,
     placeholderData: (prev) => prev,
     refetchOnWindowFocus: true,

@@ -70,11 +70,7 @@ export default function ResendVerificationPage() {
         </div>
       ) : (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          {error && (
-            <AuthAlert type="error" onClose={() => setError(null)}>
-              {error}
-            </AuthAlert>
-          )}
+          {error && <AuthAlert type="error" message={error} onClose={() => setError(null)} />}
 
           <div className="space-y-2">
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">

@@ -3,7 +3,7 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { reportsService } from '@/services/api';
+import reportsService from '@/services/api/reportsService';
 
 interface StatsFilters {
   period?: 'today' | 'week' | 'month' | 'year';

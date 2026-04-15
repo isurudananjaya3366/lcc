@@ -40,12 +40,7 @@ export interface FileUploadOptions {
   formDataOptions?: FormDataOptions;
 }
 
-export type UploadState =
-  | 'pending'
-  | 'uploading'
-  | 'completed'
-  | 'failed'
-  | 'cancelled';
+export type UploadState = 'pending' | 'uploading' | 'completed' | 'failed' | 'cancelled';
 
 export interface ValidationResult {
   valid: boolean;
@@ -64,10 +59,7 @@ export interface DownloadOptions {
 
 // ── Validation ─────────────────────────────────────────────────
 
-export function validateFile(
-  file: File,
-  rules: FileValidationRules
-): ValidationResult {
+export function validateFile(file: File, rules: FileValidationRules): ValidationResult {
   const errors: string[] = [];
 
   if (rules.maxSize && file.size > rules.maxSize) {
@@ -92,13 +84,9 @@ export function validateFile(
 
   if (rules.allowedExtensions && rules.allowedExtensions.length > 0) {
     const ext = getFileExtension(file.name);
-    const normalized = rules.allowedExtensions.map((e) =>
-      e.startsWith('.') ? e : `.${e}`
-    );
+    const normalized = rules.allowedExtensions.map((e) => (e.startsWith('.') ? e : `.${e}`));
     if (!normalized.includes(ext.toLowerCase())) {
-      errors.push(
-        `File extension "${ext}" is not allowed. Allowed: ${normalized.join(', ')}`
-      );
+      errors.push(`File extension "${ext}" is not allowed. Allowed: ${normalized.join(', ')}`);
     }
   }
 
@@ -109,10 +97,7 @@ export function validateFile(
   return { valid: errors.length === 0, errors };
 }
 
-export function validateFiles(
-  files: File[],
-  rules: FileValidationRules
-): ValidationResult {
+export function validateFiles(files: File[], rules: FileValidationRules): ValidationResult {
   const errors: string[] = [];
 
   if (rules.maxFiles && files.length > rules.maxFiles) {
@@ -196,10 +181,7 @@ export function uploadFile(
   }
 
   // Build FormData
-  const fd = buildFormData(
-    { [fieldName]: file, ...additionalData },
-    formDataOptions
-  );
+  const fd = buildFormData({ [fieldName]: file, ...additionalData }, formDataOptions);
 
   const xhr = new XMLHttpRequest();
   const controller = new UploadController(xhr);
@@ -282,12 +264,8 @@ export function uploadFiles(
 
 // ── Download ───────────────────────────────────────────────────
 
-export function downloadFile(
-  url: string,
-  options: DownloadOptions = {}
-): Promise<void> {
-  const { filename, onProgress, headers = {}, timeout = 0, withCredentials = false } =
-    options;
+export function downloadFile(url: string, options: DownloadOptions = {}): Promise<void> {
+  const { filename, onProgress, headers = {}, timeout = 0, withCredentials = false } = options;
 
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
@@ -338,11 +316,11 @@ export function getFilenameFromHeader(header: string | null): string | null {
 
   // filename*=utf-8''encoded_name
   const utf8Match = header.match(/filename\*\s*=\s*utf-8''(.+)/i);
-  if (utf8Match) return decodeURIComponent(utf8Match[1]);
+  if (utf8Match) return decodeURIComponent(utf8Match[1] ?? '');
 
   // filename="name" or filename=name
   const match = header.match(/filename\s*=\s*"?([^";]+)"?/i);
-  return match ? match[1].trim() : null;
+  return match ? (match[1] ?? '').trim() : null;
 }
 
 export function getFilenameFromUrl(url: string): string | null {
@@ -393,11 +371,9 @@ export function getMimeType(filename: string): string {
     '.webp': 'image/webp',
     '.pdf': 'application/pdf',
     '.doc': 'application/msword',
-    '.docx':
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     '.xls': 'application/vnd.ms-excel',
-    '.xlsx':
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     '.csv': 'text/csv',
     '.txt': 'text/plain',
     '.zip': 'application/zip',

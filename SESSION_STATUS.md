@@ -138,6 +138,73 @@ The `users` app provides **complementary** tenant-scoped models (profile, prefer
 
 ---
 
+## Frontend TypeScript & Lint Checking
+
+### TypeScript Check Commands
+
+**Working command** (run from the `frontend/` directory):
+
+```bash
+node node_modules/typescript/bin/tsc --noEmit --pretty false
+```
+
+**Why NOT `npx tsc` or `pnpm tsc` or `.bin/tsc`?**
+- The `.bin/tsc` symlink is **missing** from `node_modules/.bin/` in this project
+- Must use the full path: `node node_modules/typescript/bin/tsc`
+- `npx tsc` and `pnpm exec tsc` will also fail for the same reason
+
+**Why NOT pipe output through `grep` or `| head`?**
+- The terminal returns "stdout is not a tty" when piping tsc output
+- Workaround: Write a `.cjs` helper script (NOT `.js` — the project uses `"type": "module"` which treats all `.js` as ESM)
+
+**Temp helper script pattern** (create `frontend/check_ts.cjs`, delete when done):
+
+```js
+// check_ts.cjs — CommonJS (.cjs extension required due to "type": "module" in package.json)
+const { spawnSync } = require('child_process');
+const r = spawnSync('node', ['node_modules/typescript/bin/tsc', '--noEmit', '--pretty', 'false'], {
+  encoding: 'utf8', maxBuffer: 10 * 1024 * 1024
+});
+const out = (r.stdout || '') + (r.stderr || '');
+const lines = out.split('\n').filter(l => l.includes('error TS'));
+process.stdout.write('Total errors: ' + lines.length + '\n');
+lines.forEach(l => process.stdout.write(l + '\n'));
+```
+
+Run: `node check_ts.cjs` then `rm check_ts.cjs` when done.
+
+### Installing Packages (pnpm Workspace Quirk)
+
+- `pnpm add <package>` **fails** with "adding to workspace root" error
+- **Correct approach:** Edit `frontend/package.json` devDependencies directly, then run `pnpm install` from `frontend/`
+- The workspace root IS `frontend/` (it contains `pnpm-workspace.yaml` + `pnpm-lock.yaml`)
+- Filter flags like `--filter .` or `--filter @lankacommerce/frontend` also fail in this setup
+
+### ESLint
+
+- ESLint is configured in the project
+- There is **no `lint` npm script** currently in `frontend/package.json`
+- Run manually: `node node_modules/eslint/bin/eslint.js . --ext .ts,.tsx`
+
+### Common TypeScript Error Patterns
+
+| Pattern | Cause | Fix |
+| ------- | ----- | --- |
+| `T \| undefined` on array access | `noUncheckedIndexedAccess` in tsconfig | Add `?? fallback` or guard: `const x = arr[i]; if (x) { ... }` |
+| `zodResolver(schema)` mismatch | 3rd generic param differs | Cast: `zodResolver(schema) as Resolver<FormType>` |
+| `form.control` in sub-component | Generic inference fails | Cast: `form.control as Control<FormType>` |
+| `request.json()` spread (msw v2) | Returns `unknown` not `object` | Cast: `await request.json() as Record<string, unknown>` |
+| Storybook render-only story | CSF v3 requires `args` field | Add `args: { someField: defaultValue }` |
+| `ApiException` constructor | Old API: `(msg, code, status)` | New API: `(msg, { code, status })` |
+
+### Key Package Facts
+
+- **recharts** — needed by `SalesChart.tsx` (added in Session 61)
+- **msw v2** — test mocks; v2 has breaking changes from v1 (e.g., `request.json()` returns `unknown`)
+- **vitest** — test runner for `__tests__/` files
+
+---
+
 ## Test Results (Docker PostgreSQL)
 
 | Test Scope             | Passed | Failed | Notes                                                                                                                                                                                                             |

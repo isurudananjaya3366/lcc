@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -16,7 +16,14 @@ import {
 } from '@/lib/validations/register';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { AuthAlert } from '@/components/auth/AuthAlert';
 import { StepIndicator } from '@/components/auth/StepIndicator';
 import { BusinessInfoStep } from './register/BusinessInfoStep';
@@ -52,7 +59,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<RegistrationFormData>({
-    resolver: zodResolver(registrationSchema),
+    resolver: zodResolver(registrationSchema) as Resolver<RegistrationFormData>,
     defaultValues: {
       businessName: '',
       businessType: undefined,
@@ -130,7 +137,10 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
       }
     } catch (err: unknown) {
       const errorObj = err as {
-        response?: { status?: number; data?: { message?: string; errors?: Record<string, string[]> } };
+        response?: {
+          status?: number;
+          data?: { message?: string; errors?: Record<string, string[]> };
+        };
       };
       const status = errorObj?.response?.status;
       const responseData = errorObj?.response?.data;
@@ -162,9 +172,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6" noValidate>
         <StepIndicator currentStep={currentStep} totalSteps={TOTAL_STEPS} />
 
-        {error && (
-          <AuthAlert type="error" message={error} onClose={() => setError(null)} />
-        )}
+        {error && <AuthAlert type="error" message={error} onClose={() => setError(null)} />}
 
         {/* Step Content */}
         {currentStep === 1 && <BusinessInfoStep form={form} disabled={isLoading} />}
@@ -226,12 +234,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
             </Button>
           )}
           {currentStep < TOTAL_STEPS ? (
-            <Button
-              type="button"
-              onClick={handleNext}
-              disabled={isLoading}
-              className="flex-1"
-            >
+            <Button type="button" onClick={handleNext} disabled={isLoading} className="flex-1">
               Next
             </Button>
           ) : (

@@ -4,7 +4,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { hrKeys } from '@/lib/queryKeys';
-import { employeeService } from '@/services/api';
+import employeeService from '@/services/api/employeeService';
 
 export function useEmployee(
   id: string,

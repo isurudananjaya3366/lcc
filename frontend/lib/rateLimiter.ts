@@ -71,10 +71,7 @@ export class RateLimiter {
   private queue: QueuedRequest<unknown>[] = [];
   private processing = false;
 
-  constructor(
-    options?: RateLimiterOptions,
-    retryOptions?: RateLimitRetryOptions
-  ) {
+  constructor(options?: RateLimiterOptions, retryOptions?: RateLimitRetryOptions) {
     this.options = { ...DEFAULT_OPTIONS, ...options };
     this.retryOpts = { ...DEFAULT_RETRY, ...retryOptions };
 
@@ -126,8 +123,7 @@ export class RateLimiter {
         if (!isRetryable || attempt === opts.maxRetries) break;
 
         const retryAfter = this.getRetryAfterMs(err);
-        const backoff =
-          retryAfter ?? opts.retryDelay * Math.pow(opts.retryBackoff, attempt);
+        const backoff = retryAfter ?? opts.retryDelay * Math.pow(opts.retryBackoff, attempt);
         await this.delay(backoff);
       }
     }
@@ -157,9 +153,7 @@ export class RateLimiter {
 
   private canProceedSliding(): boolean {
     const now = Date.now();
-    this.timestamps = this.timestamps.filter(
-      (t) => now - t < this.options.windowMs
-    );
+    this.timestamps = this.timestamps.filter((t) => now - t < this.options.windowMs);
     return this.timestamps.length < this.options.maxRequests;
   }
 
@@ -236,10 +230,7 @@ export class RateLimiter {
 
   // ── Retry Helpers ────────────────────────────────────────────
 
-  private isRetryableError(
-    err: unknown,
-    opts: Required<RateLimitRetryOptions>
-  ): boolean {
+  private isRetryableError(err: unknown, opts: Required<RateLimitRetryOptions>): boolean {
     if (err && typeof err === 'object') {
       const status = (err as { status?: number }).status;
       if (status && opts.retryableStatuses.includes(status)) return true;
@@ -271,9 +262,7 @@ export class RateLimiter {
         return Math.floor(this.tokens);
       case 'sliding': {
         const now = Date.now();
-        const active = this.timestamps.filter(
-          (t) => now - t < this.options.windowMs
-        ).length;
+        const active = this.timestamps.filter((t) => now - t < this.options.windowMs).length;
         return this.options.maxRequests - active;
       }
       case 'fixed': {
@@ -295,13 +284,10 @@ export class RateLimiter {
       case 'sliding': {
         if (this.timestamps.length < this.options.maxRequests) return 0;
         const oldest = this.timestamps[0];
-        return Math.max(0, this.options.windowMs - (Date.now() - oldest));
+        return Math.max(0, this.options.windowMs - (Date.now() - (oldest ?? Date.now())));
       }
       case 'fixed':
-        return Math.max(
-          0,
-          this.options.windowMs - (Date.now() - this.windowStart)
-        );
+        return Math.max(0, this.options.windowMs - (Date.now() - this.windowStart));
       default:
         return 0;
     }

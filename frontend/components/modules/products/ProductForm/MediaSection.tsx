@@ -49,7 +49,8 @@ export function MediaSection({ setValue, isLoading = false, watch }: MediaSectio
       const updated = images.filter((img) => img.id !== id);
       // If we removed the primary, promote the first remaining
       if (updated.length > 0 && !updated.some((img) => img.isPrimary)) {
-        updated[0].isPrimary = true;
+        const first = updated[0];
+        if (first) first.isPrimary = true;
       }
       // Reindex order
       updated.forEach((img, i) => {

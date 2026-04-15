@@ -9,7 +9,7 @@ import { PageTransition } from './PageTransition';
  * background styling. Renders as a semantic <main> element.
  */
 
-interface MainContentProps {
+export interface MainContentProps {
   children: ReactNode;
   className?: string;
   /** Remove default padding for full-width content. */

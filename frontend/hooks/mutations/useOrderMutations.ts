@@ -6,7 +6,7 @@
  */
 
 import { createMutationHooks } from './mutationFactory';
-import { salesService } from '@/services/api/salesService';
+import salesService from '@/services/api/salesService';
 
 export const {
   useCreate: useCreateOrder,

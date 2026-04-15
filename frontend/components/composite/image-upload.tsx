@@ -47,6 +47,7 @@ function ImageUpload({
     } else {
       setPreview(null);
     }
+    return undefined;
   }, [value]);
 
   const handleFile = (file: File) => {

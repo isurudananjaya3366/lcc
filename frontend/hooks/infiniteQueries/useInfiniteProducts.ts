@@ -6,7 +6,7 @@
  */
 
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { productService } from '@/services/api/productService';
+import productService from '@/services/api/productService';
 import { productKeys } from '@/lib/queryKeys';
 import type { ProductFilters } from '@/lib/queryKeys';
 
@@ -19,11 +19,11 @@ export function useInfiniteProducts(filters?: ProductFilters) {
       productService.getProducts({
         ...filters,
         page: pageParam as number,
-        page_size: PAGE_SIZE,
-      }),
+        pageSize: PAGE_SIZE,
+      } as Parameters<typeof productService.getProducts>[0]),
     getNextPageParam: (lastPage, allPages) => {
       const loaded = allPages.length * PAGE_SIZE;
-      return loaded < lastPage.count ? allPages.length + 1 : undefined;
+      return loaded < lastPage.pagination.totalCount ? allPages.length + 1 : undefined;
     },
     initialPageParam: 1,
     staleTime: 5 * 60 * 1000,

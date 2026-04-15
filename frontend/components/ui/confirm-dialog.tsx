@@ -24,6 +24,7 @@ export interface ConfirmDialogProps {
   confirmText?: string;
   cancelText?: string;
   isLoading?: boolean;
+  children?: React.ReactNode;
 }
 
 const variantConfig = {
@@ -54,6 +55,7 @@ function ConfirmDialog({
   confirmText = 'Confirm',
   cancelText = 'Cancel',
   isLoading = false,
+  children,
 }: ConfirmDialogProps) {
   const config = variantConfig[variant];
   const Icon = config.icon;
@@ -79,6 +81,7 @@ function ConfirmDialog({
             {description}
           </DialogDescription>
         </DialogHeader>
+        {children}
         <DialogFooter className="gap-2 sm:gap-0">
           <Button
             variant="outline"

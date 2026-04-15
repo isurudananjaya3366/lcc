@@ -4,7 +4,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { salesKeys } from '@/lib/queryKeys';
-import { salesService } from '@/services/api';
+import salesService from '@/services/api/salesService';
 
 export function useOrder(id: string, options?: { enabled?: boolean }) {
   return useQuery({

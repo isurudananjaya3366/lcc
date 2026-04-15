@@ -16,8 +16,8 @@ export function OrderSummaryCards({ orders, isLoading }: OrderSummaryCardsProps)
   ).length;
   const shippedToday = orders.filter((o) => {
     if (o.orderStatus !== 'SHIPPED') return false;
-    const today = new Date().toISOString().split('T')[0];
-    return o.updatedAt?.startsWith(today);
+    const today = new Date().toISOString().split('T')[0] ?? '';
+    return o.updatedAt?.startsWith(today) ?? false;
   }).length;
   const totalRevenue = orders.reduce((sum, o) => sum + (o.total ?? 0), 0);
 

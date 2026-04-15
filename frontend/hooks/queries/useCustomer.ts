@@ -4,7 +4,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { customerKeys } from '@/lib/queryKeys';
-import { customerService } from '@/services/api';
+import customerService from '@/services/api/customerService';
 
 export function useCustomer(
   id: string,

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import type { Product, ProductStatus } from '@/types/product';
+import { ProductType, UnitOfMeasure } from '@/types/product';
 import {
   ProductDetailHeader,
   ProductInfoCard,
@@ -23,10 +24,10 @@ const MOCK_PRODUCT: Product = {
   sku: 'PROD-001',
   name: 'Sample Product',
   description: 'This is a sample product for development purposes.',
-  productType: 'SIMPLE' as const,
+  productType: ProductType.SIMPLE,
   status: 'ACTIVE' as unknown as ProductStatus,
   categoryId: 'cat-1',
-  unitOfMeasure: 'PIECE' as const,
+  unitOfMeasure: UnitOfMeasure.PIECE,
   pricing: {
     basePrice: 2500,
     cost: 1800,

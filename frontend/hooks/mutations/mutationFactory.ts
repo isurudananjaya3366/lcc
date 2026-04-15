@@ -92,7 +92,7 @@ export function createMutationHooks<TData, TCreateInput, TUpdateInput>(
           resource,
           strategy: 'PARTIAL',
         });
-        options?.onSuccess?.(data, variables, ctx);
+        options?.onSuccess?.(data, variables, ctx, undefined as never);
       },
       onError: options?.onError,
       retry: false,
@@ -116,7 +116,7 @@ export function createMutationHooks<TData, TCreateInput, TUpdateInput>(
           strategy: 'PARTIAL',
           relatedResources: getRelatedResources(resource, 'delete'),
         });
-        options?.onSuccess?.(_data, id, ctx);
+        options?.onSuccess?.(_data, id, ctx, undefined as never);
       },
       onError: options?.onError,
       retry: false,

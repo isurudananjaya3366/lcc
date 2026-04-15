@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm, useFieldArray } from 'react-hook-form';
+import type { Resolver, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
@@ -20,7 +21,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Plus, Trash2, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { salesService } from '@/services/api';
+import salesService from '@/services/api/salesService';
 import { salesKeys } from '@/lib/queryKeys';
 import { OrderSource, ShippingMethod } from '@/types/sales';
 
@@ -61,7 +62,7 @@ export function NewOrderForm() {
     watch,
     formState: { errors },
   } = useForm<OrderFormData>({
-    resolver: zodResolver(orderFormSchema),
+    resolver: zodResolver(orderFormSchema) as Resolver<OrderFormData>,
     defaultValues: {
       orderSource: OrderSource.POS,
       items: [
@@ -95,7 +96,7 @@ export function NewOrderForm() {
   const createMutation = useMutation({
     mutationFn: salesService.createOrder,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: salesKeys.all });
+      queryClient.invalidateQueries({ queryKey: salesKeys.all() });
       router.push('/orders');
     },
     onError: (err: Error) => {
@@ -103,7 +104,7 @@ export function NewOrderForm() {
     },
   });
 
-  const onSubmit = (data: OrderFormData) => {
+  const onSubmit: SubmitHandler<OrderFormData> = (data) => {
     setSubmitError(null);
     createMutation.mutate(data);
   };

@@ -20,7 +20,7 @@ export function QuotesList() {
   };
 
   const { data, isLoading } = useQuotes(queryParams);
-  const quotes = Array.isArray(data) ? data : (data?.results ?? []);
+  const quotes = Array.isArray(data) ? data : (data?.data ?? []);
 
   return (
     <div className="space-y-6">

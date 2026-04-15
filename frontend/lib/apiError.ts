@@ -83,10 +83,7 @@ export class ApiException extends Error {
     });
   }
 
-  static serverError(
-    status: number,
-    message = 'Server error'
-  ): ApiException {
+  static serverError(status: number, message = 'Server error'): ApiException {
     return new ApiException(message, { code: 'SERVER_ERROR', status });
   }
 
@@ -135,25 +132,18 @@ export function parseApiError(error: unknown): ApiException {
     }
 
     // Network error (request sent but no response)
-    if (
-      axiosError.code === 'ERR_NETWORK' ||
-      (!axiosError.response && axiosError.request)
-    ) {
-      return new ApiException(
-        'Unable to connect to the server. Check your internet connection.',
-        {
-          code: 'NETWORK',
-          isNetworkError: true,
-          originalError: error,
-        }
-      );
+    if (axiosError.code === 'ERR_NETWORK' || (!axiosError.response && axiosError.request)) {
+      return new ApiException('Unable to connect to the server. Check your internet connection.', {
+        code: 'NETWORK',
+        isNetworkError: true,
+        originalError: error,
+      });
     }
 
     // HTTP error with response
     if (axiosError.response) {
       const { data, status } = axiosError.response;
-      const message =
-        data?.message || data?.detail || axiosError.message || 'Request failed';
+      const message = data?.message || data?.detail || axiosError.message || 'Request failed';
       const code = data?.code || String(status);
       const details: ApiErrorDetails | undefined = data?.errors || data?.details;
 
@@ -177,7 +167,7 @@ export function parseApiError(error: unknown): ApiException {
       return new ApiException(message, {
         code,
         status,
-        details: details || fieldErrors || null,
+        details: details || fieldErrors || undefined,
         originalError: error,
       });
     }
@@ -229,7 +219,7 @@ export function getErrorMessage(error: unknown): string {
     if (error.isNetworkError) return 'Check your internet connection and try again.';
     if (error.isTimeoutError) return 'Request timed out. Please try again.';
     if (error.status && STATUS_MESSAGES[error.status]) {
-      return STATUS_MESSAGES[error.status];
+      return STATUS_MESSAGES[error.status] ?? error.message;
     }
     return error.message || 'An unexpected error occurred';
   }
@@ -269,8 +259,7 @@ export function isTimeoutError(error: unknown): boolean {
   if (error instanceof ApiException) return error.isTimeoutError;
 
   if (isAxiosError(error)) {
-    if (error.code === 'ECONNABORTED' || error.code === 'ETIMEDOUT')
-      return true;
+    if (error.code === 'ECONNABORTED' || error.code === 'ETIMEDOUT') return true;
     if (error.response?.status === 408) return true;
   }
 
@@ -288,8 +277,7 @@ export function isRetryable(error: unknown): boolean {
   if (isNetworkError(error)) return true;
   if (isTimeoutError(error)) return true;
 
-  const apiError =
-    error instanceof ApiException ? error : parseApiError(error);
+  const apiError = error instanceof ApiException ? error : parseApiError(error);
 
   if (apiError.isCancelled) return false;
 
@@ -303,13 +291,9 @@ export function isRetryable(error: unknown): boolean {
 
 // ── calculateBackoffDelay (Task 53) ────────────────────────────
 
-export function calculateBackoffDelay(
-  attemptNumber: number,
-  config: RetryConfig
-): number {
+export function calculateBackoffDelay(attemptNumber: number, config: RetryConfig): number {
   const attempt = Math.max(0, attemptNumber);
-  const delay =
-    config.initialDelay * Math.pow(config.backoffFactor, attempt);
+  const delay = config.initialDelay * Math.pow(config.backoffFactor, attempt);
   const capped = Math.min(delay, config.maxDelay);
   // Add jitter: 50-100% of calculated delay
   return capped * (0.5 + Math.random() * 0.5);

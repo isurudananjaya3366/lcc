@@ -43,9 +43,7 @@ function isPublicEndpoint(url?: string): boolean {
 
 // ── Request Interceptor ────────────────────────────────────────
 
-export function requestInterceptor(
-  config: InternalAxiosRequestConfig
-): InternalAxiosRequestConfig {
+export function requestInterceptor(config: InternalAxiosRequestConfig): InternalAxiosRequestConfig {
   // Ensure headers object exists
   config.headers = config.headers || {};
 
@@ -75,8 +73,7 @@ export function requestInterceptor(
     ...config.metadata,
     requestId: config.headers['X-Request-ID'] as string,
     requestTimestamp: Date.now(),
-    startPerformance:
-      typeof performance !== 'undefined' ? performance.now() : Date.now(),
+    startPerformance: typeof performance !== 'undefined' ? performance.now() : Date.now(),
   };
 
   // Dev logging
@@ -110,7 +107,7 @@ function getTenantId(): string | null {
   // Extract subdomain as tenant identifier
   const parts = hostname.split('.');
   if (parts.length > 2) {
-    return parts[0];
+    return parts[0] ?? null;
   }
   return null;
 }

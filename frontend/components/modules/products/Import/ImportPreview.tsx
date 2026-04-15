@@ -74,7 +74,7 @@ export function autoMapColumns(headers: string[]): ColumnMappings {
   const usedFields = new Set<string>();
 
   for (let i = 0; i < headers.length; i++) {
-    const header = headers[i].toLowerCase().trim();
+    const header = (headers[i] ?? '').toLowerCase().trim();
     for (const [field, aliases] of Object.entries(AUTO_MAP_RULES)) {
       if (!usedFields.has(field) && aliases.includes(header)) {
         mappings[i] = field;
@@ -94,6 +94,7 @@ export function validateImportData(data: ParsedData, mappings: ColumnMappings): 
 
   for (let rowIdx = 0; rowIdx < data.rows.length; rowIdx++) {
     const row = data.rows[rowIdx];
+    if (!row) continue;
 
     for (const [colIdxStr, fieldKey] of Object.entries(mappings)) {
       const colIdx = Number(colIdxStr);
@@ -106,7 +107,7 @@ export function validateImportData(data: ParsedData, mappings: ColumnMappings): 
       if (field.required && !value) {
         errors.push({
           row: rowIdx,
-          column: data.headers[colIdx],
+          column: data.headers[colIdx] ?? '',
           field: fieldKey,
           message: `${field.label} is required`,
           level: 'error',
@@ -122,7 +123,7 @@ export function validateImportData(data: ParsedData, mappings: ColumnMappings): 
         if (isNaN(num)) {
           errors.push({
             row: rowIdx,
-            column: data.headers[colIdx],
+            column: data.headers[colIdx] ?? '',
             field: fieldKey,
             message: `${field.label} must be a number`,
             level: 'error',
@@ -130,7 +131,7 @@ export function validateImportData(data: ParsedData, mappings: ColumnMappings): 
         } else if (fieldKey.includes('price') && num < 0) {
           errors.push({
             row: rowIdx,
-            column: data.headers[colIdx],
+            column: data.headers[colIdx] ?? '',
             field: fieldKey,
             message: `${field.label} must be positive`,
             level: 'error',
@@ -138,7 +139,7 @@ export function validateImportData(data: ParsedData, mappings: ColumnMappings): 
         } else if (fieldKey === 'stock_quantity' && !Number.isInteger(num)) {
           errors.push({
             row: rowIdx,
-            column: data.headers[colIdx],
+            column: data.headers[colIdx] ?? '',
             field: fieldKey,
             message: 'Stock must be a whole number',
             level: 'error',
@@ -154,7 +155,7 @@ export function validateImportData(data: ParsedData, mappings: ColumnMappings): 
       ) {
         errors.push({
           row: rowIdx,
-          column: data.headers[colIdx],
+          column: data.headers[colIdx] ?? '',
           field: fieldKey,
           message: `Invalid value. Expected: ${field.enumValues.join(', ')}`,
           level: 'error',
@@ -166,7 +167,7 @@ export function validateImportData(data: ParsedData, mappings: ColumnMappings): 
         if (seenSkus.has(value)) {
           errors.push({
             row: rowIdx,
-            column: data.headers[colIdx],
+            column: data.headers[colIdx] ?? '',
             field: 'sku',
             message: 'Duplicate SKU',
             level: 'error',
@@ -181,12 +182,12 @@ export function validateImportData(data: ParsedData, mappings: ColumnMappings): 
     const costIdx = Object.entries(mappings).find(([, v]) => v === 'cost_price')?.[0];
     const priceIdx = Object.entries(mappings).find(([, v]) => v === 'selling_price')?.[0];
     if (costIdx !== undefined && priceIdx !== undefined) {
-      const cost = Number(row[Number(costIdx)]);
-      const price = Number(row[Number(priceIdx)]);
+      const cost = Number(row[Number(costIdx)] ?? '');
+      const price = Number(row[Number(priceIdx)] ?? '');
       if (!isNaN(cost) && !isNaN(price) && price < cost) {
         errors.push({
           row: rowIdx,
-          column: data.headers[Number(priceIdx)],
+          column: data.headers[Number(priceIdx)] ?? '',
           field: 'selling_price',
           message: 'Selling price is below cost',
           level: 'warning',

@@ -120,7 +120,11 @@ export const useUIStore = createStore<UIStore>(
 
     openModal: (modalId, props) =>
       set((state) => {
-        state.modals.set(modalId, { id: modalId, isOpen: true, props });
+        state.modals.set(modalId, {
+          id: modalId,
+          isOpen: true,
+          props: props as Record<string, unknown> | undefined,
+        });
       }),
 
     closeModal: (modalId) =>

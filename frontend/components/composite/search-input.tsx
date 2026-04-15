@@ -61,7 +61,7 @@ function SearchInput({
         onChange={handleChange}
         placeholder={placeholder}
         disabled={disabled}
-        prefixIcon={Search}
+        prefixIcon={<Search className="h-4 w-4" />}
         className="pr-8"
         aria-label="Search"
       />

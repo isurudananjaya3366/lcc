@@ -50,7 +50,7 @@ export const Large: Story = {
 };
 
 export const Loading: Story = {
-  args: { children: 'Saving...', isLoading: true },
+  args: { children: 'Saving...', loading: true },
 };
 
 export const Disabled: Story = {

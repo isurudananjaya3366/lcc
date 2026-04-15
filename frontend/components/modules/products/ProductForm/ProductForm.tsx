@@ -1,6 +1,6 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
+import { useForm, type Resolver, type Control } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
@@ -33,7 +33,7 @@ export function ProductForm({
   const router = useRouter();
 
   const form = useForm<ProductFormData>({
-    resolver: zodResolver(productFormSchema),
+    resolver: zodResolver(productFormSchema) as Resolver<ProductFormData>,
     defaultValues: {
       ...productFormDefaults,
       ...initialData,
@@ -42,22 +42,22 @@ export function ProductForm({
     reValidateMode: 'onChange',
   });
 
-  const handleSubmit = form.handleSubmit(async (data) => {
+  const handleSubmit = form.handleSubmit(async (data: ProductFormData) => {
     await onSubmit(data);
   });
 
   return (
     <Form {...form}>
       <form onSubmit={handleSubmit} className="space-y-6">
-        <BasicInfoSection control={form.control} isLoading={isLoading} watch={form.watch} setValue={form.setValue} />
+        <BasicInfoSection control={form.control as Control<ProductFormData>} isLoading={isLoading} watch={form.watch} setValue={form.setValue} />
 
-        <PricingSection control={form.control} isLoading={isLoading} watch={form.watch} />
+        <PricingSection control={form.control as Control<ProductFormData>} isLoading={isLoading} watch={form.watch} />
 
-        <InventorySection control={form.control} isLoading={isLoading} watch={form.watch} />
+        <InventorySection control={form.control as Control<ProductFormData>} isLoading={isLoading} watch={form.watch} />
 
-        <CategorizationSection control={form.control} isLoading={isLoading} />
+        <CategorizationSection control={form.control as Control<ProductFormData>} isLoading={isLoading} />
 
-        <MediaSection control={form.control} setValue={form.setValue} isLoading={isLoading} watch={form.watch} />
+        <MediaSection control={form.control as Control<ProductFormData>} setValue={form.setValue} isLoading={isLoading} watch={form.watch} />
 
         {/* Action Buttons */}
         <div className="flex items-center justify-end gap-3 border-t border-gray-200 pt-6 dark:border-gray-700">

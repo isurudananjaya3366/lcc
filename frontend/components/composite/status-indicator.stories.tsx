@@ -42,6 +42,7 @@ export const Processing: Story = {
 };
 
 export const AllStatuses: Story = {
+  args: { status: 'active' },
   render: () => (
     <div className="flex flex-wrap gap-2">
       <StatusIndicator status="active" showDot />
@@ -61,6 +62,7 @@ export const AllStatuses: Story = {
 };
 
 export const Sizes: Story = {
+  args: { status: 'active' },
   render: () => (
     <div className="flex items-center gap-2">
       <StatusIndicator status="active" showDot size="sm" />

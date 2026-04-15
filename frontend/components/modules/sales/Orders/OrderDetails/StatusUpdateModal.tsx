@@ -23,7 +23,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { OrderStatusBadge } from '../cells/OrderStatusBadge';
-import type { Order, OrderStatus } from '@/types/sales';
+import type { Order } from '@/types/sales';
+import { OrderStatus } from '@/types/sales';
 
 interface StatusUpdateModalProps {
   isOpen: boolean;
@@ -37,11 +38,11 @@ interface StatusUpdateModalProps {
 }
 
 const validTransitions: Record<string, OrderStatus[]> = {
-  DRAFT: ['CONFIRMED', 'CANCELLED'],
-  PENDING: ['CONFIRMED', 'CANCELLED'],
-  CONFIRMED: ['PROCESSING', 'CANCELLED'],
-  PROCESSING: ['SHIPPED', 'CANCELLED'],
-  SHIPPED: ['DELIVERED'],
+  DRAFT: [OrderStatus.CONFIRMED, OrderStatus.CANCELLED],
+  PENDING: [OrderStatus.CONFIRMED, OrderStatus.CANCELLED],
+  CONFIRMED: [OrderStatus.PROCESSING, OrderStatus.CANCELLED],
+  PROCESSING: [OrderStatus.SHIPPED, OrderStatus.CANCELLED],
+  SHIPPED: [OrderStatus.DELIVERED],
   DELIVERED: [],
   COMPLETED: [],
   CANCELLED: [],

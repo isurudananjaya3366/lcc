@@ -3,7 +3,8 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { reportsService } from '@/services/api';
+import reportsService from '@/services/api/reportsService';
+import { DateRangeType } from '@/types/reports';
 
 interface ReportFilters {
   dateRange: { startDate: string; endDate: string };
@@ -22,10 +23,13 @@ export function useReports(reportType: ReportType, filters: ReportFilters) {
     queryKey: ['reports', reportType, filters] as const,
     queryFn: () =>
       reportsService.generateReport({
-        type: reportType,
-        startDate: filters.dateRange.startDate,
-        endDate: filters.dateRange.endDate,
-        groupBy: filters.groupBy,
+        reportId: reportType,
+        dateRange: {
+          startDate: filters.dateRange.startDate,
+          endDate: filters.dateRange.endDate,
+          rangeType: DateRangeType.CUSTOM,
+        },
+        ...(filters.groupBy ? { parameters: { groupBy: filters.groupBy } } : {}),
         ...filters.filters,
       }),
     staleTime: 5 * 60 * 1000,

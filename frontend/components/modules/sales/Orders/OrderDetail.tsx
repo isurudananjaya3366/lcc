@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useOrder } from '@/hooks/queries/useOrder';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { salesService } from '@/services/api/salesService';
+import salesService from '@/services/api/salesService';
 import { salesKeys } from '@/lib/queryKeys';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
@@ -29,13 +29,13 @@ interface OrderDetailProps {
 export function OrderDetail({ orderId }: OrderDetailProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { data: order, isLoading, error } = useOrder(orderId);
+  const { data: orderResponse, isLoading, error } = useOrder(orderId);
+  const order = orderResponse?.data;
   const [statusModalOpen, setStatusModalOpen] = useState(false);
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
 
   const updateOrderMutation = useMutation({
-    mutationFn: (data: { orderStatus: OrderStatus; notes?: string }) =>
-      salesService.updateOrder(orderId, data),
+    mutationFn: (data: { orderStatus: OrderStatus }) => salesService.updateOrder(orderId, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: salesKeys.order(orderId) });
       queryClient.invalidateQueries({ queryKey: salesKeys.orders() });
@@ -145,7 +145,6 @@ export function OrderDetail({ orderId }: OrderDetailProps) {
         onSubmit={async (data) => {
           await updateOrderMutation.mutateAsync({
             orderStatus: data.newStatus as OrderStatus,
-            notes: data.notes,
           });
           setStatusModalOpen(false);
         }}

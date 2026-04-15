@@ -5,7 +5,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Loader2, CheckCircle2 } from 'lucide-react';
 
 import type { StockTransfer } from '@/types/inventory';
-import { inventoryService } from '@/services/api';
+import inventoryService from '@/services/api/inventoryService';
 import { inventoryKeys } from '@/lib/queryKeys';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';

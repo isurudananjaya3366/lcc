@@ -84,17 +84,14 @@ export function clearTokens(): void {
  * @param bufferSeconds - Seconds before actual expiry to consider expired (default: 60).
  * @returns true if the token is null, malformed, or expired; false otherwise.
  */
-export function isTokenExpired(
-  token: string | null,
-  bufferSeconds: number = 60
-): boolean {
+export function isTokenExpired(token: string | null, bufferSeconds: number = 60): boolean {
   if (!token) return true;
 
   try {
     const parts = token.split('.');
     if (parts.length !== 3) return true;
 
-    const payload = JSON.parse(atob(parts[1]));
+    const payload = JSON.parse(atob(parts[1] ?? ''));
     if (!payload.exp) return true;
 
     const expiresAt = payload.exp * 1000; // Convert to milliseconds

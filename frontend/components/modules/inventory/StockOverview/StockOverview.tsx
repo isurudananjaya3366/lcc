@@ -54,9 +54,10 @@ export function StockOverview() {
       if (newFilters.search) params.set('search', newFilters.search);
       if (newFilters.warehouse !== 'all') params.set('warehouse', newFilters.warehouse);
       if (newFilters.stockLevel !== 'all') params.set('stockLevel', newFilters.stockLevel);
-      if (newSorting.length > 0) {
-        params.set('sort', newSorting[0].id);
-        params.set('order', newSorting[0].desc ? 'desc' : 'asc');
+      const firstSort = newSorting[0];
+      if (firstSort) {
+        params.set('sort', firstSort.id);
+        params.set('order', firstSort.desc ? 'desc' : 'asc');
       }
       if (newPagination.pageIndex > 0) {
         params.set('page', String(newPagination.pageIndex + 1));
@@ -101,8 +102,8 @@ export function StockOverview() {
     [filters, sorting, updateUrl]
   );
 
-  const stockLevels = data?.results ?? [];
-  const totalCount = data?.count ?? 0;
+  const stockLevels = data?.data ?? [];
+  const totalCount = data?.pagination.totalCount ?? 0;
 
   return (
     <div className="space-y-6">

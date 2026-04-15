@@ -19,10 +19,10 @@ export function ThemeToggle() {
   const cycle = useCallback(() => {
     const idx = themes.findIndex((t) => t.value === theme);
     const next = themes[(idx + 1) % themes.length];
-    setTheme(next.value);
+    if (next) setTheme(next.value);
   }, [theme, setTheme]);
 
-  const current = themes.find((t) => t.value === theme) ?? themes[0];
+  const current = themes.find((t) => t.value === theme) ?? themes[0]!;
   const Icon = current.icon;
 
   return (

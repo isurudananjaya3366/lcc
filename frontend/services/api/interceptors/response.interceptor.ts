@@ -9,20 +9,14 @@
  */
 
 import type { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
-import {
-  getRefreshToken,
-  setAccessToken,
-  clearTokens,
-} from '@/lib/tokenStorage';
+import { getRefreshToken, setAccessToken, clearTokens } from '@/lib/tokenStorage';
 
 // ── Token Refresh Queue (Task 43) ─────────────────────────────
 
 let isRefreshing = false;
 let refreshSubscribers: Array<(token: string) => void> = [];
 
-function subscribeTokenRefresh(
-  callback: (token: string) => void
-): void {
+function subscribeTokenRefresh(callback: (token: string) => void): void {
   refreshSubscribers.push(callback);
 }
 
@@ -115,10 +109,7 @@ export function createResponseErrorHandler(axiosInstance: AxiosInstance) {
 
 // ── 401 Unauthorized (Task 38 + Task 43 queue) ─────────────────
 
-async function handle401(
-  error: AxiosError,
-  axiosInstance: AxiosInstance
-): Promise<never> {
+async function handle401(error: AxiosError, axiosInstance: AxiosInstance): Promise<never> {
   const originalRequest = error.config as any;
 
   // Don't retry refresh endpoint itself
@@ -161,7 +152,7 @@ async function handle401(
     setAccessToken(newToken);
     originalRequest.headers.Authorization = `Bearer ${newToken}`;
     notifySubscribers(newToken);
-    return axiosInstance(originalRequest) as any;
+    return axiosInstance(originalRequest) as unknown as Promise<never>;
   } catch {
     clearTokens();
     return Promise.reject(error);
@@ -201,9 +192,7 @@ function handle404(error: AxiosError): Promise<never> {
   const resourceType = urlParts[urlParts.length - 2] || 'resource';
   const resourceId = urlParts[urlParts.length - 1];
 
-  const notFoundError: any = new Error(
-    `The ${resourceType.replace(/s$/, '')} was not found`
-  );
+  const notFoundError: any = new Error(`The ${resourceType.replace(/s$/, '')} was not found`);
   notFoundError.type = 'NotFoundError';
   notFoundError.statusCode = 404;
   notFoundError.resource = url;
@@ -228,11 +217,7 @@ function handle422(error: AxiosError): Promise<never> {
 
   if (responseData && typeof responseData === 'object') {
     for (const [key, value] of Object.entries(responseData)) {
-      if (
-        key === 'non_field_errors' ||
-        key === '_errors' ||
-        key === 'general'
-      ) {
+      if (key === 'non_field_errors' || key === '_errors' || key === 'general') {
         if (Array.isArray(value)) {
           nonFieldErrors.push(...(value as string[]));
         } else if (typeof value === 'string') {
@@ -252,16 +237,10 @@ function handle422(error: AxiosError): Promise<never> {
   validationError.fieldErrors = fieldErrors;
   validationError.nonFieldErrors = nonFieldErrors;
   validationError.timestamp = new Date();
-  validationError.getFieldError = (field: string) =>
-    fieldErrors[field] || [];
-  validationError.getAllMessages = () => [
-    ...nonFieldErrors,
-    ...Object.values(fieldErrors).flat(),
-  ];
-  validationError.getFirstError = (field: string) =>
-    fieldErrors[field]?.[0];
-  validationError.hasFieldError = (field: string) =>
-    !!fieldErrors[field];
+  validationError.getFieldError = (field: string) => fieldErrors[field] || [];
+  validationError.getAllMessages = () => [...nonFieldErrors, ...Object.values(fieldErrors).flat()];
+  validationError.getFirstError = (field: string) => fieldErrors[field]?.[0];
+  validationError.hasFieldError = (field: string) => !!fieldErrors[field];
 
   if (process.env.NODE_ENV === 'development') {
     console.warn('[API] Validation Error:', fieldErrors);
@@ -276,8 +255,7 @@ function handle5xx(error: AxiosError): Promise<never> {
   const status = error.response?.status;
   const responseData = error.response?.data as any;
 
-  const message =
-    responseData?.message || getDefaultServerErrorMessage(status);
+  const message = responseData?.message || getDefaultServerErrorMessage(status);
 
   const serverError: any = new Error(message);
   serverError.type = 'ServerError';

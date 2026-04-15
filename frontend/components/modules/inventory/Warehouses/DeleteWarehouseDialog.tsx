@@ -5,7 +5,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AlertTriangle, Loader2 } from 'lucide-react';
 
 import type { Warehouse } from '@/types/inventory';
-import { warehouseService } from '@/services/api';
+import warehouseService from '@/services/api/warehouseService';
 import { inventoryKeys } from '@/lib/queryKeys';
 import { Button } from '@/components/ui/button';
 

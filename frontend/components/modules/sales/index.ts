@@ -27,7 +27,6 @@ export {
   InvoiceSummaryCards,
   InvoiceFilters,
   InvoicesTable,
-  InvoiceTableColumns,
   getInvoiceColumns,
   InvoiceStatusBadge,
   InvoiceActionsCell,

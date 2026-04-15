@@ -48,7 +48,7 @@ export function QuoteValiditySection({
     if (days >= 0) {
       const newDate = new Date();
       newDate.setDate(newDate.getDate() + days);
-      onExpiryChange(newDate.toISOString().split('T')[0]);
+      onExpiryChange(newDate.toISOString().split('T')[0] ?? '');
     }
   };
 

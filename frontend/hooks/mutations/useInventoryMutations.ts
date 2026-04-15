@@ -6,8 +6,8 @@
  */
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { inventoryService } from '@/services/api';
-import { warehouseService } from '@/services/api/warehouseService';
+import inventoryService from '@/services/api/inventoryService';
+import warehouseService from '@/services/api/warehouseService';
 import { inventoryKeys } from '@/lib/queryKeys';
 import type { StockAdjustmentCreateRequest, StockTransferCreateRequest } from '@/types/inventory';
 import type {

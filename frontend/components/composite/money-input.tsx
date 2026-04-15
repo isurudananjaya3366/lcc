@@ -20,7 +20,9 @@ export interface MoneyInputProps {
 
 function formatMoney(value: number, decimals: number): string {
   const parts = value.toFixed(decimals).split('.');
-  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  if (parts[0] !== undefined) {
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
   return parts.join('.');
 }
 

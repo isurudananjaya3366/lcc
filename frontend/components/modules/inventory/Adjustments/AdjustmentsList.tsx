@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { type SortingState, type PaginationState } from '@tanstack/react-table';
 import { useQuery } from '@tanstack/react-query';
 import { inventoryKeys } from '@/lib/queryKeys';
-import { inventoryService } from '@/services/api';
+import inventoryService from '@/services/api/inventoryService';
 
 import { AdjustmentsHeader } from './AdjustmentsHeader';
 import { AdjustmentsTable } from './AdjustmentsTable';
@@ -13,9 +13,7 @@ import { AdjustmentsTable } from './AdjustmentsTable';
 export function AdjustmentsList() {
   const searchParams = useSearchParams();
 
-  const [sorting, setSorting] = useState<SortingState>([
-    { id: 'adjustedAt', desc: true },
-  ]);
+  const [sorting, setSorting] = useState<SortingState>([{ id: 'adjustedAt', desc: true }]);
 
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
@@ -37,8 +35,8 @@ export function AdjustmentsList() {
     staleTime: 2 * 60 * 1000,
   });
 
-  const adjustments = data?.results ?? [];
-  const totalCount = data?.count ?? 0;
+  const adjustments = data?.data ?? [];
+  const totalCount = data?.pagination.totalCount ?? 0;
 
   return (
     <div className="space-y-6">

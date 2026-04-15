@@ -57,7 +57,7 @@ const sizeClasses = {
 const iconSizes = { sm: 'h-3 w-3', md: 'h-3.5 w-3.5', lg: 'h-4 w-4' };
 
 export function InvoiceStatusBadge({ status, size = 'md' }: InvoiceStatusBadgeProps) {
-  const config = statusConfig[status] || statusConfig.draft;
+  const config = statusConfig[status] ?? statusConfig['draft']!;
   const Icon = config.icon;
 
   return (

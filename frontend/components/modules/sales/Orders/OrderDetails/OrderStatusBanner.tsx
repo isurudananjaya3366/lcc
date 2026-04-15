@@ -74,7 +74,7 @@ export function OrderStatusBanner({
   onActionClick,
   onDismiss,
 }: OrderStatusBannerProps) {
-  const config = bannerConfig[status] ?? bannerConfig.DRAFT;
+  const config = bannerConfig[status] ?? bannerConfig['DRAFT']!;
   const Icon = config.icon;
 
   return (

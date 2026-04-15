@@ -9,15 +9,14 @@ export const businessInfoSchema = z.object({
     .max(100, 'Business name must be at most 100 characters'),
   businessType: z.enum(
     ['retail', 'wholesale', 'restaurant', 'service', 'manufacturing', 'ecommerce'],
-    { required_error: 'Please select a business type' }
+    { message: 'Please select a business type' }
   ),
   registrationNumber: z.string().max(50).optional().or(z.literal('')),
 });
 
 // ── Step 2: Admin User ────────────────────────────────────────
 
-export const adminUserSchema = z
-  .object({
+export const adminUserBaseSchema = z.object({
     firstName: z
       .string()
       .min(2, 'First name must be at least 2 characters')
@@ -34,7 +33,9 @@ export const adminUserSchema = z
       .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
       .regex(/[0-9]/, 'Password must contain at least one number'),
     confirmPassword: z.string().min(1, 'Please confirm your password'),
-  })
+  });
+
+export const adminUserSchema = adminUserBaseSchema
   .refine((data) => data.password === data.confirmPassword, {
     message: 'Passwords do not match',
     path: ['confirmPassword'],
@@ -68,7 +69,7 @@ export const contactInfoSchema = z.object({
 
 export const planSelectionSchema = z.object({
   plan: z.enum(['starter', 'professional', 'enterprise'], {
-    required_error: 'Please select a plan',
+    message: 'Please select a plan',
   }),
 });
 
@@ -76,14 +77,14 @@ export const planSelectionSchema = z.object({
 
 export const termsSchema = z.object({
   acceptTerms: z.literal(true, {
-    errorMap: () => ({ message: 'You must accept the terms and conditions' }),
+    error: 'You must accept the terms and conditions',
   }),
 });
 
 // ── Combined Registration Schema ──────────────────────────────
 
 export const registrationSchema = businessInfoSchema
-  .merge(adminUserSchema.innerType())
+  .merge(adminUserBaseSchema)
   .merge(contactInfoSchema)
   .merge(planSelectionSchema)
   .merge(termsSchema)

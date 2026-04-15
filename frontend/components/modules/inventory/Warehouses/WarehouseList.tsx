@@ -10,7 +10,7 @@ export function WarehouseList() {
   const [searchQuery, setSearchQuery] = useState('');
 
   const { data, isLoading } = useWarehouses();
-  const warehouses = data?.results ?? [];
+  const warehouses = data?.data ?? [];
 
   const filtered = searchQuery
     ? warehouses.filter(

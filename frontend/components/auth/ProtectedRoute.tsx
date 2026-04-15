@@ -69,7 +69,7 @@ export function ProtectedRoute({
   ]);
 
   if (isLoading || isChecking) {
-    return fallback ?? <AuthLoading fullScreen message="Verifying access..." />;
+    return fallback ?? <AuthLoading fullscreen message="Verifying access..." />;
   }
 
   return <>{children}</>;

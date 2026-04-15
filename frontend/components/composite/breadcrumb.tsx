@@ -22,25 +22,19 @@ export interface BreadcrumbProps {
   className?: string;
 }
 
-export function Breadcrumb({
-  items,
-  separator,
-  maxVisible,
-  className,
-}: BreadcrumbProps) {
+export function Breadcrumb({ items, separator, maxVisible, className }: BreadcrumbProps) {
   const separatorNode = separator ?? <ChevronRight className="size-3.5 text-muted-foreground/50" />;
 
   // Responsive collapse: show first, ellipsis, and last items
   const shouldCollapse = maxVisible !== undefined && items.length > maxVisible && maxVisible >= 2;
-  const visibleItems = shouldCollapse
-    ? [items[0], ...items.slice(-(maxVisible! - 1))]
-    : items;
+  const visibleItems = shouldCollapse ? [items[0], ...items.slice(-(maxVisible! - 1))] : items;
   const showEllipsis = shouldCollapse;
 
   return (
     <nav aria-label="Breadcrumb" className={className}>
       <ol className="flex items-center gap-1.5 text-sm text-muted-foreground flex-wrap">
         {visibleItems.map((item, index) => {
+          if (!item) return null;
           const isLast = shouldCollapse
             ? index === visibleItems.length - 1
             : index === items.length - 1;
@@ -72,7 +66,7 @@ export function Breadcrumb({
                     aria-current={isLast ? 'page' : undefined}
                     className={cn(
                       'truncate',
-                      isLast ? 'text-foreground font-medium' : 'text-muted-foreground',
+                      isLast ? 'text-foreground font-medium' : 'text-muted-foreground'
                     )}
                   >
                     {item.label}

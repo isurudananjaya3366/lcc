@@ -69,7 +69,7 @@ export const handlers = [
 
   http.post(`${API_BASE}/products/`, async ({ request }) => {
     await delay(200);
-    const body = await request.json();
+    const body = await request.json() as Record<string, unknown>;
     return HttpResponse.json(
       { data: { id: crypto.randomUUID(), ...body, createdAt: new Date().toISOString() } },
       { status: 201 }
@@ -78,7 +78,7 @@ export const handlers = [
 
   http.patch(`${API_BASE}/products/:id/`, async ({ params, request }) => {
     await delay(150);
-    const body = await request.json();
+    const body = await request.json() as Record<string, unknown>;
     const product = mockProducts.find((p) => p.id === params.id);
     if (!product)
       return HttpResponse.json({ message: 'Not found' }, { status: 404 });
@@ -123,7 +123,7 @@ export const handlers = [
 
   http.post(`${API_BASE}/orders/`, async ({ request }) => {
     await delay(300);
-    const body = await request.json();
+    const body = await request.json() as Record<string, unknown>;
     return HttpResponse.json(
       {
         data: {

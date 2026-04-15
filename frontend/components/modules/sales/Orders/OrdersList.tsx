@@ -14,11 +14,11 @@ export function OrdersList() {
   const [search, setSearch] = useState('');
 
   const { data, isLoading } = useOrders({
-    orderStatus: statusFilter as never,
+    status: statusFilter,
     query: search || undefined,
-  });
+  } as never);
 
-  const orders = data?.results ?? [];
+  const orders = data?.data ?? [];
 
   return (
     <div className="space-y-6">
