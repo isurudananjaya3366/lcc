@@ -1,0 +1,14 @@
+export { default as Footer } from './Footer';
+export { default as FooterContainer } from './FooterContainer';
+export { default as FooterTop } from './FooterTop';
+export { default as FooterLogo } from './FooterLogo';
+export { default as FooterLinks } from './FooterLinks';
+export { default as FooterLinkColumn } from './FooterLinkColumn';
+export { default as FooterLink } from './FooterLink';
+export { default as FooterNewsletter } from './FooterNewsletter';
+export { default as NewsletterForm } from './NewsletterForm';
+export { default as FooterSocial } from './FooterSocial';
+export { default as SocialIconLink } from './SocialIconLink';
+export { default as FooterBottom } from './FooterBottom';
+export { default as Copyright } from './Copyright';
+export { default as PaymentIcons } from './PaymentIcons';

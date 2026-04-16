@@ -80,3 +80,22 @@ export type {
 // API types
 export { isStoreApiResponse, isValidEmail, isValidPhone, isValidPostalCode } from './api';
 export type { StoreApiResponse, StorePaginatedResponse } from './api';
+
+// Layout types
+export type {
+  StoreLayoutProps,
+  AnnouncementBarConfig,
+  AnnouncementBarState,
+  LayoutScrollState,
+  HeaderBehavior,
+  LayoutAnimation,
+  LayoutSection,
+  LayoutTheme,
+  ContainerMaxWidth,
+  LayoutContainerProps,
+  MainContentProps,
+  UseStickyHeaderOptions,
+  StickyHeaderState,
+  ScrollPosition,
+  UseScrollPositionOptions,
+} from './layout';
