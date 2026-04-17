@@ -46,6 +46,7 @@ urlpatterns = [
     path("api/v1/accounting/", include("apps.accounting.urls", namespace="accounting")),
     path("api/v1/dashboard/", include("apps.dashboard.urls", namespace="dashboard")),
     path("api/v1/analytics/", include("apps.analytics.api.urls", namespace="analytics")),
+    path("api/v1/store/", include("apps.webstore.api.urls", namespace="store")),
 
     # ──────────────────────────────────────────────
     # API Documentation — drf-spectacular (SP11)
