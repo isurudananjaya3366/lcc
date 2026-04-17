@@ -23,7 +23,7 @@ class StoreProductViewSet(ReadOnlyModelViewSet):
     serializer_class = StoreProductSerializer
     lookup_field = "slug"
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    search_fields = ["name", "description", "sku"]
+    search_fields = ["name", "description", "sku", "brand__name"]
     ordering_fields = ["selling_price", "name", "created_on"]
     ordering = ["-created_on"]
 
@@ -88,6 +88,9 @@ class StoreCategoryViewSet(ReadOnlyModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = StoreCategorySerializer
     lookup_field = "slug"
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ["name"]
+    ordering = ["name"]
 
     def get_queryset(self):
         return Category.objects.filter(is_active=True).order_by("name")
