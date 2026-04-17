@@ -21,5 +21,23 @@ export type { NavItem } from './navigation';
 export { socialLinks, getSocialUrl } from './social';
 export type { SocialLink } from './social';
 
+// Category utilities
+export {
+  getCategoryBySlug,
+  getSubcategories,
+  getCategoryBreadcrumbs,
+  getCategoryTree,
+} from './categories';
+
+// Collection utilities
+export {
+  getCollectionBySlug,
+  getRelatedCollections,
+  getFeaturedCollections,
+  getAllCollections,
+  getCollectionBreadcrumbs,
+} from './collections';
+export type { StoreCollection, FeaturedCollection } from './collections';
+
 // Store utilities
 export * from './utils';

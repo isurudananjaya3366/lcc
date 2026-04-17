@@ -1,19 +1,28 @@
 import type { Metadata } from 'next';
+import { CatalogPage } from '@/components/storefront/catalog';
 
 export const metadata: Metadata = {
-  title: 'Products',
+  title: 'All Products | LankaPOS',
   description: 'Browse our full catalog of quality products. Filter by category, price, and more.',
 };
 
-/**
- * Product listing page — shows all products with filtering/sorting.
- * Will be fully implemented in SubPhase-03.
- */
-export default function ProductsPage() {
+type ProductsPageProps = {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+};
+
+export default async function ProductsPage({ searchParams }: ProductsPageProps) {
+  const resolvedSearchParams = await searchParams;
+
+  const breadcrumbs = [
+    { label: 'Home', href: '/', current: false },
+    { label: 'All Products', current: true },
+  ];
+
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">All Products</h1>
-      <p className="text-muted-foreground">Product listing will be implemented in SubPhase-03.</p>
-    </div>
+    <CatalogPage
+      title="All Products"
+      breadcrumbs={breadcrumbs}
+      searchParams={resolvedSearchParams as Record<string, string | string[]>}
+    />
   );
 }
