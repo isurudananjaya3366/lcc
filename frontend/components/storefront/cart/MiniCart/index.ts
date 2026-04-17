@@ -1,0 +1,9 @@
+export { default as MiniCartDropdown } from './MiniCartDropdown';
+export { default as MiniCartHeader } from './MiniCartHeader';
+export { default as MiniCartItemsList } from './MiniCartItemsList';
+export { default as MiniCartItemCard } from './MiniCartItemCard';
+export { default as MiniCartSubtotal } from './MiniCartSubtotal';
+export { default as MiniCartFooter } from './MiniCartFooter';
+export { default as EmptyMiniCart } from './EmptyMiniCart';
+export { default as CartIconButton } from './CartIconButton';
+export { default as MiniCartItemRemove } from './MiniCartItemRemove';
