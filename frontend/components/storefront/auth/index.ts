@@ -15,9 +15,10 @@ export {
   SocialLoginButtons,
   GoogleButton,
   FacebookButton,
+  AppleButton,
   SocialDivider,
 } from './Social';
-export type { SocialLoginButtonsProps, GoogleButtonProps, FacebookButtonProps } from './Social';
+export type { SocialLoginButtonsProps, GoogleButtonProps, FacebookButtonProps, AppleButtonProps } from './Social';
 
 // Auth utilities
 export { AuthLoadingSpinner } from './AuthLoadingSpinner';
