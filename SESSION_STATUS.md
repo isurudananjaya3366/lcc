@@ -1,6 +1,6 @@
 # Session Status - LankaCommerce Cloud POS
 
-> **Last Updated:** Session 68 — Phase-08 SubPhase-08_Customer-Authentication FULLY AUDITED (94 tasks, 6 groups A-F, 3 gaps found+fixed: AppleButton.tsx created, GuestGuard applied to LoginPage + RegisterPage, Social barrel exports updated, 0 TS errors, 0 Django issues, SP08_AUDIT_REPORT.md created)
+> **Last Updated:** Session 68 — Phase-08 SubPhase-09_Customer-Portal FULLY AUDITED (96 tasks, 6 groups A-F, 8 gaps found+fixed: OrdersHeader created, OrderStatusSection created, AddressesHeader created, WishlistHeader created, ReviewsHeader created, usePortal.ts hook created, ContactSupport phone hardcode fixed, barrel exports updated, 0 TS errors, 0 Django issues, SP09_CUSTOMER_PORTAL_AUDIT_REPORT.md created)
 > **Purpose:** Complete handoff document for the next chat session. This file contains ALL context needed to continue work without the previous chat's memory.
 
 ---
@@ -29,12 +29,13 @@ Phase-08_Webstore-Ecommerce-Platform/SubPhase-05_Search-Functionality (ALL 92 ta
 Phase-08_Webstore-Ecommerce-Platform/SubPhase-06_Shopping-Cart (ALL 96 tasks complete, DEEP AUDITED, 3 audit fixes [MiniCartItemRemove.tsx created, StoreHeader wired to CartIconButton+Zustand, MiniCartItemCard fixed to use MiniCartItemRemove], 43 cart files: stores/store/cart.ts [Zustand+Immer+Persist] + MiniCart [9 components] + CartPage [12 components] + QuantitySelector [5] + CartItem [5] + Coupon [4] + CartSummary [4] + hooks + services + 3 routes, 0 TS errors entire frontend, SP06_AUDIT_REPORT.md, 6 groups A-F)
 Phase-08_Webstore-Ecommerce-Platform/SubPhase-07_Checkout-Flow (ALL 98 tasks complete, DEEP AUDITED, 5 TS fixes [StepProgress optional chaining, InformationStep/ShippingStep zodResolver type compat, checkoutSchemas enum fix, usePreFillInfo type widening], 65+ checkout files: stores/store/checkout.ts [Zustand+Immer+Persist] + CheckoutLayout [7] + Information [11] + Shipping [17] + Payment [14] + Review [11] + Confirmation [5] + OrderSidebar [9] + orderService + 6 routes + useCheckoutNavigation + checkoutSchemas + data/srilanka [4 files] + checkout.types.ts, Sri Lanka localized: +94 phone, Province→District→City cascade, LKR ₨, PayHere/KOKO/MintPay/COD, 0 checkout TS errors, SP07_AUDIT_REPORT.md, 6 groups A-F)
 Phase-08_Webstore-Ecommerce-Platform/SubPhase-08_Customer-Authentication (ALL 94 tasks complete, DEEP AUDITED, 3 audit gaps fixed [AppleButton.tsx created, GuestGuard applied to LoginPage+RegisterPage, Social/index.ts + auth/index.ts exports updated], 37+ auth files: stores/store/auth.ts [useStoreAuthStore Zustand+Persist] + Login [7] + Register [7] + ForgotPassword [5] + ResetPassword [4] + Social [6 incl AppleButton] + Root guards+utils [8] + services/storefront/authService.ts + tokenService.ts + hooks/useAuth.ts + useTokenRefresh.ts + types/storefront/auth.types.ts + 5 validations, JWT cookie auth, RememberMe 30d, OTP WhatsApp flow, session expiry warning, cart merge on login, 0 TS errors entire frontend, 0 Django issues, SP08_AUDIT_REPORT.md, 6 groups A-F)
+Phase-08_Webstore-Ecommerce-Platform/SubPhase-09_Customer-Portal (ALL 96 tasks complete, DEEP AUDITED, 8 audit gaps fixed [OrdersHeader created, OrderStatusSection created, AddressesHeader created, WishlistHeader created, ReviewsHeader created, usePortal.ts hook created, ContactSupport phone env-var fixed, barrel exports updated], 71 portal files: Layout [5] + Dashboard [6] + Orders [23 incl 2 new] + Addresses [9 incl 1 new] + Wishlist [6 incl 1 new] + Reviews [8 incl 1 new] + Settings [5] + portalService.ts + usePortal.ts [NEW] + portal.types.ts + addressSchema + profileSchema + PortalTestIds, auth-protected, SR Lanka locale, wishlist→cart integration, 0 TS errors entire frontend, 0 Django issues, SP09_CUSTOMER_PORTAL_AUDIT_REPORT.md, 6 groups A-F)
 ```
 
 ### Next Document to Implement
 
 ```
-Phase-08_Webstore-Ecommerce-Platform/SubPhase-09 (Next SubPhase)
+Phase-08_Webstore-Ecommerce-Platform/SubPhase-10 (Next SubPhase)
 ```
 
 ---

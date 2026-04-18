@@ -43,3 +43,5 @@ export {
   getRememberMe,
   setRememberMe,
 } from './tokenService';
+
+export { getDashboardStats, getOrders, getOrderById } from './portalService';

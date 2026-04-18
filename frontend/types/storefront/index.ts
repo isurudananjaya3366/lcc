@@ -26,3 +26,13 @@ export type {
   OTPVerifyData,
   AuthState,
 } from './auth.types';
+
+export type {
+  OrderStatus as PortalOrderStatus,
+  PortalOrder,
+  PortalOrderItem,
+  PortalAddress,
+  PortalStats,
+  WishlistItem,
+  PortalReview,
+} from './portal.types';
