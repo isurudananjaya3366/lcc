@@ -10,6 +10,61 @@ from rest_framework import serializers
 from apps.products.models import Category, Product, ProductImage, ProductVariant
 from apps.products.models.variant_option import VariantOptionValue  # noqa: F401
 
+# ─── Store Order Serializers ─────────────────────────────────────────────────
+
+
+class StoreOrderLineItemSerializer(serializers.Serializer):
+    """Serializer for a single cart item in a store order submission."""
+
+    productId = serializers.CharField(max_length=255)
+    name = serializers.CharField(max_length=255)
+    sku = serializers.CharField(max_length=100)
+    price = serializers.DecimalField(max_digits=12, decimal_places=2)
+    quantity = serializers.IntegerField(min_value=1)
+    variant = serializers.JSONField(allow_null=True, required=False, default=None)
+
+
+class StoreContactInfoSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    phone = serializers.CharField(max_length=20)
+    firstName = serializers.CharField(max_length=100)
+    lastName = serializers.CharField(max_length=100)
+
+
+class StoreShippingAddressSerializer(serializers.Serializer):
+    province = serializers.CharField(max_length=100)
+    district = serializers.CharField(max_length=100)
+    city = serializers.CharField(max_length=100)
+    address1 = serializers.CharField(max_length=200)
+    address2 = serializers.CharField(max_length=200, required=False, allow_blank=True, default="")
+    landmark = serializers.CharField(max_length=200, required=False, allow_blank=True, default="")
+    postalCode = serializers.CharField(max_length=10, required=False, allow_blank=True, default="")
+
+
+class StoreOrderCreateSerializer(serializers.Serializer):
+    """Serializer for incoming checkout order submission from the storefront."""
+
+    contactInfo = StoreContactInfoSerializer()
+    shippingAddress = StoreShippingAddressSerializer()
+    shippingMethodId = serializers.CharField(max_length=100)
+    paymentMethod = serializers.CharField(max_length=50)
+    items = StoreOrderLineItemSerializer(many=True, min_length=1)
+    discountCode = serializers.CharField(
+        max_length=100, required=False, allow_blank=True, default=""
+    )
+
+
+class StoreOrderConfirmationSerializer(serializers.Serializer):
+    """Response serializer for a successfully created store order."""
+
+    orderId = serializers.UUIDField()
+    orderNumber = serializers.CharField()
+    status = serializers.CharField()
+    total = serializers.DecimalField(max_digits=12, decimal_places=2)
+    currency = serializers.CharField()
+    estimatedDelivery = serializers.CharField()
+    createdAt = serializers.DateTimeField()
+
 
 class StoreProductImageSerializer(serializers.ModelSerializer):
     url = serializers.SerializerMethodField()

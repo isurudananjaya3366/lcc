@@ -19,3 +19,11 @@ export {
   type ResetPasswordFormData,
 } from './password';
 export { productFormSchema, type ProductFormData, productFormDefaults } from './product';
+export {
+  informationStepSchema,
+  shippingStepSchema,
+  paymentStepSchema,
+  type InformationStepData,
+  type ShippingStepData,
+  type PaymentStepData,
+} from './checkoutSchemas';

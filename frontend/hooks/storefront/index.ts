@@ -10,3 +10,4 @@ export { useCartMerge } from './useCartMerge';
 export { useStockValidation } from './useStockValidation';
 export { usePriceCheck } from './usePriceCheck';
 export type { PriceChange } from './usePriceCheck';
+export { useCheckoutNavigation } from './useCheckoutNavigation';

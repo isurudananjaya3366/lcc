@@ -12,3 +12,4 @@ export { useStoreUIStore } from './ui';
 export { useRecentlyViewedStore, type RecentProduct } from './recentlyViewed';
 export { useComparisonStore, type ComparisonProduct } from './comparison';
 export { useAnnouncementStore } from './announcement';
+export { useStoreCheckoutStore } from './checkout';

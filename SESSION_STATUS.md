@@ -1,6 +1,6 @@
 # Session Status - LankaCommerce Cloud POS
 
-> **Last Updated:** Session 67 — Phase-08 SubPhase-06_Shopping-Cart DEEP AUDITED (96 tasks, 6 groups A-F, 3 audit fixes, 43 cart files + 3 routes + hooks + services + Zustand store, 0 TS errors, SP06_AUDIT_REPORT.md)
+> **Last Updated:** Session 69 — Phase-08 SubPhase-07_Checkout-Flow FULLY AUDITED + PRODUCTION WIRED (98 tasks, 6 groups A-F, 5 gaps found+fixed: PlaceOrderButton stub→real API, missing backend POST /api/v1/store/orders/ endpoint created, shipping/page.tsx StepProgress added, vitest.config.ts created, 4 test files created with 111 tests all passing, frontend↔backend wiring verified, SP08_SP07_CHECKOUT_AUDIT_REPORT.md)
 > **Purpose:** Complete handoff document for the next chat session. This file contains ALL context needed to continue work without the previous chat's memory.
 
 ---
@@ -27,12 +27,13 @@ Phase-08_Webstore-Ecommerce-Platform/SubPhase-03_Storefront-Catalog (ALL 96 task
 Phase-08_Webstore-Ecommerce-Platform/SubPhase-04_Product-Detail-Page (ALL 94 tasks complete, DEEP AUDITED, 9 audit fixes, 61 components + 5 routes + backend store API created at api/v1/store/ [products list/detail/related/reviews + categories, AllowAny], 0 TS errors in product detail files, SP04_AUDIT_REPORT.md, 6 groups A-F)
 Phase-08_Webstore-Ecommerce-Platform/SubPhase-05_Search-Functionality (ALL 92 tasks complete, DEEP AUDITED, 4 audit fixes [SearchInput forwardRef, SearchForm autocomplete integration, LoadMoreButton created, layout aside removed], 45 search files: SearchInput + Autocomplete + RecentSearches + SearchResults + SearchFilters + EdgeCases + hooks + services + routes, 0 TS errors entire frontend, SP05_AUDIT_REPORT.md, 6 groups A-F)
 Phase-08_Webstore-Ecommerce-Platform/SubPhase-06_Shopping-Cart (ALL 96 tasks complete, DEEP AUDITED, 3 audit fixes [MiniCartItemRemove.tsx created, StoreHeader wired to CartIconButton+Zustand, MiniCartItemCard fixed to use MiniCartItemRemove], 43 cart files: stores/store/cart.ts [Zustand+Immer+Persist] + MiniCart [9 components] + CartPage [12 components] + QuantitySelector [5] + CartItem [5] + Coupon [4] + CartSummary [4] + hooks + services + 3 routes, 0 TS errors entire frontend, SP06_AUDIT_REPORT.md, 6 groups A-F)
+Phase-08_Webstore-Ecommerce-Platform/SubPhase-07_Checkout-Flow (ALL 98 tasks complete, DEEP AUDITED, 5 TS fixes [StepProgress optional chaining, InformationStep/ShippingStep zodResolver type compat, checkoutSchemas enum fix, usePreFillInfo type widening], 65+ checkout files: stores/store/checkout.ts [Zustand+Immer+Persist] + CheckoutLayout [7] + Information [11] + Shipping [17] + Payment [14] + Review [11] + Confirmation [5] + OrderSidebar [9] + orderService + 6 routes + useCheckoutNavigation + checkoutSchemas + data/srilanka [4 files] + checkout.types.ts, Sri Lanka localized: +94 phone, Province→District→City cascade, LKR ₨, PayHere/KOKO/MintPay/COD, 0 checkout TS errors, SP07_AUDIT_REPORT.md, 6 groups A-F)
 ```
 
 ### Next Document to Implement
 
 ```
-Phase-08_Webstore-Ecommerce-Platform/SubPhase-07 (Next SubPhase)
+Phase-08_Webstore-Ecommerce-Platform/SubPhase-08 (Next SubPhase)
 ```
 
 ---
@@ -220,6 +221,7 @@ Deep audit of all 94 tasks in the Product Detail Page SubPhase. 9 frontend gaps 
 9. **CrossSellSection never rendered** → Added import + render in ProductDetailContainer
 
 **Backend Store API Created:**
+
 - `apps/webstore/api/` — `StoreProductViewSet` (lookup_field='slug', AllowAny), `StoreCategoryViewSet`
 - Endpoints: `GET /api/v1/store/products/`, `/{slug}/`, `/{slug}/related/`, `/{slug}/reviews/`, `/categories/`
 - Django system check: 0 issues
