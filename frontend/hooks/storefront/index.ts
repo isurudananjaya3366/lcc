@@ -11,3 +11,6 @@ export { useStockValidation } from './useStockValidation';
 export { usePriceCheck } from './usePriceCheck';
 export type { PriceChange } from './usePriceCheck';
 export { useCheckoutNavigation } from './useCheckoutNavigation';
+export { useAuth } from './useAuth';
+export { useTokenRefresh } from './useTokenRefresh';
+export { useCartMergeOnLogin } from './useCartMergeOnLogin';

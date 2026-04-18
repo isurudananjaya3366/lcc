@@ -13,3 +13,4 @@ export { useRecentlyViewedStore, type RecentProduct } from './recentlyViewed';
 export { useComparisonStore, type ComparisonProduct } from './comparison';
 export { useAnnouncementStore } from './announcement';
 export { useStoreCheckoutStore } from './checkout';
+export { useStoreAuthStore } from './auth';

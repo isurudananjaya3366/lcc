@@ -16,3 +16,13 @@ export type {
   CheckoutState,
   StepValidation,
 } from './checkout.types';
+
+export type {
+  StoreUser,
+  LoginCredentials,
+  RegisterFormData,
+  ForgotPasswordData,
+  ResetPasswordData,
+  OTPVerifyData,
+  AuthState,
+} from './auth.types';

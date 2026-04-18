@@ -20,3 +20,26 @@ export type {
   OrderStatus,
   OrderLineItem,
 } from './orderService';
+
+export {
+  loginApi,
+  registerApi,
+  logoutApi,
+  getCurrentUser,
+  requestPasswordReset,
+  verifyOTP,
+  resetPassword,
+  refreshTokenApi,
+} from './authService';
+
+export {
+  getAccessToken,
+  setAccessToken,
+  getRefreshToken,
+  setRefreshToken,
+  clearTokens,
+  isTokenExpired,
+  getTokenExpiryMs,
+  getRememberMe,
+  setRememberMe,
+} from './tokenService';
