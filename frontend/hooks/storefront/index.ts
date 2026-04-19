@@ -14,3 +14,5 @@ export { useCheckoutNavigation } from './useCheckoutNavigation';
 export { useAuth } from './useAuth';
 export { useTokenRefresh } from './useTokenRefresh';
 export { useCartMergeOnLogin } from './useCartMergeOnLogin';
+export { useTheme } from './useTheme';
+export type { UseThemeReturn } from './useTheme';

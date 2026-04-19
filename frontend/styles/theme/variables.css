@@ -1,0 +1,45 @@
+/* ================================================================
+   Root CSS Variables — Theme
+   ================================================================
+   Default CSS custom properties for the theme system.
+   These are overridden at runtime by CSSVariablesInjector.
+   ================================================================ */
+
+:root {
+  /* ── Colors ────────────────────────────────────────────────── */
+  --theme-color-primary: #2563eb;
+  --theme-color-secondary: #64748b;
+  --theme-color-accent: #f59e0b;
+  --theme-color-background: #ffffff;
+  --theme-color-surface: #f8fafc;
+
+  /* Text */
+  --theme-color-text-primary: #0f172a;
+  --theme-color-text-secondary: #64748b;
+  --theme-color-text-disabled: #cbd5e1;
+
+  /* Borders */
+  --theme-color-border-light: #e2e8f0;
+  --theme-color-border-dark: #94a3b8;
+
+  /* Status */
+  --theme-color-success: #10b981;
+  --theme-color-warning: #f59e0b;
+  --theme-color-error: #ef4444;
+  --theme-color-info: #3b82f6;
+
+  /* ── Fonts ─────────────────────────────────────────────────── */
+  --theme-font-heading: 'Inter', system-ui, sans-serif;
+  --theme-font-body: 'Open Sans', system-ui, sans-serif;
+  --theme-font-scale: 1;
+
+  /* Font weights */
+  --theme-font-weight-light: 300;
+  --theme-font-weight-normal: 400;
+  --theme-font-weight-medium: 500;
+  --theme-font-weight-bold: 700;
+
+  /* ── Logo ──────────────────────────────────────────────────── */
+  --theme-logo-width: 200px;
+  --theme-logo-height: 60px;
+}

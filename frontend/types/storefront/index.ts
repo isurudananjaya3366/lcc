@@ -36,3 +36,19 @@ export type {
   WishlistItem,
   PortalReview,
 } from './portal.types';
+
+export type {
+  Theme,
+  ThemeColors,
+  ThemeFonts,
+  ThemeLogo,
+  ThemeHomepage,
+  ThemeContextValue,
+  PartialTheme,
+  ThemeStoreState,
+  ThemeValidationError,
+  ThemeValidationResult,
+  ThemeCacheEntry,
+} from './theme.types';
+
+export { isValidHexColor, isThemeColors, isThemeFonts } from './theme.types';

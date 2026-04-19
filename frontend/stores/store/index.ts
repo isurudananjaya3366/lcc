@@ -14,3 +14,4 @@ export { useComparisonStore, type ComparisonProduct } from './comparison';
 export { useAnnouncementStore } from './announcement';
 export { useStoreCheckoutStore } from './checkout';
 export { useStoreAuthStore } from './auth';
+export { useThemeStore } from './theme';
