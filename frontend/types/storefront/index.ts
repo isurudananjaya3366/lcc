@@ -52,3 +52,22 @@ export type {
 } from './theme.types';
 
 export { isValidHexColor, isThemeColors, isThemeFonts } from './theme.types';
+
+export type {
+  PageStatus,
+  ContentType,
+  PageSEO,
+  ContentBlock,
+  CMSPage,
+  BlogAuthor,
+  BlogCategory,
+  BlogTag,
+  BlogPost,
+  PaginationMeta,
+  PagesResponse,
+  BlogPostsResponse,
+  FAQItem,
+  ContactFormData,
+  PolicySection,
+  ShippingRate,
+} from './cms.types';

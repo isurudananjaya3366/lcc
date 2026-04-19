@@ -45,3 +45,14 @@ export {
 } from './tokenService';
 
 export { getDashboardStats, getOrders, getOrderById } from './portalService';
+
+export {
+  getPageBySlug,
+  getPages,
+  getBlogPosts,
+  getBlogPostBySlug,
+  getBlogCategories,
+  getFAQItems,
+  submitContactForm,
+  getShippingRates,
+} from './cmsService';
