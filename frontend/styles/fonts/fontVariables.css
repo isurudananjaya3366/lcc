@@ -1,0 +1,29 @@
+/**
+ * Font CSS Variables — referenced by Tailwind and component styles.
+ * The actual font-family values are injected by next/font via
+ * CSS custom properties (--font-body, --font-heading).
+ */
+
+:root {
+  /* Body font — Inter */
+  --font-body: var(--font-body, 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif);
+
+  /* Heading font — Playfair Display */
+  --font-heading: var(--font-heading, 'Playfair Display', Georgia, 'Times New Roman', serif);
+
+  /* Monospace (code blocks) */
+  --font-mono: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, monospace;
+}
+
+/* Apply fonts */
+body {
+  font-family: var(--font-body);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+}
+
+code, pre, kbd {
+  font-family: var(--font-mono);
+}

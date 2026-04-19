@@ -40,6 +40,9 @@ const nextConfig = {
   // ── Images ────────────────────────────────────────────────────
   images: {
     formats: ['image/avif', 'image/webp'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    minimumCacheTTL: 60 * 60 * 24 * 30, // 30 days
     remotePatterns: [
       {
         protocol: 'http',
@@ -201,6 +204,45 @@ const nextConfig = {
         permanent: true,
       },
     ];
+  },
+
+  // ── Webpack: Vendor & Common Chunk Splitting (Task 44/45) ─────
+  webpack(config, { isServer }) {
+    if (!isServer) {
+      config.optimization = config.optimization || {};
+      config.optimization.splitChunks = {
+        chunks: 'all',
+        minSize: 20_000,
+        maxSize: 244_000,
+        minChunks: 1,
+        maxAsyncRequests: 30,
+        maxInitialRequests: 30,
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/](react|react-dom|next|@tanstack)[\\/]/,
+            name: 'vendor',
+            chunks: 'all',
+            priority: 20,
+            reuseExistingChunk: true,
+          },
+          ui: {
+            test: /[\\/]node_modules[\\/](@radix-ui|lucide-react|class-variance-authority|clsx)[\\/]/,
+            name: 'ui-vendor',
+            chunks: 'all',
+            priority: 15,
+            reuseExistingChunk: true,
+          },
+          common: {
+            name: 'common',
+            minChunks: 2,
+            chunks: 'all',
+            priority: 10,
+            reuseExistingChunk: true,
+          },
+        },
+      };
+    }
+    return config;
   },
 };
 
