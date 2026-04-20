@@ -19,9 +19,45 @@ TENANT_DOMAIN = "invoices.testserver"
 def setup_test_tenant(django_db_setup, django_db_blocker):
     """Create a test tenant schema once per session."""
     with django_db_blocker.unblock():
-        if TenantModel.objects.filter(schema_name=SCHEMA_NAME).exists():
-            t = TenantModel.objects.get(schema_name=SCHEMA_NAME)
-            t.delete(force_drop=True)
+        with connection.cursor() as cur:
+            cur.execute(
+                "SELECT nspname FROM pg_catalog.pg_namespace "
+                "WHERE nspname = %s",
+                [SCHEMA_NAME],
+            )
+            schema_exists = cur.fetchone() is not None
+
+        if schema_exists:
+            try:
+                tenant = TenantModel.objects.get(schema_name=SCHEMA_NAME)
+                connection.set_tenant(tenant)
+                yield tenant
+                connection.set_schema_to_public()
+                return
+            except TenantModel.DoesNotExist:
+                with connection.cursor() as cur:
+                    cur.execute(
+                        "DROP SCHEMA IF EXISTS %s CASCADE" % SCHEMA_NAME
+                    )
+
+        with connection.cursor() as cur:
+            cur.execute(
+                "DELETE FROM %s WHERE tenant_id IN "
+                "(SELECT id FROM %s WHERE schema_name = %%s)"
+                % (DomainModel._meta.db_table, TenantModel._meta.db_table),
+                [SCHEMA_NAME],
+            )
+            cur.execute(
+                "DELETE FROM tenants_tenantsettings WHERE tenant_id IN "
+                "(SELECT id FROM %s WHERE schema_name = %%s)"
+                % TenantModel._meta.db_table,
+                [SCHEMA_NAME],
+            )
+            cur.execute(
+                "DELETE FROM %s WHERE schema_name = %%s"
+                % TenantModel._meta.db_table,
+                [SCHEMA_NAME],
+            )
 
         tenant = TenantModel(
             schema_name=SCHEMA_NAME,
@@ -40,24 +76,6 @@ def setup_test_tenant(django_db_setup, django_db_blocker):
         yield tenant
 
         connection.set_schema_to_public()
-        try:
-            from django.db import connection as conn
-
-            conn.set_schema_to_public()
-            cursor = conn.cursor()
-            cursor.execute(
-                f'DROP SCHEMA IF EXISTS "{SCHEMA_NAME}" CASCADE'
-            )
-            cursor.execute(
-                "DELETE FROM tenants_domain WHERE domain = %s",
-                [TENANT_DOMAIN],
-            )
-            cursor.execute(
-                "DELETE FROM tenants_tenant WHERE schema_name = %s",
-                [SCHEMA_NAME],
-            )
-        except Exception:
-            pass
 
 
 @pytest.fixture

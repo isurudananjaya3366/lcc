@@ -29,9 +29,28 @@ TENANT_DOMAIN = "payroll.testserver"
 def setup_test_tenant(django_db_setup, django_db_blocker):
     """Create and destroy a test tenant for payroll tests."""
     with django_db_blocker.unblock():
-        # Clean up any stale tenant using raw SQL to avoid cascade issues
         with connection.cursor() as cur:
-            cur.execute("DROP SCHEMA IF EXISTS %s CASCADE" % SCHEMA_NAME)
+            cur.execute(
+                "SELECT nspname FROM pg_catalog.pg_namespace "
+                "WHERE nspname = %s",
+                [SCHEMA_NAME],
+            )
+            schema_exists = cur.fetchone() is not None
+
+        if schema_exists:
+            try:
+                tenant = TenantModel.objects.get(schema_name=SCHEMA_NAME)
+                connection.set_tenant(tenant)
+                yield tenant
+                connection.set_schema_to_public()
+                return
+            except TenantModel.DoesNotExist:
+                with connection.cursor() as cur:
+                    cur.execute(
+                        "DROP SCHEMA IF EXISTS %s CASCADE" % SCHEMA_NAME
+                    )
+
+        with connection.cursor() as cur:
             cur.execute(
                 "DELETE FROM %s WHERE tenant_id IN "
                 "(SELECT id FROM %s WHERE schema_name = %%s)"
