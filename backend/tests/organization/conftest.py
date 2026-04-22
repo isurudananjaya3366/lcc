@@ -1,12 +1,12 @@
 """Fixtures for the organization module tests."""
 
-import pytest
 from datetime import date
 from decimal import Decimal
 
+import pytest
 from django.contrib.auth import get_user_model
 from django.db import connection
-from django_tenants.utils import get_tenant_model, get_tenant_domain_model
+from django_tenants.utils import get_tenant_domain_model, get_tenant_model
 
 TenantModel = get_tenant_model()
 DomainModel = get_tenant_domain_model()
@@ -30,6 +30,12 @@ def setup_test_tenant(django_db_setup, django_db_blocker):
         if schema_exists:
             try:
                 tenant = TenantModel.objects.get(schema_name=SCHEMA_NAME)
+                # Ensure domain always points to this tenant (other test suites
+                # share the same TENANT_DOMAIN and may have repointed it)
+                DomainModel.objects.update_or_create(
+                    domain=TENANT_DOMAIN,
+                    defaults={"tenant": tenant, "is_primary": True},
+                )
                 connection.set_tenant(tenant)
                 yield tenant
                 connection.set_schema_to_public()

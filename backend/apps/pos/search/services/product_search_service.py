@@ -356,8 +356,9 @@ class ProductSearchService:
     @classmethod
     def record_search(
         cls,
-        query_text: str,
+        query_text: str = "",
         *,
+        query: str = "",
         result_count: int = 0,
         search_method: str = SEARCH_METHOD_COMBINED,
         terminal=None,
@@ -367,8 +368,9 @@ class ProductSearchService:
         """Persist a search to SearchHistory."""
         from apps.pos.search.models import SearchHistory
 
+        q = (query_text or query)[:200]
         SearchHistory.objects.create(
-            query=query_text[:200],
+            query=q,
             result_count=result_count,
             search_method=search_method,
             terminal=terminal,

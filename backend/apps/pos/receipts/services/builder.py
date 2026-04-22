@@ -44,6 +44,7 @@ class ReceiptBuilder:
         """
         try:
             self.validate_cart()
+            payments_data = self.build_payments()
             return {
                 "schema_version": "1.0",
                 "generated_at": timezone.now().isoformat(),
@@ -51,7 +52,8 @@ class ReceiptBuilder:
                 "transaction": self.build_transaction_info(),
                 "items": self.build_items(),
                 "totals": self.build_totals(),
-                "payments": self.build_payments(),
+                "payments": payments_data["payments"],
+                "payments_info": payments_data,
                 "footer": self.build_footer(),
                 "qr_code": self.build_qr_code(),
             }
@@ -254,6 +256,7 @@ class ReceiptBuilder:
             footer["social_media"] = social
 
         footer["footer_note"] = "This is a computer-generated receipt"
+        footer["footer_lines"] = lines if lines else [footer["thank_you_message"]]
         return footer
 
     # ── Task 32: build_qr_code ────────────────────────────────

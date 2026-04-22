@@ -5,10 +5,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 from apps.core.models import BaseModel
-from apps.pos.constants import (
-    DISCOUNT_TYPE_FIXED,
-    DISCOUNT_TYPE_PERCENT,
-)
+from apps.pos.constants import DISCOUNT_TYPE_FIXED, DISCOUNT_TYPE_PERCENT
 
 MAX_CART_ITEM_QUANTITY = Decimal("9999.999")
 
@@ -212,6 +209,8 @@ class POSCartItem(BaseModel):
             price = self.variant.price
         elif hasattr(self.product, "base_price") and self.product.base_price:
             price = self.product.base_price
+        elif hasattr(self.product, "selling_price") and self.product.selling_price:
+            price = self.product.selling_price
         else:
             price = Decimal("0.00")
         self.original_price = price

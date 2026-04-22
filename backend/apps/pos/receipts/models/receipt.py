@@ -221,13 +221,18 @@ class Receipt(BaseModel):
         """Create a duplicate copy of this receipt."""
         from django.core.exceptions import ValidationError
 
+        from apps.pos.receipts.services import ReceiptNumberGenerator
+
         self._validate_can_duplicate()
+
+        generator = ReceiptNumberGenerator()
+        new_number = generator.generate()
 
         duplicate = Receipt(
             cart=self.cart,
             transaction_id=self.transaction_id,
             receipt_type="DUPLICATE",
-            receipt_number=self.receipt_number,
+            receipt_number=new_number,
             template=self.template,
             original_receipt=self,
             generated_at=timezone.now(),

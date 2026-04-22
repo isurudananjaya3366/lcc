@@ -181,6 +181,8 @@ class QuoteViewSet(ModelViewSet):
             )
         except (InvalidStatusTransition, QuoteValidationError) as exc:
             return Response({"detail": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as exc:
+            return Response({"detail": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
         quote.refresh_from_db()
         return Response(

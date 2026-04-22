@@ -16,7 +16,7 @@ from decimal import Decimal
 import pytest
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError, connection
-from django_tenants.utils import get_tenant_model, get_tenant_domain_model
+from django_tenants.utils import get_tenant_domain_model, get_tenant_model
 
 TenantModel = get_tenant_model()
 DomainModel = get_tenant_domain_model()
@@ -830,9 +830,9 @@ class TestProductAPIExtended:
 class TestTenantIsolation:
     """Test product data is isolated between tenants."""
 
-    @pytest.fixture
-    def second_tenant(self, setup_test_tenant, db, django_db_blocker):
-        """Create a second tenant for isolation testing."""
+    @pytest.fixture(scope="session")
+    def second_tenant(self, setup_test_tenant, django_db_setup, django_db_blocker):
+        """Create a second tenant for isolation testing (session-scoped like setup_test_tenant)."""
         schema = "test_products_iso"
         domain_name = "products-iso.testserver"
 
@@ -840,13 +840,28 @@ class TestTenantIsolation:
             # Must be on public schema to create tenants
             connection.set_schema_to_public()
 
-            # Clean up if exists from a previous run
-            if TenantModel.objects.filter(schema_name=schema).exists():
+            # Check if schema already exists in PG
+            with connection.cursor() as cur:
+                cur.execute(
+                    "SELECT nspname FROM pg_catalog.pg_namespace WHERE nspname = %s",
+                    [schema],
+                )
+                schema_exists = cur.fetchone() is not None
+
+            if schema_exists:
                 try:
-                    t = TenantModel.objects.get(schema_name=schema)
-                    t.delete(force_drop=True)
-                except Exception:
-                    pass  # schema may already be gone
+                    tenant = TenantModel.objects.get(schema_name=schema)
+                    DomainModel.objects.get_or_create(
+                        tenant=tenant,
+                        domain=domain_name,
+                        defaults={"is_primary": True},
+                    )
+                    yield tenant
+                    connection.set_schema_to_public()
+                    return
+                except TenantModel.DoesNotExist:
+                    with connection.cursor() as cur:
+                        cur.execute("DROP SCHEMA IF EXISTS %s CASCADE" % schema)
 
             tenant = TenantModel(
                 schema_name=schema,
@@ -855,18 +870,15 @@ class TestTenantIsolation:
             )
             tenant.save(verbosity=0)
 
-            domain = DomainModel(
+            DomainModel.objects.get_or_create(
                 tenant=tenant,
                 domain=domain_name,
-                is_primary=True,
+                defaults={"is_primary": True},
             )
-            domain.save()
 
         yield tenant
 
-        # Cleanup is handled at the start of the next run.
-        # Dropping schema inside a test transaction causes
-        # "pending trigger events" errors, so we skip teardown.
+        # Cleanup deferred to next run to avoid "pending trigger events" errors.
         connection.set_schema_to_public()
 
     def test_products_isolated_by_tenant(

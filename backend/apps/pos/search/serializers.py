@@ -121,6 +121,7 @@ class QuickButtonGroupSerializer(serializers.ModelSerializer):
             "columns",
             "is_default",
             "is_active",
+            "buttons",
         ]
         read_only_fields = ["id"]
 

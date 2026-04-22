@@ -14,7 +14,7 @@ from decimal import Decimal
 
 import pytest
 from django.db import connection
-from django_tenants.utils import get_tenant_model, get_tenant_domain_model
+from django_tenants.utils import get_tenant_domain_model, get_tenant_model
 
 # Import receipt fixtures so pytest discovers them
 from tests.pos.conftest_receipts import *  # noqa: F401,F403
@@ -114,7 +114,6 @@ def cashier(tenant_context):
 
     User = get_user_model()  # noqa: N806
     return User.objects.create_user(
-        username="cashier1",
         email="cashier@testpos.com",
         password="testpass123",  # noqa: S106
     )
@@ -127,7 +126,6 @@ def manager_user(tenant_context):
 
     User = get_user_model()  # noqa: N806
     return User.objects.create_user(
-        username="manager1",
         email="manager@testpos.com",
         password="managerpass123",  # noqa: S106
         is_staff=True,
@@ -141,7 +139,6 @@ def cashier2(tenant_context):
 
     User = get_user_model()  # noqa: N806
     return User.objects.create_user(
-        username="cashier2",
         email="cashier2@testpos.com",
         password="testpass123",  # noqa: S106
     )
@@ -260,7 +257,15 @@ def closed_session(terminal2, cashier2):
 
 
 @pytest.fixture
-def product(tenant_context):
+def product_category(tenant_context):
+    """Create a test product category."""
+    from apps.products.models import Category
+
+    return Category.objects.create(name="Beverages", slug="beverages")
+
+
+@pytest.fixture
+def product(tenant_context, product_category):
     """Create a test product."""
     from apps.products.models import Product
 
@@ -270,13 +275,14 @@ def product(tenant_context):
         barcode="8901234567890",
         selling_price=Decimal("150.00"),
         cost_price=Decimal("100.00"),
+        category=product_category,
         is_pos_visible=True,
         status="active",
     )
 
 
 @pytest.fixture
-def product2(tenant_context):
+def product2(tenant_context, product_category):
     """Create a second test product."""
     from apps.products.models import Product
 
@@ -286,13 +292,14 @@ def product2(tenant_context):
         barcode="8901234567891",
         selling_price=Decimal("200.00"),
         cost_price=Decimal("130.00"),
+        category=product_category,
         is_pos_visible=True,
         status="active",
     )
 
 
 @pytest.fixture
-def product_invisible(tenant_context):
+def product_invisible(tenant_context, product_category):
     """Create a product not visible in POS."""
     from apps.products.models import Product
 
@@ -302,13 +309,14 @@ def product_invisible(tenant_context):
         barcode="8901234500001",
         selling_price=Decimal("500.00"),
         cost_price=Decimal("300.00"),
+        category=product_category,
         is_pos_visible=False,
         status="active",
     )
 
 
 @pytest.fixture
-def product_with_variant(tenant_context):
+def product_with_variant(tenant_context, product_category):
     """Create a product with a variant."""
     from apps.products.models import Product, ProductVariant
 
@@ -318,6 +326,7 @@ def product_with_variant(tenant_context):
         barcode="8901234500010",
         selling_price=Decimal("1500.00"),
         cost_price=Decimal("800.00"),
+        category=product_category,
         is_pos_visible=True,
         status="active",
     )
@@ -379,13 +388,13 @@ def cart_with_items(cart, product, product2):
 @pytest.fixture
 def quick_button_group(terminal, product):
     """Create a quick button group with a button."""
-    from apps.pos.search.models import QuickButtonGroup, QuickButton
+    from apps.pos.search.models import QuickButton, QuickButtonGroup
 
     group = QuickButtonGroup.objects.create(
         name="Popular Drinks",
-        terminal=terminal,
+        code="popular-drinks",
         is_active=True,
-        sort_order=1,
+        display_order=1,
     )
     QuickButton.objects.create(
         group=group,
@@ -408,7 +417,7 @@ def api_client():
     """Return a DRF API test client."""
     from rest_framework.test import APIClient
 
-    return APIClient()
+    return APIClient(HTTP_HOST=TENANT_DOMAIN)
 
 
 @pytest.fixture

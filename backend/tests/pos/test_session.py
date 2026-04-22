@@ -227,6 +227,14 @@ class TestSessionNumberGeneration:
         nums = set()
         for _ in range(3):
             num = POSSession.generate_session_number(terminal)
+            sess = POSSession(
+                terminal=terminal,
+                user=cashier,
+                session_number=num,
+                opening_cash_amount=Decimal("1000.00"),
+            )
+            sess.open_session()
+            sess.close_session(actual_cash_amount=Decimal("1000.00"))
             nums.add(num)
         assert len(nums) == 3
 

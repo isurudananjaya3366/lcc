@@ -39,10 +39,7 @@ from apps.pos.receipts.services import (
     ReceiptNumberGenerator,
     ThermalPrintRenderer,
 )
-from apps.pos.receipts.services.exceptions import (
-    CartValidationError,
-    ReceiptBuildError,
-)
+from apps.pos.receipts.services.exceptions import CartValidationError, ReceiptBuildError
 
 logger = logging.getLogger(__name__)
 
@@ -215,7 +212,7 @@ class ReceiptViewSet(viewsets.ReadOnlyModelViewSet):
 
     # ── Task 74: Email receipt ───────────────────────────────
 
-    @action(detail=True, methods=["post"], url_path="email")
+    @action(detail=True, methods=["post"], url_path="email", url_name="email")
     def email_receipt(self, request, pk=None):
         """Send receipt via email."""
         receipt = self.get_object()
@@ -252,7 +249,7 @@ class ReceiptViewSet(viewsets.ReadOnlyModelViewSet):
 
     # ── Task 75: Download PDF ────────────────────────────────
 
-    @action(detail=True, methods=["get"], url_path="pdf")
+    @action(detail=True, methods=["get"], url_path="pdf", url_name="pdf")
     def download_pdf(self, request, pk=None):
         """Download receipt as PDF."""
         receipt = self.get_object()
@@ -357,6 +354,16 @@ class ReceiptViewSet(viewsets.ReadOnlyModelViewSet):
         return Response(ReceiptListSerializer(qs, many=True).data)
 
 
+class _PassthroughRenderer:
+    """Minimal DRF renderer that accepts any format, used so content negotiation never raises NotAcceptable."""
+
+    media_type = "*/*"
+    format = "passthrough"
+
+    def render(self, data, accepted_media_type=None, renderer_context=None):  # noqa: A003
+        return data
+
+
 class ReceiptExportView(APIView):
     """
     Task 78: Export receipts as CSV or JSON.
@@ -365,6 +372,12 @@ class ReceiptExportView(APIView):
     """
 
     permission_classes = [IsAuthenticated]
+    renderer_classes = [_PassthroughRenderer]
+
+    def perform_content_negotiation(self, request, force=False):
+        """Skip format-based renderer selection — view returns HttpResponse directly."""
+        renderer = _PassthroughRenderer()
+        return renderer, renderer.media_type
 
     def get(self, request):
         ser = ReceiptExportSerializer(data=request.query_params)

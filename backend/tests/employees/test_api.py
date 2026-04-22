@@ -1,12 +1,13 @@
 """Tests for employee API endpoints."""
 
-import pytest
 from datetime import date
+
+import pytest
 from rest_framework.test import APIClient
 
 pytestmark = pytest.mark.django_db
 
-TENANT_DOMAIN = "testserver"
+TENANT_DOMAIN = "employees.testserver"
 
 
 @pytest.fixture

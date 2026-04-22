@@ -304,14 +304,11 @@
       <p class="company-address">{{ template.company_address }}</p>
       {% if template.company_phone or template.company_email %}
       <p class="company-contact">
-        {% if template.company_phone %}Tel: {{ template.company_phone }}{% endif %} {% if template.company_phone and
-        template.company_email %} | {% endif %} {% if template.company_email %}Email: {{ template.company_email }}{%
-        endif %}
+        {% if template.company_phone %}Tel: {{ template.company_phone }}{% endif %}{% if template.company_phone and template.company_email %} | {% endif %}{% if template.company_email %}Email: {{ template.company_email }}{% endif %}
       </p>
       {% endif %} {% if template.epf_number or template.etf_number %}
       <p class="statutory-numbers">
-        {% if template.epf_number %}EPF: {{ template.epf_number }}{% endif %} {% if template.epf_number and
-        template.etf_number %} | {% endif %} {% if template.etf_number %}ETF: {{ template.etf_number }}{% endif %}
+        {% if template.epf_number %}EPF: {{ template.epf_number }}{% endif %}{% if template.epf_number and template.etf_number %} | {% endif %}{% if template.etf_number %}ETF: {{ template.etf_number }}{% endif %}
       </p>
       {% endif %}
     </div>

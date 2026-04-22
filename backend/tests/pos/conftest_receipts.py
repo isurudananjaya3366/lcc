@@ -5,9 +5,10 @@ Provides conftest-level fixtures for receipt builder, thermal printer,
 PDF generator, and email service tests.
 """
 
-import pytest
 from decimal import Decimal
 from unittest.mock import MagicMock
+
+import pytest
 
 from apps.pos.receipts.models import Receipt, ReceiptTemplate
 
@@ -83,8 +84,8 @@ def receipt(completed_cart, receipt_template):
     builder = ReceiptBuilder(cart=completed_cart, template=receipt_template)
     receipt_data = builder.build()
 
-    generator = ReceiptNumberGenerator()
-    receipt_number = generator.generate()
+    # Use the same number the builder generated internally (avoids a duplicate generate)
+    receipt_number = builder._receipt_number or ReceiptNumberGenerator().generate()
 
     return Receipt.objects.create(
         receipt_number=receipt_number,

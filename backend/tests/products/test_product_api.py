@@ -7,7 +7,7 @@ All tests are database-free.
 
 import uuid
 from decimal import Decimal
-from unittest.mock import MagicMock, PropertyMock, patch, call
+from unittest.mock import MagicMock, PropertyMock, call, patch
 
 import pytest
 from rest_framework import serializers as drf_serializers
@@ -696,8 +696,9 @@ class TestBrandViewSetConfiguration:
         assert BrandViewSet.search_fields == ["name"]
 
     def test_inherits_model_viewset(self):
-        from apps.products.api.views import BrandViewSet
         from rest_framework.viewsets import ModelViewSet
+
+        from apps.products.api.views import BrandViewSet
 
         assert issubclass(BrandViewSet, ModelViewSet)
 
@@ -734,8 +735,9 @@ class TestTaxClassViewSetConfiguration:
         assert TaxClassViewSet.filterset_fields == ["is_default"]
 
     def test_inherits_model_viewset(self):
-        from apps.products.api.views import TaxClassViewSet
         from rest_framework.viewsets import ModelViewSet
+
+        from apps.products.api.views import TaxClassViewSet
 
         assert issubclass(TaxClassViewSet, ModelViewSet)
 
@@ -802,8 +804,9 @@ class TestProductViewSetConfiguration:
         assert ProductViewSet.ordering == ["-created_on"]
 
     def test_inherits_model_viewset(self):
-        from apps.products.api.views import ProductViewSet
         from rest_framework.viewsets import ModelViewSet
+
+        from apps.products.api.views import ProductViewSet
 
         assert issubclass(ProductViewSet, ModelViewSet)
 
@@ -1093,10 +1096,11 @@ class TestProductURLConfiguration:
     def test_router_registry_count(self):
         from apps.products.api.urls import router
 
-        # 8 viewsets registered: categories, brands, tax-classes, products,
+        # 14 viewsets registered: categories, brands, tax-classes, products,
         # variant-option-types, variant-option-values, product-variants,
-        # product-option-configs
-        assert len(router.registry) == 8
+        # product-option-configs, bundles, bundle-items, bom, bom-items,
+        # product-images, variant-images
+        assert len(router.registry) == 14
 
     def test_brand_list_url_name_exists(self):
         from apps.products.api.urls import urlpatterns

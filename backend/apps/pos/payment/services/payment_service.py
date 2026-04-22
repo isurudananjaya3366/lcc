@@ -15,8 +15,8 @@ from apps.pos.constants import (
     CART_STATUS_ACTIVE,
     CART_STATUS_COMPLETED,
     CART_STATUS_VOIDED,
-    PAYMENT_METHOD_CASH,
     PAYMENT_METHOD_CARD,
+    PAYMENT_METHOD_CASH,
     PAYMENT_METHOD_STORE_CREDIT,
     PAYMENT_STATUS_COMPLETED,
     PAYMENT_STATUS_FAILED,
@@ -225,7 +225,22 @@ class PaymentService:
 
             if method == PAYMENT_METHOD_CASH:
                 amt_tendered = Decimal(str(pay_spec.get("tendered_amount", pay_spec.get("amount_tendered", amount))))
-                results.append(self.process_cash_payment(amt_tendered))
+                if not amt_tendered or amt_tendered <= 0:
+                    raise ValueError("Amount tendered must be positive")
+                if amt_tendered < amount:
+                    raise ValueError(
+                        f"Insufficient cash. Required: LKR {amount}, "
+                        f"Tendered: LKR {amt_tendered}"
+                    )
+                change_due = amt_tendered - amount
+                results.append(self._create_payment(
+                    method=PAYMENT_METHOD_CASH,
+                    amount=amount,
+                    status=PAYMENT_STATUS_COMPLETED,
+                    amount_tendered=amt_tendered,
+                    change_due=change_due,
+                    paid_at=timezone.now(),
+                ))
             elif method == PAYMENT_METHOD_CARD:
                 results.append(
                     self.process_card_payment(

@@ -42,7 +42,7 @@ class TestPOSTerminalCreation:
         assert terminal in warehouse.terminals.all()
 
     def test_terminal_str_representation(self, terminal):
-        expected = f"{terminal.code} - {terminal.name}"
+        expected = f"{terminal.name} ({terminal.code})"
         assert str(terminal) == expected
 
 

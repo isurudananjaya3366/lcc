@@ -101,7 +101,7 @@ class ReceiptDetailSerializer(serializers.ModelSerializer):
         if request:
             from django.urls import reverse
             return request.build_absolute_uri(
-                reverse("pos:receipt-download-pdf", kwargs={"pk": obj.pk})
+                reverse("pos:receipt-pdf", kwargs={"pk": obj.pk})
             )
         return None
 
@@ -119,7 +119,7 @@ class ReceiptDetailSerializer(serializers.ModelSerializer):
         if request:
             from django.urls import reverse
             return request.build_absolute_uri(
-                reverse("pos:receipt-email-receipt", kwargs={"pk": obj.pk})
+                reverse("pos:receipt-email", kwargs={"pk": obj.pk})
             )
         return None
 

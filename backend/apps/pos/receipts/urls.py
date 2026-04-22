@@ -17,10 +17,10 @@ router.register(
 )
 
 urlpatterns = [
-    path("", include(router.urls)),
     path(
         "receipts/export/",
         ReceiptExportView.as_view(),
         name="receipt-export",
     ),
+    path("", include(router.urls)),
 ]

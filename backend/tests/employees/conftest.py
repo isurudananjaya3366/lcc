@@ -1,16 +1,17 @@
 """Fixtures for employees module tests."""
 
-import pytest
 from datetime import date
+
+import pytest
 from django.contrib.auth import get_user_model
 from django.db import connection
-from django_tenants.utils import get_tenant_model, get_tenant_domain_model
+from django_tenants.utils import get_tenant_domain_model, get_tenant_model
 
 TenantModel = get_tenant_model()
 DomainModel = get_tenant_domain_model()
 
 SCHEMA_NAME = "test_employees"
-TENANT_DOMAIN = "testserver"
+TENANT_DOMAIN = "employees.testserver"
 
 
 @pytest.fixture(scope="session")
@@ -28,6 +29,10 @@ def setup_test_tenant(django_db_setup, django_db_blocker):
         if schema_exists:
             try:
                 tenant = TenantModel.objects.get(schema_name=SCHEMA_NAME)
+                DomainModel.objects.get_or_create(
+                    domain=TENANT_DOMAIN,
+                    defaults={"tenant": tenant, "is_primary": True},
+                )
                 connection.set_tenant(tenant)
                 yield tenant
                 connection.set_schema_to_public()
