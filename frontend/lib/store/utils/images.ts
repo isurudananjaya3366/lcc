@@ -123,7 +123,9 @@ export function isValidImageUrl(url: string): boolean {
 interface ProductImageData {
   url: string;
   altText?: string;
+  alt_text?: string;
   isPrimary?: boolean;
+  is_primary?: boolean;
 }
 
 /**
@@ -134,7 +136,7 @@ export function getProductMainImage(
   size: ImageSize = 'medium'
 ): string {
   if (!images || images.length === 0) return PLACEHOLDER_IMAGE;
-  const primary = images.find((img) => img.isPrimary) ?? images[0];
+  const primary = images.find((img) => img.isPrimary || img.is_primary) ?? images[0];
   return getImageUrl(primary!.url, size);
 }
 

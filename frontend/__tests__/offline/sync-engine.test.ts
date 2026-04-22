@@ -78,8 +78,7 @@ describe('Connection Monitor', () => {
     const monitor = new ConnectionMonitor();
     // Mock fetch for ping
     const originalFetch = globalThis.fetch;
-    globalThis.fetch = () =>
-      Promise.resolve(new Response('OK', { status: 200 }));
+    globalThis.fetch = () => Promise.resolve(new Response('OK', { status: 200 }));
     try {
       const result = await monitor.checkConnection();
       expect(typeof result).toBe('boolean');
@@ -92,9 +91,7 @@ describe('Connection Monitor', () => {
     const monitor = new ConnectionMonitor();
     const originalFetch = globalThis.fetch;
     globalThis.fetch = () =>
-      new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('timeout')), 10)
-      );
+      new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 10));
     try {
       const result = await monitor.checkConnection();
       expect(result).toBe(false);
@@ -211,15 +208,9 @@ describe('Conflict Resolver', () => {
 
   it('should handle empty local or server arrays', async () => {
     const resolver = new ConflictResolver();
-    const conflicts1 = await resolver.detectConflicts(
-      [],
-      [{ id: 'x', version: 1 }]
-    );
+    const conflicts1 = await resolver.detectConflicts([], [{ id: 'x', version: 1 }]);
     expect(conflicts1.length).toBe(0);
-    const conflicts2 = await resolver.detectConflicts(
-      [{ id: 'y', version: 1 }],
-      []
-    );
+    const conflicts2 = await resolver.detectConflicts([{ id: 'y', version: 1 }], []);
     expect(conflicts2.length).toBe(0);
   });
 });
@@ -272,9 +263,7 @@ describe('Sync Engine', () => {
       // Start first sync
       const p1 = syncEngine.manualSync().catch(() => ({ error: 'caught' }));
       // Attempt second sync immediately
-      const p2 = syncEngine
-        .manualSync()
-        .catch((e: Error) => ({ error: e.message }));
+      const p2 = syncEngine.manualSync().catch((e: Error) => ({ error: e.message }));
 
       const results = await Promise.all([p1, p2]);
       // At least one should indicate it was blocked or errored
@@ -282,8 +271,7 @@ describe('Sync Engine', () => {
     });
 
     it('should release lock after sync completion', async () => {
-      globalThis.fetch = () =>
-        Promise.resolve(new Response('{}', { status: 200 }));
+      globalThis.fetch = () => Promise.resolve(new Response('{}', { status: 200 }));
 
       try {
         await syncEngine.manualSync();
@@ -356,12 +344,9 @@ describe('Sync Engine', () => {
     });
 
     it('should handle push failure gracefully', async () => {
-      globalThis.fetch = () =>
-        Promise.resolve(new Response('Server Error', { status: 500 }));
+      globalThis.fetch = () => Promise.resolve(new Response('Server Error', { status: 500 }));
 
-      const result = await syncEngine
-        .manualSync()
-        .catch((e: Error) => ({ error: e.message }));
+      const result = await syncEngine.manualSync().catch((e: Error) => ({ error: e.message }));
       expect(result).toBeDefined();
     });
   });
@@ -371,12 +356,9 @@ describe('Sync Engine', () => {
   // ----------------------------------------------------------
   describe('Pull Updates', () => {
     it('should handle 304 Not Modified response', async () => {
-      globalThis.fetch = () =>
-        Promise.resolve(new Response(null, { status: 304 }));
+      globalThis.fetch = () => Promise.resolve(new Response(null, { status: 304 }));
 
-      const result = await syncEngine
-        .manualSync()
-        .catch((e: Error) => ({ error: e.message }));
+      const result = await syncEngine.manualSync().catch((e: Error) => ({ error: e.message }));
       expect(result).toBeDefined();
     });
 
@@ -396,9 +378,7 @@ describe('Sync Engine', () => {
           )
         );
 
-      const result = await syncEngine
-        .manualSync()
-        .catch((e: Error) => ({ error: e.message }));
+      const result = await syncEngine.manualSync().catch((e: Error) => ({ error: e.message }));
       expect(result).toBeDefined();
     });
   });
@@ -488,9 +468,7 @@ describe('Sync Engine', () => {
       globalThis.fetch = () => Promise.reject(new Error('Network timeout'));
 
       try {
-        const result = await syncEngine
-          .manualSync()
-          .catch((e: Error) => ({ error: e.message }));
+        const result = await syncEngine.manualSync().catch((e: Error) => ({ error: e.message }));
         expect(result).toBeDefined();
       } finally {
         // restored in afterEach
@@ -501,19 +479,14 @@ describe('Sync Engine', () => {
       globalThis.fetch = () =>
         Promise.resolve(new Response('Internal Server Error', { status: 500 }));
 
-      const result = await syncEngine
-        .manualSync()
-        .catch((e: Error) => ({ error: e.message }));
+      const result = await syncEngine.manualSync().catch((e: Error) => ({ error: e.message }));
       expect(result).toBeDefined();
     });
 
     it('should handle 401 authentication error', async () => {
-      globalThis.fetch = () =>
-        Promise.resolve(new Response('Unauthorized', { status: 401 }));
+      globalThis.fetch = () => Promise.resolve(new Response('Unauthorized', { status: 401 }));
 
-      const result = await syncEngine
-        .manualSync()
-        .catch((e: Error) => ({ error: e.message }));
+      const result = await syncEngine.manualSync().catch((e: Error) => ({ error: e.message }));
       expect(result).toBeDefined();
     });
 
@@ -525,9 +498,7 @@ describe('Sync Engine', () => {
           })
         );
 
-      const result = await syncEngine
-        .manualSync()
-        .catch((e: Error) => ({ error: e.message }));
+      const result = await syncEngine.manualSync().catch((e: Error) => ({ error: e.message }));
       expect(result).toBeDefined();
     });
 
@@ -540,9 +511,7 @@ describe('Sync Engine', () => {
           })
         );
 
-      const result = await syncEngine
-        .manualSync()
-        .catch((e: Error) => ({ error: e.message }));
+      const result = await syncEngine.manualSync().catch((e: Error) => ({ error: e.message }));
       expect(result).toBeDefined();
     });
   });
@@ -564,13 +533,15 @@ describe('Sync Engine', () => {
     it('should return a delta sync state object', () => {
       const state = syncEngine.getDeltaSyncState();
       expect(state).toBeDefined();
-      expect(typeof state.lastSyncTimestamp).toBe('number');
+      expect(state.lastSyncTimestamp === null || typeof state.lastSyncTimestamp === 'string').toBe(
+        true
+      );
     });
 
     it('should reset delta sync state', () => {
       syncEngine.resetDeltaSyncState();
       const state = syncEngine.getDeltaSyncState();
-      expect(state.lastSyncTimestamp).toBe(0);
+      expect(state.lastSyncTimestamp).toBeNull();
     });
   });
 });

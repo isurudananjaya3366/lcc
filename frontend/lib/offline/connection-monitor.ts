@@ -23,7 +23,10 @@ import {
 type ConnectionChangeCallback = (event: ConnectionChangeEvent) => void;
 
 export class ConnectionMonitor {
-  private online = typeof navigator !== 'undefined' ? navigator.onLine : true;
+  private online =
+    typeof navigator !== 'undefined' && typeof navigator.onLine === 'boolean'
+      ? navigator.onLine
+      : true;
   private previouslyOnline = this.online;
   private lastConnectionCheckTime = 0;
   private lastSuccessfulConnectionTime = 0;
@@ -58,9 +61,7 @@ export class ConnectionMonitor {
     this.setupEventListeners();
     const ms =
       interval ??
-      (this.online
-        ? CONNECTION_CHECK_INTERVAL_ONLINE
-        : CONNECTION_CHECK_INTERVAL_OFFLINE);
+      (this.online ? CONNECTION_CHECK_INTERVAL_ONLINE : CONNECTION_CHECK_INTERVAL_OFFLINE);
     this.checkTimer = setInterval(() => this.checkConnection(), ms);
   }
 

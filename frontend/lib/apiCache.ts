@@ -46,6 +46,7 @@ export class ApiCache {
   private options: Required<CacheOptions>;
   private hits = 0;
   private misses = 0;
+  private accessCounter = 0;
 
   constructor(options?: CacheOptions) {
     this.options = { ...DEFAULT_OPTIONS, ...options };
@@ -53,11 +54,7 @@ export class ApiCache {
 
   // ── Key Generation ───────────────────────────────────────────
 
-  static generateKey(
-    method: string,
-    url: string,
-    params?: Record<string, unknown>
-  ): string {
+  static generateKey(method: string, url: string, params?: Record<string, unknown>): string {
     let key = `${method.toUpperCase()}:${url}`;
     if (params && Object.keys(params).length > 0) {
       const sorted = Object.keys(params)
@@ -87,7 +84,7 @@ export class ApiCache {
     }
 
     entry.accessCount++;
-    entry.lastAccessed = Date.now();
+    entry.lastAccessed = ++this.accessCounter;
     this.hits++;
     return entry.data as T;
   }
@@ -112,7 +109,7 @@ export class ApiCache {
       timestamp: now,
       expiresAt: now + (maxAge ?? this.options.maxAge),
       accessCount: 0,
-      lastAccessed: now,
+      lastAccessed: ++this.accessCounter,
     });
   }
 

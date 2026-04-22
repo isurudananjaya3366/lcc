@@ -85,10 +85,7 @@ export class TransactionQueue {
 
     // Schedule automatic cleanup
     if (this.config.cleanupInterval > 0) {
-      this.cleanupTimer = setInterval(
-        () => void this.cleanupQueue(),
-        this.config.cleanupInterval
-      );
+      this.cleanupTimer = setInterval(() => void this.cleanupQueue(), this.config.cleanupInterval);
     }
 
     this.initialised = true;
@@ -96,18 +93,13 @@ export class TransactionQueue {
 
   // ── Queue Transaction (Task 36) ─────────────────────────────
 
-  async queueTransaction(
-    payload: TransactionPayload,
-    dependsOn?: string
-  ): Promise<string> {
+  async queueTransaction(payload: TransactionPayload, dependsOn?: string): Promise<string> {
     await this.initialize();
 
     // Validate (Task 46)
     const validation = this.validateTransaction(payload);
     if (!validation.isValid) {
-      throw new Error(
-        `Invalid transaction: ${validation.errors.map((e) => e.message).join('; ')}`
-      );
+      throw new Error(`Invalid transaction: ${validation.errors.map((e) => e.message).join('; ')}`);
     }
 
     // Validate dependency (Task 50)
@@ -164,12 +156,9 @@ export class TransactionQueue {
   }
 
   async getQueueLength(): Promise<number> {
-    const pending = await idbService.getAllByIndex<QueuedTransaction>(
-      STORE,
-      'sync_status',
-      'pending'
-    );
-    return pending.length;
+    await this.initialize();
+    const all = await idbService.getAll<QueuedTransaction>(STORE);
+    return all.filter((t) => t.status === TransactionStatus.PENDING).length;
   }
 
   // ── Get Pending (Task 39) ───────────────────────────────────
@@ -203,18 +192,13 @@ export class TransactionQueue {
     return pending.map((t, i) => ({
       ...t,
       position: i + 1,
-      dependency_status: t.depends_on
-        ? txMap.get(t.depends_on)?.status
-        : undefined,
+      dependency_status: t.depends_on ? txMap.get(t.depends_on)?.status : undefined,
     }));
   }
 
   // ── Mark as Synced (Task 40) ─────────────────────────────────
 
-  async markAsSynced(
-    offlineId: string,
-    serverTransactionId: string
-  ): Promise<boolean> {
+  async markAsSynced(offlineId: string, serverTransactionId: string): Promise<boolean> {
     const tx = await idbService.get<QueuedTransaction>(STORE, offlineId);
     if (!tx) return false;
 
@@ -270,9 +254,8 @@ export class TransactionQueue {
     } else {
       tx.status = TransactionStatus.PENDING;
       const delay =
-        this.config.retryDelays[
-          Math.min(tx.retry_count - 1, this.config.retryDelays.length - 1)
-        ] ?? 30000;
+        this.config.retryDelays[Math.min(tx.retry_count - 1, this.config.retryDelays.length - 1)] ??
+        30000;
       tx.next_retry_at = new Date(Date.now() + delay).toISOString();
     }
 
@@ -288,8 +271,7 @@ export class TransactionQueue {
   }
 
   setMaxRetries(limit: number): void {
-    if (limit < 1 || limit > 10)
-      throw new RangeError('maxRetries must be 1-10');
+    if (limit < 1 || limit > 10) throw new RangeError('maxRetries must be 1-10');
     this.config.maxRetries = limit;
   }
 
@@ -311,14 +293,10 @@ export class TransactionQueue {
       if (tx.retry_count >= this.config.maxRetries) atMax++;
 
       if (tx.status === TransactionStatus.PENDING) {
-        if (!oldestPending || tx.created_at < oldestPending)
-          oldestPending = tx.created_at;
+        if (!oldestPending || tx.created_at < oldestPending) oldestPending = tx.created_at;
       }
       if (tx.error_message) {
-        errorCounts.set(
-          tx.error_message,
-          (errorCounts.get(tx.error_message) ?? 0) + 1
-        );
+        errorCounts.set(tx.error_message, (errorCounts.get(tx.error_message) ?? 0) + 1);
       }
     }
 
@@ -482,14 +460,8 @@ export class TransactionQueue {
 
     // Calculation check
     if (payload.items?.length > 0) {
-      const computedSubtotal = payload.items.reduce(
-        (s, item) => s + item.subtotal,
-        0
-      );
-      if (
-        Math.abs(computedSubtotal - payload.subtotal) >
-        VALIDATION_RULES.ROUNDING_TOLERANCE
-      ) {
+      const computedSubtotal = payload.items.reduce((s, item) => s + item.subtotal, 0);
+      if (Math.abs(computedSubtotal - payload.subtotal) > VALIDATION_RULES.ROUNDING_TOLERANCE) {
         warnings.push({
           field: 'subtotal',
           code: 'CALC_MISMATCH',
@@ -576,8 +548,7 @@ export class TransactionQueue {
       case OrderingStrategy.PRIORITY:
         return txs.sort(
           (a, b) =>
-            (b.priority ?? TransactionPriority.NORMAL) -
-            (a.priority ?? TransactionPriority.NORMAL)
+            (b.priority ?? TransactionPriority.NORMAL) - (a.priority ?? TransactionPriority.NORMAL)
         );
       case OrderingStrategy.DEPENDENCY_AWARE:
         return this.sortDependencyAware(txs);
@@ -622,9 +593,7 @@ export class TransactionQueue {
   async getDependency(offlineId: string): Promise<QueuedTransaction | null> {
     const tx = await idbService.get<QueuedTransaction>(STORE, offlineId);
     if (!tx?.depends_on) return null;
-    return (
-      (await idbService.get<QueuedTransaction>(STORE, tx.depends_on)) ?? null
-    );
+    return (await idbService.get<QueuedTransaction>(STORE, tx.depends_on)) ?? null;
   }
 
   async getDependents(offlineId: string): Promise<QueuedTransaction[]> {
@@ -639,10 +608,7 @@ export class TransactionQueue {
 
     while (current?.depends_on && !visited.has(current.depends_on)) {
       visited.add(current.depends_on);
-      const dep = await idbService.get<QueuedTransaction>(
-        STORE,
-        current.depends_on
-      );
+      const dep = await idbService.get<QueuedTransaction>(STORE, current.depends_on);
       if (!dep) break;
       chain.unshift(dep);
       current = dep;
@@ -740,12 +706,9 @@ export class TransactionQueue {
     if (!options?.include_synced) {
       all = all.filter((t) => t.status !== TransactionStatus.SYNCED);
     }
-    if (options?.date_from)
-      all = all.filter((t) => t.created_at >= options.date_from!);
-    if (options?.date_to)
-      all = all.filter((t) => t.created_at <= options.date_to!);
-    if (options?.terminal_id)
-      all = all.filter((t) => t.terminal_id === options.terminal_id);
+    if (options?.date_from) all = all.filter((t) => t.created_at >= options.date_from!);
+    if (options?.date_to) all = all.filter((t) => t.created_at <= options.date_to!);
+    if (options?.terminal_id) all = all.filter((t) => t.terminal_id === options.terminal_id);
 
     const meta = await this.loadMetadata();
 
@@ -762,17 +725,11 @@ export class TransactionQueue {
         date_range: {
           from:
             all.length > 0
-              ? all.reduce(
-                  (m, t) => (t.created_at < m ? t.created_at : m),
-                  all[0]!.created_at
-                )
+              ? all.reduce((m, t) => (t.created_at < m ? t.created_at : m), all[0]!.created_at)
               : null,
           to:
             all.length > 0
-              ? all.reduce(
-                  (m, t) => (t.created_at > m ? t.created_at : m),
-                  all[0]!.created_at
-                )
+              ? all.reduce((m, t) => (t.created_at > m ? t.created_at : m), all[0]!.created_at)
               : null,
         },
       },
@@ -840,11 +797,7 @@ export class TransactionQueue {
   }
 
   private validateImportFile(file: QueueExportFile): boolean {
-    return !!(
-      file.export_version &&
-      file.schema_version &&
-      Array.isArray(file.transactions)
-    );
+    return !!(file.export_version && file.schema_version && Array.isArray(file.transactions));
   }
 
   private generateChecksum(transactions: QueuedTransaction[]): string {
@@ -892,14 +845,9 @@ export class TransactionQueue {
 
   private async cleanupByAge(start: number): Promise<CleanupResult> {
     const all = await idbService.getAll<QueuedTransaction>(STORE);
-    const cutoff = new Date(
-      Date.now() - this.config.cleanupThreshold
-    ).toISOString();
+    const cutoff = new Date(Date.now() - this.config.cleanupThreshold).toISOString();
     const toRemove = all.filter(
-      (t) =>
-        t.status === TransactionStatus.SYNCED &&
-        t.synced_at &&
-        t.synced_at < cutoff
+      (t) => t.status === TransactionStatus.SYNCED && t.synced_at && t.synced_at < cutoff
     );
 
     if (toRemove.length > 0) {

@@ -38,7 +38,7 @@ describe('formatPriceRange', () => {
 
 describe('getDiscountBadge', () => {
   it('calculates discount percentage', () => {
-    const result = getDiscountBadge(1000, 800);
+    const result = getDiscountBadge(800, 1000);
     expect(result).toContain('20');
   });
 
@@ -51,8 +51,9 @@ describe('getDiscountBadge', () => {
 describe('formatStrikethroughPrice', () => {
   it('returns formatted original price', () => {
     const result = formatStrikethroughPrice(1000);
-    expect(typeof result).toBe('string');
-    expect(result).toBeTruthy();
+    expect(typeof result).toBe('object');
+    expect(typeof result.current).toBe('string');
+    expect(result.current).toBeTruthy();
   });
 });
 

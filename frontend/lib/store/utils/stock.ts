@@ -128,7 +128,7 @@ export function canAddToCart(
   if (totalRequested > availableQuantity) {
     const maxAddable = Math.max(0, availableQuantity - currentCartQuantity);
     return {
-      allowed: maxAddable > 0,
+      allowed: false,
       maxAddable,
       reason:
         maxAddable > 0

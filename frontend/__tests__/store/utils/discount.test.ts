@@ -80,7 +80,8 @@ describe('calculateBulkDiscount', () => {
 describe('calculateBuyXGetY', () => {
   it('calculates free items for buy 2 get 1', () => {
     const result = calculateBuyXGetY(500, 3, 2, 1);
-    expect(result).toBeGreaterThan(0);
+    expect(result.discountAmount).toBeGreaterThan(0);
+    expect(result.finalAmount).toBeLessThan(result.originalAmount);
   });
 });
 
