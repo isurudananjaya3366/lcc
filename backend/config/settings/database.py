@@ -246,6 +246,7 @@ SHARED_APPS: list[str] = [
     "apps.tenants",                      # Tenant & Domain models (must be in public schema)
     "apps.core",                         # Core utilities, base models, shared helpers
     "apps.users",                        # User profiles & management (shared user registry)
+    "apps.authentication",               # JWT auth endpoints (login, logout, refresh)
     "apps.platform",                     # Platform services (plans, settings, flags, audit, billing)
     # ── Third-Party Infrastructure (tenant-agnostic) ────────────────
     "rest_framework",                    # DRF — API framework (config is global)

@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* ==========================================================================
    LankaCommerce Store — Global Styles
    Storefront-specific styles, design tokens, and utility classes.

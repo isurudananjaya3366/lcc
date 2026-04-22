@@ -20,15 +20,11 @@ const nextConfig = {
   // Server-only variables (NEXTAUTH_SECRET, API_BASE_URL, etc.)
   // are NOT included — validated at runtime via lib/env.ts.
   env: {
-    NEXT_PUBLIC_SITE_NAME:
-      process.env.NEXT_PUBLIC_SITE_NAME || 'LankaCommerce Cloud',
+    NEXT_PUBLIC_SITE_NAME: process.env.NEXT_PUBLIC_SITE_NAME || 'LankaCommerce Cloud',
     NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME || 'LCC',
-    NEXT_PUBLIC_DEFAULT_CURRENCY:
-      process.env.NEXT_PUBLIC_DEFAULT_CURRENCY || 'LKR',
-    NEXT_PUBLIC_DEFAULT_TIMEZONE:
-      process.env.NEXT_PUBLIC_DEFAULT_TIMEZONE || 'Asia/Colombo',
-    NEXT_PUBLIC_DEFAULT_LOCALE:
-      process.env.NEXT_PUBLIC_DEFAULT_LOCALE || 'en-LK',
+    NEXT_PUBLIC_DEFAULT_CURRENCY: process.env.NEXT_PUBLIC_DEFAULT_CURRENCY || 'LKR',
+    NEXT_PUBLIC_DEFAULT_TIMEZONE: process.env.NEXT_PUBLIC_DEFAULT_TIMEZONE || 'Asia/Colombo',
+    NEXT_PUBLIC_DEFAULT_LOCALE: process.env.NEXT_PUBLIC_DEFAULT_LOCALE || 'en-LK',
   },
 
   // ── TypeScript ────────────────────────────────────────────────
@@ -167,22 +163,7 @@ const nextConfig = {
         destination: '/dashboard/:path*',
         permanent: true,
       },
-      // Auth shortcuts
-      {
-        source: '/login',
-        destination: '/auth/login',
-        permanent: true,
-      },
-      {
-        source: '/register',
-        destination: '/auth/register',
-        permanent: true,
-      },
-      {
-        source: '/logout',
-        destination: '/auth/logout',
-        permanent: true,
-      },
+      // Auth shortcuts (removed — (auth) route group handles /login, /register, /logout directly)
       // Convenience shortcuts
       {
         source: '/docs',
@@ -197,9 +178,7 @@ const nextConfig = {
       // HTTPS enforcement
       {
         source: '/:path*',
-        has: [
-          { type: 'header', key: 'x-forwarded-proto', value: 'http' },
-        ],
+        has: [{ type: 'header', key: 'x-forwarded-proto', value: 'http' }],
         destination: 'https://:host/:path*',
         permanent: true,
       },
