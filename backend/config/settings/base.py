@@ -225,6 +225,13 @@ CORS_ALLOW_ALL_ORIGINS = False  # Overridden in local.py
 CORS_ALLOW_CREDENTIALS = env.bool("CORS_ALLOW_CREDENTIALS")
 CORS_ALLOWED_ORIGINS: list[str] = env.list("CORS_ALLOWED_ORIGINS")
 
+from corsheaders.defaults import default_headers as _default_cors_headers  # noqa: E402
+
+CORS_ALLOW_HEADERS = list(_default_cors_headers) + [
+    "x-request-id",
+    "x-tenant-id",
+]
+
 
 # ════════════════════════════════════════════════════════════════════════
 # SIMPLE JWT  (Task 42)

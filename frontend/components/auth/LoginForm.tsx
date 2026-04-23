@@ -69,17 +69,18 @@ export function LoginForm({ onSuccess, redirectUrl = '/dashboard' }: LoginFormPr
       }
 
       // Update auth store with login action (sets isAuthenticated = true)
+      const rawUser = response.user as typeof response.user & { isStaff?: boolean };
       authStore.login(
         {
           id: response.user.id,
           email: response.user.email,
           firstName: response.user.firstName,
           lastName: response.user.lastName,
-          role: response.user.role,
+          role: response.user.role ?? (rawUser.isStaff ? 'admin' : 'user'),
           avatar: response.user.avatar ?? null,
         },
         null as never, // tenant is set separately if applicable
-        response.user.permissions ?? []
+        response.user.permissions ?? (rawUser.isStaff ? ['*:*'] : [])
       );
 
       if (onSuccess) {

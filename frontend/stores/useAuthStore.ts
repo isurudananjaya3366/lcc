@@ -106,8 +106,13 @@ export const useAuthStore = createStore<AuthStore>(
     // ── Permission Selectors ─────────────────────────────────
 
     hasPermission: (permission) => {
-      const { isAuthenticated, permissions } = get();
-      if (!isAuthenticated || permissions.length === 0) return false;
+      const { isAuthenticated, permissions, user } = get();
+      if (!isAuthenticated) return false;
+
+      // Admin/superuser bypass
+      if (user?.role === 'admin' || user?.role === 'superuser') return true;
+
+      if (permissions.length === 0) return false;
 
       // Exact match
       if (permissions.includes(permission)) return true;
@@ -150,6 +155,11 @@ export const useAuthStore = createStore<AuthStore>(
         permissions: state.permissions,
         isAuthenticated: state.isAuthenticated,
       }),
+      onRehydrateStorage: () => (state?: AuthStore) => {
+        if (state) {
+          state.isLoading = false;
+        }
+      },
     },
   }
 );

@@ -16,7 +16,6 @@ import os  # noqa: F401
 from config.env import env  # noqa: F401
 from config.settings.base import *  # noqa: F401, F403
 
-
 # ════════════════════════════════════════════════════════════════════════
 # DEBUG SETTINGS  (Task 29)
 # ════════════════════════════════════════════════════════════════════════
@@ -111,7 +110,7 @@ EMAIL_SUBJECT_PREFIX = "[LCC Dev] "
 # CORS (development — allow all origins)
 # ════════════════════════════════════════════════════════════════════════
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = False  # Must be False when CORS_ALLOW_CREDENTIALS=True; use CORS_ALLOWED_ORIGINS instead
 
 
 # ════════════════════════════════════════════════════════════════════════

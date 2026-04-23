@@ -113,6 +113,33 @@ wsl bash -c "cd /mnt/c/git_repos/pos && docker compose down -v"
 
 The Next.js dev server compiles on first request. Wait 30–60 seconds and refresh.
 
+### Login shows "An unexpected error occurred"
+
+This was caused by a CORS misconfiguration. The backend must:
+
+1. Have `CORS_ALLOW_ALL_ORIGINS = False` in `local.py` (cannot be `True` when `CORS_ALLOW_CREDENTIALS=True`)
+2. Allow custom headers `x-request-id` and `x-tenant-id` via `CORS_ALLOW_HEADERS` in `base.py`
+3. Have `CORS_ALLOWED_ORIGINS=http://localhost:3000` in the environment (see `.env.docker`)
+
+The login page is at **`http://localhost:3000/login`** (not `/auth/login`).
+
+### Sidebar only shows "Dashboard" after login
+
+The backend login response doesn't include `role` or `permissions`. The frontend maps `isStaff: true` → `role: "admin"` and `permissions: ["*:*"]`. If you see only Dashboard in the sidebar, clear localStorage and log in again:
+
+1. Open browser DevTools → Application → Local Storage → clear all `lcc-*` keys
+2. Navigate to `http://localhost:3000/login` and log in
+
+### Turbopack code changes not taking effect
+
+Hot reload works for most changes. If changes don't appear after ~10 seconds:
+
+```bash
+wsl bash -c "cd /mnt/c/git_repos/pos && docker compose restart frontend"
+```
+
+Wait ~30 seconds for Turbopack to recompile, then refresh.
+
 ### pgbouncer crash loop (stale PID)
 
 If pgbouncer fails to start after a crash:
@@ -165,3 +192,26 @@ wsl bash -c "curl -s http://localhost:8001/api/v1/"
 - **Database URL**: `postgres://lcc_user:dev_password_change_me@pgbouncer:6432/lankacommerce`
 - **Settings module**: `config.settings.local` (inside container)
 - **Auth model**: `platform.PlatformUser` (email-based login, not username)
+- **CORS**: `CORS_ALLOW_ALL_ORIGINS` must be `False`; allowed origins listed in `CORS_ALLOWED_ORIGINS` env var
+- **Custom CORS headers**: `x-request-id` and `x-tenant-id` are allowed via `CORS_ALLOW_HEADERS` in `base.py`
+- **Backend login response**: Returns `{accessToken, refreshToken, user}` — user object includes `isStaff` but not `role`/`permissions`. Frontend maps `isStaff=true` → `role="admin"`, `permissions=["*:*"]`
+- **Axios client**: Uses `withCredentials: true`; custom headers require explicit CORS allow-list on backend
+
+---
+
+## Route Reference
+
+| Route                 | Description                  |
+| --------------------- | ---------------------------- |
+| `/login`              | Login page                   |
+| `/register`           | User registration            |
+| `/dashboard`          | ERP dashboard home           |
+| `/inventory/products` | Products list                |
+| `/sales/orders`       | Sales orders                 |
+| `/purchasing/orders`  | Purchase orders              |
+| `/accounting`         | Accounting module            |
+| `/hr/employees`       | HR — employees               |
+| `/settings`           | System settings              |
+| `/`                   | Storefront (public webstore) |
+| `/shop`               | Shop/product listing         |
+| `/account/dashboard`  | Customer portal              |

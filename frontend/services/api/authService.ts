@@ -29,19 +29,19 @@ import type {
 // ── API Endpoints ──────────────────────────────────────────────
 
 const AUTH_ENDPOINTS = {
-  LOGIN: '/auth/login',
-  LOGOUT: '/auth/logout',
-  REFRESH: '/auth/refresh',
-  ME: '/auth/me',
-  FORGOT_PASSWORD: '/auth/forgot-password',
-  RESET_PASSWORD: '/auth/reset-password',
-  CHANGE_PASSWORD: '/auth/change-password',
-  VERIFY_EMAIL: '/auth/verify-email',
-  RESEND_VERIFICATION: '/auth/resend-verification',
-  TWO_FACTOR_SETUP: '/auth/2fa/setup',
-  TWO_FACTOR_VERIFY_SETUP: '/auth/2fa/verify-setup',
-  TWO_FACTOR_VERIFY: '/auth/2fa/verify',
-  TWO_FACTOR_BACKUP: '/auth/2fa/backup-verify',
+  LOGIN: '/auth/login/',
+  LOGOUT: '/auth/logout/',
+  REFRESH: '/auth/refresh/',
+  ME: '/auth/me/',
+  FORGOT_PASSWORD: '/auth/forgot-password/',
+  RESET_PASSWORD: '/auth/reset-password/',
+  CHANGE_PASSWORD: '/auth/change-password/',
+  VERIFY_EMAIL: '/auth/verify-email/',
+  RESEND_VERIFICATION: '/auth/resend-verification/',
+  TWO_FACTOR_SETUP: '/auth/2fa/setup/',
+  TWO_FACTOR_VERIFY_SETUP: '/auth/2fa/verify-setup/',
+  TWO_FACTOR_VERIFY: '/auth/2fa/verify/',
+  TWO_FACTOR_BACKUP: '/auth/2fa/backup-verify/',
 } as const;
 
 // ── Auth Service ───────────────────────────────────────────────
